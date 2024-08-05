@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="link_sheet" targetNamespace="http://tempuri.org/link_sheet.xsd" xmlns:mstns="http://tempuri.org/link_sheet.xsd" xmlns="http://tempuri.org/link_sheet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="link_sheet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="link_sheet" msprop:Generator_UserDSName="link_sheet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent" msprop:Generator_RowClassName="DataTable1Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ac_no" msprop:Generator_ColumnVarNameInTable="columnac_no" msprop:Generator_ColumnPropNameInRow="ac_no" msprop:Generator_ColumnPropNameInTable="ac_noColumn" msprop:Generator_UserColumnName="ac_no" type="xs:string" minOccurs="0" />
+              <xs:element name="ac_description" msprop:Generator_ColumnVarNameInTable="columnac_description" msprop:Generator_ColumnPropNameInRow="ac_description" msprop:Generator_ColumnPropNameInTable="ac_descriptionColumn" msprop:Generator_UserColumnName="ac_description" type="xs:string" minOccurs="0" />
+              <xs:element name="AMOUNT_DR" msprop:Generator_ColumnVarNameInTable="columnAMOUNT_DR" msprop:Generator_ColumnPropNameInRow="AMOUNT_DR" msprop:Generator_ColumnPropNameInTable="AMOUNT_DRColumn" msprop:Generator_UserColumnName="AMOUNT_DR" type="xs:decimal" minOccurs="0" />
+              <xs:element name="AMOUNT_CR" msprop:Generator_ColumnVarNameInTable="columnAMOUNT_CR" msprop:Generator_ColumnPropNameInRow="AMOUNT_CR" msprop:Generator_ColumnPropNameInTable="AMOUNT_CRColumn" msprop:Generator_UserColumnName="AMOUNT_CR" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Account_group" msprop:Generator_ColumnVarNameInTable="columnAccount_group" msprop:Generator_ColumnPropNameInRow="Account_group" msprop:Generator_ColumnPropNameInTable="Account_groupColumn" msprop:Generator_UserColumnName="Account_group" type="xs:string" minOccurs="0" />
+              <xs:element name="fiscal_year" msprop:Generator_ColumnVarNameInTable="columnfiscal_year" msprop:Generator_ColumnPropNameInRow="fiscal_year" msprop:Generator_ColumnPropNameInTable="fiscal_yearColumn" msprop:Generator_UserColumnName="fiscal_year" type="xs:string" minOccurs="0" />
+              <xs:element name="duration" msprop:Generator_ColumnVarNameInTable="columnduration" msprop:Generator_ColumnPropNameInRow="duration" msprop:Generator_ColumnPropNameInTable="durationColumn" msprop:Generator_UserColumnName="duration" type="xs:string" minOccurs="0" />
+              <xs:element name="OB_DEBIT" msprop:Generator_ColumnVarNameInTable="columnOB_DEBIT" msprop:Generator_ColumnPropNameInRow="OB_DEBIT" msprop:Generator_ColumnPropNameInTable="OB_DEBITColumn" msprop:Generator_UserColumnName="OB_DEBIT" type="xs:decimal" minOccurs="0" />
+              <xs:element name="OB_CREDIT" msprop:Generator_ColumnVarNameInTable="columnOB_CREDIT" msprop:Generator_ColumnPropNameInRow="OB_CREDIT" msprop:Generator_ColumnPropNameInTable="OB_CREDITColumn" msprop:Generator_UserColumnName="OB_CREDIT" type="xs:decimal" minOccurs="0" />
+              <xs:element name="P_IND" msprop:Generator_ColumnVarNameInTable="columnP_IND" msprop:Generator_ColumnPropNameInRow="P_IND" msprop:Generator_ColumnPropNameInTable="P_INDColumn" msprop:Generator_UserColumnName="P_IND" type="xs:int" minOccurs="0" />
+              <xs:element name="ac_linking" msprop:Generator_ColumnVarNameInTable="columnac_linking" msprop:Generator_ColumnPropNameInRow="ac_linking" msprop:Generator_ColumnPropNameInTable="ac_linkingColumn" msprop:Generator_UserColumnName="ac_linking" type="xs:string" minOccurs="0" />
+              <xs:element name="ac_ledg" msprop:Generator_ColumnVarNameInTable="columnac_ledg" msprop:Generator_ColumnPropNameInRow="ac_ledg" msprop:Generator_ColumnPropNameInTable="ac_ledgColumn" msprop:Generator_UserColumnName="ac_ledg" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

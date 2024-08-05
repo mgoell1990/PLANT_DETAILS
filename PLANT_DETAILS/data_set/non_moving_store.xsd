@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="non_moving_store" targetNamespace="http://tempuri.org/non_moving_store.xsd" xmlns:mstns="http://tempuri.org/non_moving_store.xsd" xmlns="http://tempuri.org/non_moving_store.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="non_moving_store" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="non_moving_store" msprop:Generator_UserDSName="non_moving_store">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_RowClassName="DataTable1Row" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="MAT_CODE" msprop:Generator_ColumnVarNameInTable="columnMAT_CODE" msprop:Generator_ColumnPropNameInRow="MAT_CODE" msprop:Generator_ColumnPropNameInTable="MAT_CODEColumn" msprop:Generator_UserColumnName="MAT_CODE" type="xs:string" minOccurs="0" />
+              <xs:element name="MAT_NAME" msprop:Generator_ColumnVarNameInTable="columnMAT_NAME" msprop:Generator_ColumnPropNameInRow="MAT_NAME" msprop:Generator_ColumnPropNameInTable="MAT_NAMEColumn" msprop:Generator_UserColumnName="MAT_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="MAT_DRAW" msprop:Generator_ColumnVarNameInTable="columnMAT_DRAW" msprop:Generator_ColumnPropNameInRow="MAT_DRAW" msprop:Generator_ColumnPropNameInTable="MAT_DRAWColumn" msprop:Generator_UserColumnName="MAT_DRAW" type="xs:string" minOccurs="0" />
+              <xs:element name="MAT_STOCK" msprop:Generator_ColumnVarNameInTable="columnMAT_STOCK" msprop:Generator_ColumnPropNameInRow="MAT_STOCK" msprop:Generator_ColumnPropNameInTable="MAT_STOCKColumn" msprop:Generator_UserColumnName="MAT_STOCK" type="xs:string" minOccurs="0" />
+              <xs:element name="SEARCH_DATE" msprop:Generator_ColumnVarNameInTable="columnSEARCH_DATE" msprop:Generator_ColumnPropNameInRow="SEARCH_DATE" msprop:Generator_ColumnPropNameInTable="SEARCH_DATEColumn" msprop:Generator_UserColumnName="SEARCH_DATE" type="xs:string" minOccurs="0" />
+              <xs:element name="MAT_LASTPUR_DATE" msprop:Generator_ColumnVarNameInTable="columnMAT_LASTPUR_DATE" msprop:Generator_ColumnPropNameInRow="MAT_LASTPUR_DATE" msprop:Generator_ColumnPropNameInTable="MAT_LASTPUR_DATEColumn" msprop:Generator_UserColumnName="MAT_LASTPUR_DATE" type="xs:string" minOccurs="0" />
+              <xs:element name="LAST_ISSUE_DATE" msprop:Generator_ColumnVarNameInTable="columnLAST_ISSUE_DATE" msprop:Generator_ColumnPropNameInRow="LAST_ISSUE_DATE" msprop:Generator_ColumnPropNameInTable="LAST_ISSUE_DATEColumn" msprop:Generator_UserColumnName="LAST_ISSUE_DATE" type="xs:string" minOccurs="0" />
+              <xs:element name="MAT_VALUE" msprop:Generator_ColumnVarNameInTable="columnMAT_VALUE" msprop:Generator_ColumnPropNameInRow="MAT_VALUE" msprop:Generator_ColumnPropNameInTable="MAT_VALUEColumn" msprop:Generator_UserColumnName="MAT_VALUE" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ISSUE_FY" msprop:Generator_ColumnVarNameInTable="columnISSUE_FY" msprop:Generator_ColumnPropNameInRow="ISSUE_FY" msprop:Generator_ColumnPropNameInTable="ISSUE_FYColumn" msprop:Generator_UserColumnName="ISSUE_FY" type="xs:string" minOccurs="0" />
+              <xs:element name="UNIT_PRICE" msprop:Generator_ColumnVarNameInTable="columnUNIT_PRICE" msprop:Generator_ColumnPropNameInRow="UNIT_PRICE" msprop:Generator_ColumnPropNameInTable="UNIT_PRICEColumn" msprop:Generator_UserColumnName="UNIT_PRICE" type="xs:decimal" minOccurs="0" />
+              <xs:element name="DURATION" msprop:Generator_ColumnVarNameInTable="columnDURATION" msprop:Generator_ColumnPropNameInRow="DURATION" msprop:Generator_ColumnPropNameInTable="DURATIONColumn" msprop:Generator_UserColumnName="DURATION" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

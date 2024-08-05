@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="WeighBridgeDataset" targetNamespace="http://tempuri.org/WeighBridgeDataset.xsd" xmlns:mstns="http://tempuri.org/WeighBridgeDataset.xsd" xmlns="http://tempuri.org/WeighBridgeDataset.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="WeighBridgeDataset" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="WeighBridgeDataset" msprop:Generator_UserDSName="WeighBridgeDataset">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent" msprop:Generator_RowClassName="DataTable1Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SlNumber" msprop:Generator_ColumnVarNameInTable="columnSlNumber" msprop:Generator_ColumnPropNameInRow="SlNumber" msprop:Generator_ColumnPropNameInTable="SlNumberColumn" msprop:Generator_UserColumnName="SlNumber" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleNo" msprop:Generator_ColumnVarNameInTable="columnVehicleNo" msprop:Generator_ColumnPropNameInRow="VehicleNo" msprop:Generator_ColumnPropNameInTable="VehicleNoColumn" msprop:Generator_UserColumnName="VehicleNo" type="xs:string" minOccurs="0" />
+              <xs:element name="MaterialName" msprop:Generator_ColumnVarNameInTable="columnMaterialName" msprop:Generator_ColumnPropNameInRow="MaterialName" msprop:Generator_ColumnPropNameInTable="MaterialNameColumn" msprop:Generator_UserColumnName="MaterialName" type="xs:string" minOccurs="0" />
+              <xs:element name="PartyName" msprop:Generator_ColumnVarNameInTable="columnPartyName" msprop:Generator_ColumnPropNameInRow="PartyName" msprop:Generator_ColumnPropNameInTable="PartyNameColumn" msprop:Generator_UserColumnName="PartyName" type="xs:string" minOccurs="0" />
+              <xs:element name="TransporterName" msprop:Generator_ColumnVarNameInTable="columnTransporterName" msprop:Generator_ColumnPropNameInRow="TransporterName" msprop:Generator_ColumnPropNameInTable="TransporterNameColumn" msprop:Generator_UserColumnName="TransporterName" type="xs:string" minOccurs="0" />
+              <xs:element name="NoOfBags" msprop:Generator_ColumnVarNameInTable="columnNoOfBags" msprop:Generator_ColumnPropNameInRow="NoOfBags" msprop:Generator_ColumnPropNameInTable="NoOfBagsColumn" msprop:Generator_UserColumnName="NoOfBags" type="xs:string" minOccurs="0" />
+              <xs:element name="ChallanNo" msprop:Generator_ColumnVarNameInTable="columnChallanNo" msprop:Generator_ColumnPropNameInRow="ChallanNo" msprop:Generator_ColumnPropNameInTable="ChallanNoColumn" msprop:Generator_UserColumnName="ChallanNo" type="xs:string" minOccurs="0" />
+              <xs:element name="ChallanDate" msprop:Generator_ColumnVarNameInTable="columnChallanDate" msprop:Generator_ColumnPropNameInRow="ChallanDate" msprop:Generator_ColumnPropNameInTable="ChallanDateColumn" msprop:Generator_UserColumnName="ChallanDate" type="xs:string" minOccurs="0" />
+              <xs:element name="ChallanNet" msprop:Generator_ColumnVarNameInTable="columnChallanNet" msprop:Generator_ColumnPropNameInRow="ChallanNet" msprop:Generator_ColumnPropNameInTable="ChallanNetColumn" msprop:Generator_UserColumnName="ChallanNet" type="xs:string" minOccurs="0" />
+              <xs:element name="GrossWeight" msprop:Generator_ColumnVarNameInTable="columnGrossWeight" msprop:Generator_ColumnPropNameInRow="GrossWeight" msprop:Generator_ColumnPropNameInTable="GrossWeightColumn" msprop:Generator_UserColumnName="GrossWeight" type="xs:string" minOccurs="0" />
+              <xs:element name="GrossWeightTime" msprop:Generator_ColumnVarNameInTable="columnGrossWeightTime" msprop:Generator_ColumnPropNameInRow="GrossWeightTime" msprop:Generator_ColumnPropNameInTable="GrossWeightTimeColumn" msprop:Generator_UserColumnName="GrossWeightTime" type="xs:string" minOccurs="0" />
+              <xs:element name="TareWeight" msprop:Generator_ColumnVarNameInTable="columnTareWeight" msprop:Generator_ColumnPropNameInRow="TareWeight" msprop:Generator_ColumnPropNameInTable="TareWeightColumn" msprop:Generator_UserColumnName="TareWeight" type="xs:string" minOccurs="0" />
+              <xs:element name="TareWeightTime" msprop:Generator_ColumnVarNameInTable="columnTareWeightTime" msprop:Generator_ColumnPropNameInRow="TareWeightTime" msprop:Generator_ColumnPropNameInTable="TareWeightTimeColumn" msprop:Generator_UserColumnName="TareWeightTime" type="xs:string" minOccurs="0" />
+              <xs:element name="NetWeight" msprop:Generator_ColumnVarNameInTable="columnNetWeight" msprop:Generator_ColumnPropNameInRow="NetWeight" msprop:Generator_ColumnPropNameInTable="NetWeightColumn" msprop:Generator_UserColumnName="NetWeight" type="xs:string" minOccurs="0" />
+              <xs:element name="WeighmentDate" msprop:Generator_ColumnVarNameInTable="columnWeighmentDate" msprop:Generator_ColumnPropNameInRow="WeighmentDate" msprop:Generator_ColumnPropNameInTable="WeighmentDateColumn" msprop:Generator_UserColumnName="WeighmentDate" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
