@@ -2464,7 +2464,7 @@ Public Class inv_value
             Return
         ElseIf ((CDec(TextBox14.Text) + CDec(TextBox16.Text) + CDec(TextBox18.Text)) <= 0) Then
             Label17.Visible = True
-            Label17.Text = "GST percentage cannot be 0."
+            Label17.Text = "GST percentage cannot be 0.."
             Return
         Else
             Label17.Text = ""
