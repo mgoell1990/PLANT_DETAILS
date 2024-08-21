@@ -2006,10 +2006,10 @@
                                         <div class="row align-items-center">
                                             <div class="col-6 text-start">
                                                 <div class="row align-items-center">
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <asp:Label ID="Label22" runat="server" Font-Bold="True" Text="GST Payment"></asp:Label>
                                                     </div>
-                                                    <div class="col-8">
+                                                    <div class="col-7">
                                                         <asp:DropDownList class="form-select" ID="DropDownList7" runat="server">
                                                             <asp:ListItem>Select</asp:ListItem>
                                                             <asp:ListItem Selected="True">Yes</asp:ListItem>
