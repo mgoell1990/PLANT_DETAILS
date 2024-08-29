@@ -293,7 +293,7 @@ Public Class be
                 Dim BE_DATE As Date = be_date_TextBox4.Text
                 If podate > BE_DATE Then
                     Label501.Visible = True
-                    Label501.Text = "Please cheack Purchase order date"
+                    Label501.Text = "Please check Purchase order date"
                     Return
                 Else
                     Label501.Visible = False
@@ -355,6 +355,8 @@ Public Class be
                 If (qty - rqty) < be_quantity_TextBox5.Text Then
                     be_quantity_TextBox5.Focus()
                     be_quantity_TextBox5.Text = ""
+                    Label501.Visible = True
+                    Label501.Text = "BE quantity is greater tha Purchase order balance quantity. PO balance is " + (qty - rqty) + "MT."
                     Return
                 End If
                 ''search cha details

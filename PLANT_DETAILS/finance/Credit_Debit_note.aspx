@@ -65,7 +65,7 @@
             <asp:Label ID="Label318" runat="server" Font-Bold="True" style="text-align: left" Text="Notification" Width="160px"></asp:Label>
             <br />
             <asp:TextBox ID="TextBox66" runat="server" Height="68px" TextMode="MultiLine" Width="471px"></asp:TextBox>
-            &nbsp;&nbsp;<asp:Button ID="Button1" runat="server" Text="Go" CssClass="bottomstyle" Width="80px"></asp:Button>
+            &nbsp;&nbsp;<asp:Button ID="Button1" runat="server" Text="Add" CssClass="bottomstyle" Width="80px"></asp:Button>
                  <asp:Button ID="Button2" runat="server" CssClass="bottomstyle" Text="Save" Width="80px" />
                  <br />
                 <asp:Panel ID="Panel11" runat="server" ScrollBars="Auto" Width="100%">
