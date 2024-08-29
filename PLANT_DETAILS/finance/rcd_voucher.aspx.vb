@@ -258,12 +258,14 @@ Public Class rcd_voucher
 
                     DropDownList22.Text = ""
                     DropDownList23.SelectedValue = "Select"
+
+                    myTrans.Commit()
+                    Label455.Visible = True
+                    Label455.ForeColor = Drawing.Color.Red
+                    Label455.Text = "Token No & B.P.V No Generated"
                 End If
 
-                myTrans.Commit()
-                Label455.Visible = True
-                Label455.ForeColor = Drawing.Color.Red
-                Label455.Text = "Token No & B.P.V No Generated"
+
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()
