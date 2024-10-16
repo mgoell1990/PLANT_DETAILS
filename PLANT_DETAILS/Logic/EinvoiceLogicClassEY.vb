@@ -1665,6 +1665,27 @@ Public Class EinvoiceLogicClassEY
 
     Public Function GenerateJsonDataForGSTR1B2B_CNDN(systemInvoiceNo As String, buyerPartyCode As String, consigneePartyCode As String, isServiceFlag As String, payloadId As String, tcsFlag As String, invoiceDate As Date, docType As String)
 
+
+
+        '''''''''''''''''''''''''''''''''''''''''''
+        Dim despatchInvNo As New String("")
+        Dim DEBIT_CREDIT_DATE As Date
+        conn.Open()
+        mc1.CommandText = "select * from CN_DN_DETAILS with(nolock) where DEBIT_CREDIT_NO='" & systemInvoiceNo & "'"
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows Then
+            dr.Read()
+
+            despatchInvNo = dr.Item("INVOICE_NO")
+            DEBIT_CREDIT_DATE = dr.Item("DEBIT_CREDIT_DATE")
+
+            dr.Close()
+        Else
+            dr.Close()
+        End If
+        conn.Close()
+
         Dim working_date As Date = invoiceDate
         Dim STR1 As String = ""
         If working_date.Month > 3 Then
@@ -1676,23 +1697,6 @@ Public Class EinvoiceLogicClassEY
             STR1 = STR1.Trim.Substring(2)
             STR1 = (STR1 - 1) & STR1
         End If
-
-        '''''''''''''''''''''''''''''''''''''''''''
-        Dim despatchInvNo As New String("")
-        conn.Open()
-        mc1.CommandText = "select * from CN_DN_DETAILS with(nolock) where DEBIT_CREDIT_NO='" & systemInvoiceNo & "' and FISCAL_YEAR='" & STR1 & "'"
-        mc1.Connection = conn
-        dr = mc1.ExecuteReader
-        If dr.HasRows Then
-            dr.Read()
-
-            despatchInvNo = dr.Item("INVOICE_NO")
-
-            dr.Close()
-        Else
-            dr.Close()
-        End If
-        conn.Close()
 
 
         Dim docNo, docDate, reverseCharge, suppGstin, supTradeName, supLegalName, supLocation, supStateCode,
@@ -1800,8 +1804,8 @@ Public Class EinvoiceLogicClassEY
                 itemType = "G"
             End If
 
-            docDate = working_date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
-            returnPeriod = working_date.Month.ToString("D2") & Convert.ToDateTime(dr.Item("INV_DATE")).Year
+            docDate = DEBIT_CREDIT_DATE.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+            returnPeriod = DEBIT_CREDIT_DATE.Month.ToString("D2") & DEBIT_CREDIT_DATE.Year
             Dim gstRate As Decimal
             If (CDec(dr.Item("IGST_RATE")) = 0) Then
                 gstRate = CDec(dr.Item("CGST_RATE")) + CDec(dr.Item("SGST_RATE"))

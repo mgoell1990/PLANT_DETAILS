@@ -29,104 +29,235 @@ Public Class SendGstr1DataToEY
     End Sub
 
     Protected Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
-        conn.Open()
-        Dim mc1 As New SqlCommand
 
-        mc1.CommandText = "SELECT d_type+inv_no AS INVOICE_NO, * FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE+INV_NO='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='0') ORDER BY INVOICE_NO"
-        mc1.Connection = conn
-        dr = mc1.ExecuteReader
-        If dr.HasRows Then
-            dr.Read()
 
-            ''''''''''''''''''''''''''''''''
-            Using conn_trans
-                conn_trans.Open()
-                myTrans = conn_trans.BeginTransaction()
+        If (DropDownList3.Text = "Credit/Debit Note") Then
+            conn.Open()
+            Dim mc1 As New SqlCommand
 
-                Try
-                    Dim logicClassObj = New EinvoiceLogicClassEY
-                    Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(DropDownList28.Text, Label405.Text)
-                    If (AuthErrorData.Item(0).status = "1") Then
+            mc1.CommandText = "SELECT d_type+inv_no AS INVOICE_NO, * FROM DESPATCH where D_TYPE+INV_NO in (select invoice_no from CN_DN_DETAILS where FISCAL_YEAR='" & DropDownList27.Text & "' and DEBIT_CREDIT_NO='" & DropDownList28.Text & "') and INV_DATE in (select ORIGINAL_INVOICE_DATE from CN_DN_DETAILS where FISCAL_YEAR='" & DropDownList27.Text & "' and DEBIT_CREDIT_NO='" & DropDownList28.Text & "')"
+            mc1.Connection = conn
+            dr = mc1.ExecuteReader
+            If dr.HasRows Then
+                dr.Read()
 
-                        Dim result
-                        If (dr.Item("ACC_UNIT") = "Service") Then
-                            If (dr.Item("BILL_PARTY_GST_N") = "") Then
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "NO", dr.Item("INV_DATE"), "INV")
+                ''''''''''''''''''''''''''''''''
+                Using conn_trans
+                    conn_trans.Open()
+                    myTrans = conn_trans.BeginTransaction()
+
+                    Try
+                        Dim logicClassObj = New EinvoiceLogicClassEY
+                        Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(DropDownList28.Text, Label405.Text)
+                        If (AuthErrorData.Item(0).status = "1") Then
+
+                            Dim result
+                            If (dr.Item("ACC_UNIT") = "Service") Then
+                                If (Left(DropDownList28.Text, 2) = "CN") Then
+                                    If (dr.Item("BILL_PARTY_GST_N") = "") Then
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "NO", dr.Item("INV_DATE"), "CR")
+                                    Else
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "YES", dr.Item("INV_DATE"), "CR")
+                                    End If
+                                ElseIf (Left(DropDownList28.Text, 2) = "DN") Then
+                                    If (dr.Item("BILL_PARTY_GST_N") = "") Then
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "NO", dr.Item("INV_DATE"), "DR")
+                                    Else
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "YES", dr.Item("INV_DATE"), "DR")
+                                    End If
+                                End If
+
+
                             Else
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "YES", dr.Item("INV_DATE"), "INV")
+                                If (Left(DropDownList28.Text, 2) = "CN") Then
+                                    If (dr.Item("BILL_PARTY_GST_N") = "") Then
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "NO", dr.Item("INV_DATE"), "CR")
+                                    Else
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "YES", dr.Item("INV_DATE"), "CR")
+                                    End If
+                                ElseIf (Left(DropDownList28.Text, 2) = "DN") Then
+                                    If (dr.Item("BILL_PARTY_GST_N") = "") Then
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "NO", dr.Item("INV_DATE"), "DR")
+                                    Else
+                                        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", DropDownList28.Text, dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "YES", dr.Item("INV_DATE"), "DR")
+                                    End If
+                                End If
+
+
                             End If
 
-                        Else
-                            If (dr.Item("BILL_PARTY_GST_N") = "") Then
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "NO", dr.Item("INV_DATE"), "INV")
-                            Else
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "YES", dr.Item("INV_DATE"), "INV")
-                            End If
+
+                            Dim sqlQuery As String = ""
+                            sqlQuery = "update CN_DN_DETAILS set EY_STATUS ='" & result.ToString() & "' where DEBIT_CREDIT_NO  ='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "'"
+                            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                            despatch.ExecuteReader()
+                            despatch.Dispose()
+                            myTrans.Commit()
+                            lblErrorMsg.Visible = True
+                            lblErrorMsg.Text = DropDownList28.Text + " : " + result.ToString()
+
+
+
+
+                            dt.Clear()
+                            da = New SqlDataAdapter("select DEBIT_CREDIT_NO as INVOICE_NO from CN_DN_DETAILS where FISCAL_YEAR='" + DropDownList27.Text + "' order by DEBIT_CREDIT_NO", conn)
+                            da.Fill(dt)
+                            DropDownList28.Items.Clear()
+                            DropDownList28.DataSource = dt
+                            DropDownList28.DataValueField = "INVOICE_NO"
+                            DropDownList28.DataBind()
+                            DropDownList28.Items.Insert(0, "Select")
+
+
+
+                        ElseIf (AuthErrorData.Item(0).status = "2") Then
+
+                            lblErrorMsg.Visible = True
+                            lblErrorMsg.Text = AuthErrorData.Item(0).errorCode
 
                         End If
+                    Catch ee As Exception
+                        ' Roll back the transaction. 
+                        myTrans.Rollback()
+                        conn_trans.Close()
+                    Finally
+                        conn_trans.Close()
+                    End Try
+                End Using
+                ''''''''''''''''''''''''''''''''
+                dr.Close()
 
-
-                        Dim sqlQuery As String = ""
-                        sqlQuery = "update DESPATCH set EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "'"
-                        Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
-                        despatch.ExecuteReader()
-                        despatch.Dispose()
-                        myTrans.Commit()
-                        lblErrorMsg.Text = DropDownList28.Text + " : " + result.ToString()
-
-                        'conn.Open()
-                        dt.Clear()
-                        da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE NOT LIKE 'DC%' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='0') ORDER BY INVOICE_NO", conn)
-                        da.Fill(dt)
-                        'conn.Close()
-                        DropDownList28.Items.Clear()
-                        DropDownList28.DataSource = dt
-                        DropDownList28.DataValueField = "INVOICE_NO"
-                        DropDownList28.DataBind()
-                        DropDownList28.Items.Insert(0, "Select")
-                        DropDownList28.SelectedValue = "Select"
-
-                    ElseIf (AuthErrorData.Item(0).status = "2") Then
-
-                        lblErrorMsg.Visible = True
-                        lblErrorMsg.Text = AuthErrorData.Item(0).errorCode
-
-                    End If
-                Catch ee As Exception
-                    ' Roll back the transaction. 
-                    myTrans.Rollback()
-                    conn_trans.Close()
-                Finally
-                    conn_trans.Close()
-                End Try
-            End Using
-            ''''''''''''''''''''''''''''''''
-            dr.Close()
+            End If
             conn.Close()
         Else
-            conn.Close()
+            conn.Open()
+            Dim mc1 As New SqlCommand
+
+            mc1.CommandText = "SELECT d_type+inv_no AS INVOICE_NO, * FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE+INV_NO='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='0') ORDER BY INVOICE_NO"
+            mc1.Connection = conn
+            dr = mc1.ExecuteReader
+            If dr.HasRows Then
+                dr.Read()
+
+                ''''''''''''''''''''''''''''''''
+                Using conn_trans
+                    conn_trans.Open()
+                    myTrans = conn_trans.BeginTransaction()
+
+                    Try
+                        Dim logicClassObj = New EinvoiceLogicClassEY
+                        Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(DropDownList28.Text, Label405.Text)
+                        If (AuthErrorData.Item(0).status = "1") Then
+
+                            Dim result
+                            If (dr.Item("ACC_UNIT") = "Service") Then
+                                If (dr.Item("BILL_PARTY_GST_N") = "") Then
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "NO", dr.Item("INV_DATE"), "INV")
+                                Else
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "YES", dr.Item("INV_DATE"), "INV")
+                                End If
+
+                            Else
+                                If (dr.Item("BILL_PARTY_GST_N") = "") Then
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "NO", dr.Item("INV_DATE"), "INV")
+                                Else
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "YES", dr.Item("INV_DATE"), "INV")
+                                End If
+
+                            End If
+
+
+                            Dim sqlQuery As String = ""
+                            sqlQuery = "update DESPATCH set EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "'"
+                            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                            despatch.ExecuteReader()
+                            despatch.Dispose()
+                            myTrans.Commit()
+                            lblErrorMsg.Text = DropDownList28.Text + " : " + result.ToString()
+
+                            'conn.Open()
+                            dt.Clear()
+                            da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE NOT LIKE 'DC%' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='0') ORDER BY INVOICE_NO", conn)
+                            da.Fill(dt)
+                            'conn.Close()
+                            DropDownList28.Items.Clear()
+                            DropDownList28.DataSource = dt
+                            DropDownList28.DataValueField = "INVOICE_NO"
+                            DropDownList28.DataBind()
+                            DropDownList28.Items.Insert(0, "Select")
+                            DropDownList28.SelectedValue = "Select"
+
+                        ElseIf (AuthErrorData.Item(0).status = "2") Then
+
+                            lblErrorMsg.Visible = True
+                            lblErrorMsg.Text = AuthErrorData.Item(0).errorCode
+
+                        End If
+                    Catch ee As Exception
+                        ' Roll back the transaction. 
+                        myTrans.Rollback()
+                        conn_trans.Close()
+                    Finally
+                        conn_trans.Close()
+                    End Try
+                End Using
+                ''''''''''''''''''''''''''''''''
+                dr.Close()
+                conn.Close()
+            Else
+                conn.Close()
+            End If
         End If
+
+
+
 
     End Sub
 
     Protected Sub DropDownList28_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList28.SelectedIndexChanged
-        conn.Open()
-        Dim mc1 As New SqlCommand
-        mc1.CommandText = "select * from despatch where d_type+inv_no = '" & DropDownList28.Text & "' and fiscal_year='" & DropDownList27.Text & "'"
-        mc1.Connection = conn
-        dr = mc1.ExecuteReader
-        If dr.HasRows Then
-            dr.Read()
-            Label405.Text = dr.Item("PARTY_CODE")
-            Label407.Text = dr.Item("CONSIGN_CODE")
-            Label409.Text = dr.Item("P_CODE")
-            Label411.Text = dr.Item("P_DESC")
-            dr.Close()
-        End If
-        conn.Close()
 
-        lblErrorMsg.Visible = True
-        lblErrorMsg.Text = ""
+        If (DropDownList3.Text = "Credit/Debit Note") Then
+            conn.Open()
+            Dim mc1 As New SqlCommand
+            mc1.CommandText = "select * from DESPATCH where D_TYPE+INV_NO in (select invoice_no from CN_DN_DETAILS where FISCAL_YEAR='" & DropDownList27.Text & "' and DEBIT_CREDIT_NO='" & DropDownList28.Text & "') and INV_DATE in (select ORIGINAL_INVOICE_DATE from CN_DN_DETAILS where FISCAL_YEAR='" & DropDownList27.Text & "' and DEBIT_CREDIT_NO='" & DropDownList28.Text & "')"
+            mc1.Connection = conn
+            dr = mc1.ExecuteReader
+            If dr.HasRows Then
+                dr.Read()
+                Label405.Text = dr.Item("PARTY_CODE")
+                Label407.Text = dr.Item("CONSIGN_CODE")
+                Label409.Text = dr.Item("P_CODE")
+                Label411.Text = dr.Item("P_DESC")
+                Label15.Text = dr.Item("inv_date")
+                dr.Close()
+            End If
+            conn.Close()
+
+            lblErrorMsg.Visible = True
+            lblErrorMsg.Text = ""
+        Else
+            conn.Open()
+            Dim mc1 As New SqlCommand
+            mc1.CommandText = "select * from despatch where d_type+inv_no = '" & DropDownList28.Text & "' and fiscal_year='" & DropDownList27.Text & "'"
+            mc1.Connection = conn
+            dr = mc1.ExecuteReader
+            If dr.HasRows Then
+                dr.Read()
+                Label405.Text = dr.Item("PARTY_CODE")
+                Label407.Text = dr.Item("CONSIGN_CODE")
+                Label409.Text = dr.Item("P_CODE")
+                Label411.Text = dr.Item("P_DESC")
+                Label15.Text = dr.Item("inv_date")
+                dr.Close()
+            End If
+            conn.Close()
+
+            lblErrorMsg.Visible = True
+            lblErrorMsg.Text = ""
+        End If
+
+
+
     End Sub
 
     Protected Sub Button46_Click(sender As Object, e As EventArgs) Handles Button46.Click
@@ -349,14 +480,32 @@ Public Class SendGstr1DataToEY
 
     Protected Sub DropDownList27_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList27.SelectedIndexChanged
         DropDownList28.Enabled = True
-        conn.Open()
-        dt.Clear()
-        da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE NOT LIKE 'DC%' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK') ORDER BY INVOICE_NO", conn)
-        da.Fill(dt)
-        conn.Close()
-        DropDownList28.Items.Clear()
-        DropDownList28.DataSource = dt
-        DropDownList28.DataValueField = "INVOICE_NO"
-        DropDownList28.DataBind()
+
+    End Sub
+
+    Protected Sub DropDownList3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList3.SelectedIndexChanged
+        If (DropDownList3.Text = "Credit/Debit Note") Then
+            conn.Open()
+            dt.Clear()
+            da = New SqlDataAdapter("select DEBIT_CREDIT_NO as INVOICE_NO from CN_DN_DETAILS where FISCAL_YEAR='" + DropDownList27.Text + "' order by DEBIT_CREDIT_NO", conn)
+            da.Fill(dt)
+            conn.Close()
+            DropDownList28.Items.Clear()
+            DropDownList28.DataSource = dt
+            DropDownList28.DataValueField = "INVOICE_NO"
+            DropDownList28.DataBind()
+            DropDownList28.Items.Insert(0, "Select")
+        Else
+            conn.Open()
+            dt.Clear()
+            da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' and FISCAL_YEAR='" + DropDownList27.Text + "' AND D_TYPE NOT LIKE 'DC%' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK') ORDER BY INVOICE_NO", conn)
+            da.Fill(dt)
+            conn.Close()
+            DropDownList28.Items.Clear()
+            DropDownList28.DataSource = dt
+            DropDownList28.DataValueField = "INVOICE_NO"
+            DropDownList28.DataBind()
+            DropDownList28.Items.Insert(0, "Select")
+        End If
     End Sub
 End Class

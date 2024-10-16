@@ -36,6 +36,14 @@
                    <asp:ListItem>2324</asp:ListItem>
                    <asp:ListItem>2425</asp:ListItem>
                </asp:DropDownList>
+                <br />
+              <br />
+                <asp:Label ID="Label1" runat="server" Font-Bold="True" ForeColor="Blue" Text="Invoice Type:-" Width="80px"></asp:Label>
+               <asp:DropDownList ID="DropDownList3" runat="server" AutoPostBack="True">
+                   <asp:ListItem>Select</asp:ListItem>
+                   <asp:ListItem>Credit/Debit Note</asp:ListItem>
+                   <asp:ListItem>FG Invoice</asp:ListItem>
+               </asp:DropDownList>
                <br />
               <asp:Label ID="Label402" runat="server" Font-Bold="True" ForeColor="Blue" Text="Invoice No:-" Width="80px"></asp:Label>
              
@@ -80,6 +88,10 @@
                    
                </asp:DropDownList>
                <br />
+               
+               <asp:Label ID="Label14" runat="server" Font-Bold="True" ForeColor="Blue" Text="Original invoice date:-" Width="80px"></asp:Label>
+               <asp:Label ID="Label15" runat="server" Text="Label"></asp:Label>
+                <br />
                
                <asp:Label ID="Label404" runat="server" Font-Bold="True" ForeColor="Blue" Text="Party Code:-" Width="80px"></asp:Label>
                <asp:Label ID="Label405" runat="server" Text="Label"></asp:Label>

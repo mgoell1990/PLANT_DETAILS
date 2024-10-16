@@ -543,13 +543,4 @@ Partial Public Class PendingGSTPayment
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents crTextBox10 As Global.System.Web.UI.WebControls.TextBox
-    
-    '''<summary>
-    '''GridView10 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents GridView10 As Global.System.Web.UI.WebControls.GridView
 End Class

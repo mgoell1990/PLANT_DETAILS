@@ -314,9 +314,9 @@ Public Class Credit_Debit_note1
                             Dim authIdToken As String = AuthErrorData.Item(0).Idtoken
                             Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY)
                             If (Label7.Text = "Credit Note") Then
-                                EinvErrorData = logicClassObj.GenerateB2CInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox65.Text, GridView1.Rows(0).Cells(5).Text, GridView1.Rows(0).Cells(6).Text, isServiceFlag, "N", "CR")
+                                EinvErrorData = logicClassObj.GenerateB2CInvoice(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", TextBox65.Text, GridView1.Rows(0).Cells(5).Text, GridView1.Rows(0).Cells(6).Text, isServiceFlag, "N", "CR")
                             Else
-                                EinvErrorData = logicClassObj.GenerateB2CInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox65.Text, GridView1.Rows(0).Cells(5).Text, GridView1.Rows(0).Cells(6).Text, isServiceFlag, "N", "DR")
+                                EinvErrorData = logicClassObj.GenerateB2CInvoice(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", TextBox65.Text, GridView1.Rows(0).Cells(5).Text, GridView1.Rows(0).Cells(6).Text, isServiceFlag, "N", "DR")
                             End If
 
 

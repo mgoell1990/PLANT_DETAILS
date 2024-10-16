@@ -935,7 +935,7 @@ Public Class mis_sale
                 conn.Close()
                 'TOTAL PCS CALCULATION
                 Dim total_pcs As Integer = 0
-                If (Label384.Text = "Pcs" Or Label384.Text = "PCS") Then
+                If (Label384.Text = "Pcs" Or Label384.Text = "PCS" Or Label384.Text = "Nos" Or Label384.Text = "NOS") Then
                     total_pcs = CInt(TextBox107.Text)
                 Else
                     total_pcs = 0

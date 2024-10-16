@@ -134,7 +134,7 @@
                             <div class="row  align-items-center mt-1">
 
                                 <div class="col-2 text-start">
-                                    <asp:Label ID="Label446" runat="server" ForeColor="Blue" Text="GARN No"></asp:Label>
+                                    <asp:Label ID="Label446" runat="server" ForeColor="Blue" Text="CRR/GARN No"></asp:Label>
                                 </div>
                                 <div class="col-2 text-start g-0">
                                     <asp:DropDownList class="form-select" ID="garn_dropdown" runat="server">
@@ -257,15 +257,15 @@
                                             <asp:BoundField DataField="GARN_NO_MB_NO" HeaderText="GARN/MB No" />
                                             <asp:BoundField DataField="AC_NO" HeaderText="A/c Head" />
                                             <asp:BoundField DataField="ac_description" HeaderText="A/c Description" />
-                                            <asp:BoundField DataField="AMOUNT_CR" HeaderText="Debit Amount"></asp:BoundField>
-                                            <asp:BoundField DataField="AMOUNT_DR" HeaderText="Credit Amount"></asp:BoundField>
+                                            <asp:BoundField DataField="AMOUNT_DR" HeaderText="Debit Amount"></asp:BoundField>
+                                            <asp:BoundField DataField="AMOUNT_CR" HeaderText="Credit Amount"></asp:BoundField>
                                             <asp:BoundField DataField="POST_INDICATION" HeaderText="Post Indication"></asp:BoundField>
                                         </Columns>
                                     </asp:GridView>
                                 </div>
                             </div>
 
-                            <div class="row  align-items-center mt-1">
+                            <div class="row  align-items-center ">
                                 <div class="col-2 text-start">
                                 </div>
                                 <div class="col-2 text-start g-0">
@@ -286,21 +286,7 @@
                                 </div>
                             </div>
 
-                            <div class="row align-items-center mt-1">
-                                <div class="col" style="overflow: scroll">
-                                    <asp:GridView ID="GridView10" Width="100%" CssClass="table table-bordered table-condensed table-responsive text-center" runat="server" AutoGenerateColumns="false">
-                                        <Columns>
-                                            <asp:BoundField DataField="GARN_NO_MB_NO" HeaderText="GARN/MB No">
-                                                <ItemStyle Width="10px" />
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="AC_NO" HeaderText="A/c Head" />
-                                            <asp:BoundField DataField="ac_description" HeaderText="A/c Description" />
-                                            <asp:BoundField DataField="AMOUNT_DR" HeaderText="Debit Amount" />
-                                            <asp:BoundField DataField="AMOUNT_CR" HeaderText="Credit Amount" />
-                                        </Columns>
-                                    </asp:GridView>
-                                </div>
-                            </div>
+                            
 
 
                         </div>

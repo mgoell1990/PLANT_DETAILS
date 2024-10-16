@@ -140,9 +140,47 @@ Public Class fg_report_quality
         GridView_fdata.DataSource = dt
         GridView_fdata.DataBind()
 
+
+
+
+
+        Dim total_opening, total_opening_MT, total_Prod, total_prod_MT, total_desp, total_desp_MT, total_closing, total_closing_MT As New Decimal(0)
+        Dim j As Integer = 0
+        For j = 0 To GridView_fdata.Rows.Count - 1
+            ''Calculating total Debit and Credit amount
+            total_opening = total_opening + CDec(GridView_fdata.Rows(j).Cells(2).Text)
+            total_opening_MT = total_opening_MT + CDec(GridView_fdata.Rows(j).Cells(3).Text)
+            total_Prod = total_Prod + CDec(GridView_fdata.Rows(j).Cells(4).Text)
+            total_prod_MT = total_prod_MT + CDec(GridView_fdata.Rows(j).Cells(5).Text)
+            total_desp = total_desp + CDec(GridView_fdata.Rows(j).Cells(6).Text)
+            total_desp_MT = total_desp_MT + CDec(GridView_fdata.Rows(j).Cells(7).Text)
+            total_closing = total_closing + CDec(GridView_fdata.Rows(j).Cells(8).Text)
+            ''total_closing_MT = total_closing_MT + CDec(GridView_fdata.Rows(j).Cells(9).Text)
+        Next
+        Dim dRow1 As DataRow
+        dRow1 = dt.NewRow
+        dRow1.Item(1) = "Total"
+        dt.Rows.Add(dRow1)
+
+        dt.AcceptChanges()
+
+        ''GridView_fdata.DataSource = dt
+        GridView_fdata.DataBind()
+
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(2).Text = total_opening
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(3).Text = total_opening_MT
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(4).Text = total_Prod
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(5).Text = total_prod_MT
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(6).Text = total_desp
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(7).Text = total_desp_MT
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(8).Text = total_closing
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Cells(9).Text = total_closing_MT
+        GridView_fdata.Rows(GridView_fdata.Rows.Count - 1).Font.Bold = True
+
         Dim i As Integer = 0
         For i = 0 To GridView_fdata.Rows.Count - 1
             GridView_fdata.Rows(i).Cells(9).Text = CDec(GridView_fdata.Rows(i).Cells(3).Text) + CDec(GridView_fdata.Rows(i).Cells(5).Text) - CDec(GridView_fdata.Rows(i).Cells(7).Text)
+            ''GridView_fdata.DataBind()
         Next
     End Sub
 
@@ -153,7 +191,7 @@ Public Class fg_report_quality
 
         Dim dt3 As DataTable = New DataTable("finish goods stock")
         dt3.Columns.Add(New DataColumn("SL No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("FG Type", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("FG Type", GetType(String)))
         dt3.Columns.Add(New DataColumn("Item Name", GetType(String)))
         dt3.Columns.Add(New DataColumn("Opening Stock", GetType(Decimal)))
         dt3.Columns.Add(New DataColumn("Opening Stock(Mt)", GetType(Decimal)))
@@ -165,7 +203,7 @@ Public Class fg_report_quality
         dt3.Columns.Add(New DataColumn("Closing Stock(Mt)", GetType(Decimal)))
 
         For Me.count = 0 To GridView_fdata.Rows.Count - 1
-            dt3.Rows.Add(GridView_fdata.Rows(count).Cells(0).Text, GridView_fdata.Rows(count).Cells(1).Text, GridView_fdata.Rows(count).Cells(2).Text, CDec(GridView_fdata.Rows(count).Cells(3).Text), CDec(GridView_fdata.Rows(count).Cells(4).Text), CDec(GridView_fdata.Rows(count).Cells(5).Text), CDec(GridView_fdata.Rows(count).Cells(6).Text), CDec(GridView_fdata.Rows(count).Cells(7).Text), CDec(GridView_fdata.Rows(count).Cells(8).Text), CDec(GridView_fdata.Rows(count).Cells(9).Text), CDec(GridView_fdata.Rows(count).Cells(10).Text))
+            dt3.Rows.Add(GridView_fdata.Rows(count).Cells(0).Text, GridView_fdata.Rows(count).Cells(1).Text, CDec(GridView_fdata.Rows(count).Cells(2).Text), CDec(GridView_fdata.Rows(count).Cells(3).Text), CDec(GridView_fdata.Rows(count).Cells(4).Text), CDec(GridView_fdata.Rows(count).Cells(5).Text), CDec(GridView_fdata.Rows(count).Cells(6).Text), CDec(GridView_fdata.Rows(count).Cells(7).Text), CDec(GridView_fdata.Rows(count).Cells(8).Text), CDec(GridView_fdata.Rows(count).Cells(9).Text))
         Next
 
         Using wb As New XLWorkbook()

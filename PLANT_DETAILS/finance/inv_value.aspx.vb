@@ -856,7 +856,7 @@ Public Class inv_value
                             If (DropDownList3.SelectedValue = "Yes") Then
                                 If ((CDec(GridView6.Rows(i).Cells(40).Text) + CDec(GridView6.Rows(i).Cells(41).Text) + CDec(GridView6.Rows(i).Cells(42).Text)) > 0) Then
                                     ''INSERT DATA INTO TAXABLE VALUES TABLE
-                                    Query_1 = "INSERT INTO Taxable_Values (GST_STATUS,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_STATUS,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
+                                    Query_1 = "INSERT INTO Taxable_Values (GST_PAYMENT_VOUCHER_NO,GST_PAYMENT_DATE,GST_STATUS,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_PAYMENT_VOUCHER_NO,@GST_PAYMENT_DATE,@GST_STATUS,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
                                     cmd = New SqlCommand(Query_1, conn_trans, myTrans)
                                     cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox160.Text)
                                     cmd.Parameters.AddWithValue("@INVOICE_DATE", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
@@ -904,8 +904,13 @@ Public Class inv_value
                                     cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
                                     If (DropDownList4.SelectedValue = "Yes") Then
                                         cmd.Parameters.AddWithValue("@GST_STATUS", "PAID")
+                                        cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", CDate(DateTime.Now.ToString("dd-MM-yyyy")))
+                                        cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", "")
+
                                     Else
                                         cmd.Parameters.AddWithValue("@GST_STATUS", "PENDING")
+                                        cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", DBNull.Value)
+                                        cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", DBNull.Value)
                                     End If
                                     cmd.ExecuteReader()
                                     cmd.Dispose()
@@ -2154,7 +2159,7 @@ Public Class inv_value
                                 If ((CDec(GridView210.Rows(I).Cells(46).Text) + CDec(GridView210.Rows(I).Cells(47).Text) + CDec(GridView210.Rows(I).Cells(48).Text)) > 0) Then
 
                                     ''INSERT DATA INTO TAXABLE VALUES TABLE
-                                    query1 = "INSERT INTO Taxable_Values (INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
+                                    query1 = "INSERT INTO Taxable_Values (GST_STATUS,GST_PAYMENT_DATE,GST_PAYMENT_VOUCHER_NO,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_STATUS,@GST_PAYMENT_DATE,@GST_PAYMENT_VOUCHER_NO,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
                                     cmd1 = New SqlCommand(query1, conn_trans, myTrans)
                                     cmd1.Parameters.AddWithValue("@INVOICE_NO", TextBox160.Text)
                                     cmd1.Parameters.AddWithValue("@INVOICE_DATE", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
@@ -2203,8 +2208,12 @@ Public Class inv_value
                                     cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
                                     If (DropDownList5.SelectedValue = "Yes") Then
                                         cmd1.Parameters.AddWithValue("@GST_STATUS", "PAID")
+                                        cmd1.Parameters.AddWithValue("@GST_PAYMENT_DATE", CDate(DateTime.Now.ToString("dd-MM-yyyy")))
+                                        cmd1.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", "")
                                     Else
                                         cmd1.Parameters.AddWithValue("@GST_STATUS", "PENDING")
+                                        cmd1.Parameters.AddWithValue("@GST_PAYMENT_DATE", DBNull.Value)
+                                        cmd1.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", DBNull.Value)
                                     End If
                                     cmd1.ExecuteReader()
                                     cmd1.Dispose()
@@ -3300,7 +3309,7 @@ Public Class inv_value
                                     If ((CDec(row.Cells(33).Text) + CDec(row.Cells(34).Text) + CDec(row.Cells(35).Text)) > 0) Then
 
                                         ''INSERT DATA INTO TAXABLE VALUES TABLE
-                                        Query_1 = "INSERT INTO Taxable_Values (GST_STATUS,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_STATUS,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
+                                        Query_1 = "INSERT INTO Taxable_Values (GST_STATUS,GST_PAYMENT_DATE,GST_PAYMENT_VOUCHER_NO,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_STATUS,@GST_PAYMENT_DATE,@GST_PAYMENT_VOUCHER_NO,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
                                         cmd = New SqlCommand(Query_1, conn_trans, myTrans)
                                         cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox160.Text)
                                         cmd.Parameters.AddWithValue("@INVOICE_DATE", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
@@ -3349,8 +3358,12 @@ Public Class inv_value
                                         cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
                                         If (DropDownList7.SelectedValue = "Yes") Then
                                             cmd.Parameters.AddWithValue("@GST_STATUS", "PAID")
+                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", CDate(DateTime.Now.ToString("dd-MM-yyyy")))
+                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", "")
                                         Else
                                             cmd.Parameters.AddWithValue("@GST_STATUS", "PENDING")
+                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", DBNull.Value)
+                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", DBNull.Value)
                                         End If
                                         cmd.ExecuteReader()
                                         cmd.Dispose()

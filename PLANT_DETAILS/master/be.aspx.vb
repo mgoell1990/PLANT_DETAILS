@@ -352,13 +352,13 @@ Public Class be
                     dr.Close()
                 End If
                 conn.Close()
-                If (qty - rqty) < be_quantity_TextBox5.Text Then
-                    be_quantity_TextBox5.Focus()
-                    be_quantity_TextBox5.Text = ""
-                    Label501.Visible = True
-                    Label501.Text = "BE quantity is greater tha Purchase order balance quantity. PO balance is " + (qty - rqty) + "MT."
-                    Return
-                End If
+                'If (qty - rqty) < be_quantity_TextBox5.Text Then
+                '    be_quantity_TextBox5.Focus()
+                '    be_quantity_TextBox5.Text = ""
+                '    Label501.Visible = True
+                '    Label501.Text = "BE quantity is greater tha Purchase order balance quantity. PO balance is " + (qty - rqty) + "MT."
+                '    Return
+                'End If
                 ''search cha details
                 Dim w_qty, w_complite, w_unit_price, W_discount As Decimal
                 Dim MC As New SqlCommand

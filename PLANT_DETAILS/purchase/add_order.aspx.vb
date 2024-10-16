@@ -2532,7 +2532,7 @@ Public Class add_order
                     conn_trans.Close()
 
                 Else
-                    If ((ORD_AMT - UPTO_AMT) >= CDec(TextBox721.Text)) Then
+                    If ((ORD_AMT - UPTO_AMT) >= CDec(TextBox681.Text)) Then
 
                         Button59.Enabled = True
                         mycommand = New SqlCommand("update ORDER_DETAILS set SO_STATUS='RCW',NO_OF_ITEM=" & GridView4.Rows.Count & " where SO_NO ='" & TextBox125.Text & "'", conn_trans, myTrans)
