@@ -260,18 +260,23 @@
                                             <asp:BoundField DataField="AMOUNT_DR" HeaderText="Debit Amount"></asp:BoundField>
                                             <asp:BoundField DataField="AMOUNT_CR" HeaderText="Credit Amount"></asp:BoundField>
                                             <asp:BoundField DataField="POST_INDICATION" HeaderText="Post Indication"></asp:BoundField>
+                                            <asp:BoundField DataField="TAXABLE_VALUE" HeaderText="Taxable Value"></asp:BoundField>
                                         </Columns>
                                     </asp:GridView>
                                 </div>
                             </div>
 
                             <div class="row  align-items-center ">
-                                <div class="col-2 text-start">
+                                <div class="col-3 text-start d-inline-flex align-items-center">
+                                    <asp:Label ID="Label6" runat="server" CssClass="w-50 me-2" Font-Bold="True" Text="Total Taxable" ForeColor="Blue"></asp:Label>
+                                    <asp:TextBox class="form-control w-50" ID="txtTotalTaxableValue" runat="server" BackColor="#FFFF66" Font-Bold="True" ForeColor="#FF0066" ReadOnly="True">0.00</asp:TextBox>
                                 </div>
-                                <div class="col-2 text-start g-0">
+
+                                <div class="col-3 text-start d-inline-flex align-items-center">
+                                    <asp:Label ID="Label7" runat="server" CssClass="w-50 me-2" Font-Bold="True" Text="Total GST" ForeColor="Blue"></asp:Label>
+                                    <asp:TextBox class="form-control w-50" ID="txtTotalGST" runat="server" BackColor="#FFFF66" Font-Bold="True" ForeColor="#FF0066" ReadOnly="True">0.00</asp:TextBox>
                                 </div>
-                                <div class="col-2 text-start">
-                                </div>
+                                                                
                                 <div class="col-1 text-start">
                                     <asp:Label ID="Label92" runat="server" Font-Bold="True" Text="Debit" ForeColor="Blue"></asp:Label>
                                 </div>
