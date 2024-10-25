@@ -3064,7 +3064,7 @@ Public Class inv_value
 
                                     'update mb book
                                     Dim cmd As New SqlCommand
-                                    Dim Query_1 As String = "update mb_book set GST_STATUS=@GST_STATUS,Valuation_Date=@Valuation_Date,fiscal_year=@fiscal_year,valuation_amt=@valuation_amt,rcm_sgst=@rcm_sgst,rcm_cgst=@rcm_cgst,rcm_igst=@rcm_igst,rcm_cess=@rcm_cess,ld=@ld, rcm=@rcm, sgst=@sgst,cgst=@cgst ,igst=@igst,cess=@cess,sgst_liab=@sgst_liab,cgst_liab=@cgst_liab,igst_liab=@igst_liab,cess_liab=@cess_liab,inv_no=@inv_no,inv_date=@inv_date,prov_amt=@prov_amt,pen_amt=@pen_amt,it_amt=@it_amt,pay_ind=@pay_ind,v_ind=@v_ind,mat_rate=@mat_rate WHERE po_no ='" & Label12.Text & "' AND wo_slno =" & CDec(row.Cells(4).Text) & " AND mb_no  ='" & row.Cells(1).Text & "'  AND v_ind IS NULL"
+                                    Dim Query_1 As String = "update mb_book set TAXABLE_VALUE@TAXABLE_VALUE,BillTrackID=@BillTrackID,GST_STATUS=@GST_STATUS,Valuation_Date=@Valuation_Date,fiscal_year=@fiscal_year,valuation_amt=@valuation_amt,rcm_sgst=@rcm_sgst,rcm_cgst=@rcm_cgst,rcm_igst=@rcm_igst,rcm_cess=@rcm_cess,ld=@ld, rcm=@rcm, sgst=@sgst,cgst=@cgst ,igst=@igst,cess=@cess,sgst_liab=@sgst_liab,cgst_liab=@cgst_liab,igst_liab=@igst_liab,cess_liab=@cess_liab,inv_no=@inv_no,inv_date=@inv_date,prov_amt=@prov_amt,pen_amt=@pen_amt,it_amt=@it_amt,pay_ind=@pay_ind,v_ind=@v_ind,mat_rate=@mat_rate WHERE po_no ='" & Label12.Text & "' AND wo_slno =" & CDec(row.Cells(4).Text) & " AND mb_no  ='" & row.Cells(1).Text & "'  AND v_ind IS NULL"
                                     cmd = New SqlCommand(Query_1, conn_trans, myTrans)
                                     cmd.Parameters.AddWithValue("@inv_no", TextBox160.Text)
                                     cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
@@ -3096,6 +3096,10 @@ Public Class inv_value
                                     Else
                                         cmd.Parameters.AddWithValue("@GST_STATUS", "PENDING")
                                     End If
+
+                                    cmd.Parameters.AddWithValue("@BillTrackID", DropDownList40.Text)
+                                    cmd.Parameters.AddWithValue("@TAXABLE_VALUE", CDec(row.Cells(37).Text))
+
                                     cmd.ExecuteReader()
                                     cmd.Dispose()
 

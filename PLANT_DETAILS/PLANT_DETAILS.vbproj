@@ -1726,6 +1726,7 @@
     <Content Include="Personnel\SensBulkMail.aspx" />
     <Content Include="purchase\add_order.aspx" />
     <Content Include="purchase\CheckOrderValidity.aspx" />
+    <Content Include="purchase\CloseOrder.aspx" />
     <Content Include="purchase\manage_order.aspx" />
     <Content Include="purchase\new_order.aspx" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
@@ -3055,6 +3056,13 @@
     </Compile>
     <Compile Include="purchase\CheckOrderValidity.aspx.vb">
       <DependentUpon>CheckOrderValidity.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="purchase\CloseOrder.aspx.designer.vb">
+      <DependentUpon>CloseOrder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="purchase\CloseOrder.aspx.vb">
+      <DependentUpon>CloseOrder.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="purchase\order_balance.aspx.designer.vb">

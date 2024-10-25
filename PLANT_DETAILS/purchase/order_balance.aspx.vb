@@ -1,14 +1,5 @@
 ﻿Imports System.Globalization
-Imports Microsoft.VisualBasic
-Imports System
-Imports System.Data
 Imports System.Data.SqlClient
-Imports System.Data.DataSet
-Imports System.Data.SqlTypes
-Imports System.Configuration
-Imports CrystalDecisions.CrystalReports.Engine
-Imports CrystalDecisions.Web
-Imports CrystalDecisions.ReportSource
 Public Class order_balance
     Inherits System.Web.UI.Page
     Dim conn As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)

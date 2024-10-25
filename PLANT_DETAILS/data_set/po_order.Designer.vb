@@ -381,6 +381,8 @@ Partial Public Class po_order
         
         Private columnINQUARY_NO As Global.System.Data.DataColumn
         
+        Private columnSO_STATUS As Global.System.Data.DataColumn
+        
         Private columnINQUARY_DATE As Global.System.Data.DataColumn
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -812,6 +814,14 @@ Partial Public Class po_order
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property SO_STATUSColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSO_STATUS
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public ReadOnly Property INQUARY_DATEColumn() As Global.System.Data.DataColumn
             Get
                 Return Me.columnINQUARY_DATE
@@ -905,9 +915,10 @@ Partial Public Class po_order
                     ByVal INSP_TEST_QULITY As String,  _
                     ByVal INDENT_NO As String,  _
                     ByVal INQUARY_NO As String,  _
+                    ByVal SO_STATUS As String,  _
                     ByVal INQUARY_DATE As Date) As DataTable1Row
             Dim rowDataTable1Row As DataTable1Row = CType(Me.NewRow,DataTable1Row)
-            Dim columnValuesArray() As Object = New Object() {SO_ACTUAL, SO_ACTUAL_DATE, SO_NO, SO_DATE, emp_name, emp_mob, emp_phone, emp_email, QUOT_NO, QUOT_DATE, LOI_DATE, PAYMENT_TERM, SD_AMOUNT, S_TAX_ON_FREIGHT, ST_MISC, B_P_CLAUSE, QTY_VERIATATION, MISC_CHARGE, PVC_CLAUSE, DELIVERY_TERM, FREIGHT_TERM, LD, MODE_OF_DESPATCH, NOTE, CURRENCY, INSU_TERM, LOI_NAME, PAYMENT_MODE, PERFORMANCE_GURRENTEE, SPECIAL_GURRENTEE, THIRD_PARTY_INSP, INSP_TERM, SD_DIPOSITE, INSU_TAX, DESTINATION, NO_OF_ITEM, FULL_VALUE, SPECIAL_DEL_PACK_TERM, PAYING_AGENCY, PURGRP_FILE, GENERAL_TERM, DOC_SUPPLY, DOC_PAYMENT, INVOICING_PARTY, PARTY_CODE, CONSIGN_CODE, INSP_TEST_QULITY, INDENT_NO, INQUARY_NO, INQUARY_DATE}
+            Dim columnValuesArray() As Object = New Object() {SO_ACTUAL, SO_ACTUAL_DATE, SO_NO, SO_DATE, emp_name, emp_mob, emp_phone, emp_email, QUOT_NO, QUOT_DATE, LOI_DATE, PAYMENT_TERM, SD_AMOUNT, S_TAX_ON_FREIGHT, ST_MISC, B_P_CLAUSE, QTY_VERIATATION, MISC_CHARGE, PVC_CLAUSE, DELIVERY_TERM, FREIGHT_TERM, LD, MODE_OF_DESPATCH, NOTE, CURRENCY, INSU_TERM, LOI_NAME, PAYMENT_MODE, PERFORMANCE_GURRENTEE, SPECIAL_GURRENTEE, THIRD_PARTY_INSP, INSP_TERM, SD_DIPOSITE, INSU_TAX, DESTINATION, NO_OF_ITEM, FULL_VALUE, SPECIAL_DEL_PACK_TERM, PAYING_AGENCY, PURGRP_FILE, GENERAL_TERM, DOC_SUPPLY, DOC_PAYMENT, INVOICING_PARTY, PARTY_CODE, CONSIGN_CODE, INSP_TEST_QULITY, INDENT_NO, INQUARY_NO, SO_STATUS, INQUARY_DATE}
             rowDataTable1Row.ItemArray = columnValuesArray
             Me.Rows.Add(rowDataTable1Row)
             Return rowDataTable1Row
@@ -979,6 +990,7 @@ Partial Public Class po_order
             Me.columnINSP_TEST_QULITY = MyBase.Columns("INSP_TEST_QULITY")
             Me.columnINDENT_NO = MyBase.Columns("INDENT_NO")
             Me.columnINQUARY_NO = MyBase.Columns("INQUARY_NO")
+            Me.columnSO_STATUS = MyBase.Columns("SO_STATUS")
             Me.columnINQUARY_DATE = MyBase.Columns("INQUARY_DATE")
         End Sub
         
@@ -1083,6 +1095,8 @@ Partial Public Class po_order
             MyBase.Columns.Add(Me.columnINDENT_NO)
             Me.columnINQUARY_NO = New Global.System.Data.DataColumn("INQUARY_NO", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnINQUARY_NO)
+            Me.columnSO_STATUS = New Global.System.Data.DataColumn("SO_STATUS", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSO_STATUS)
             Me.columnINQUARY_DATE = New Global.System.Data.DataColumn("INQUARY_DATE", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnINQUARY_DATE)
         End Sub
@@ -1966,6 +1980,21 @@ Partial Public Class po_order
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property SO_STATUS() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableDataTable1.SO_STATUSColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SO_STATUS' in table 'DataTable1' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableDataTable1.SO_STATUSColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property INQUARY_DATE() As Date
             Get
                 Try 
@@ -2565,6 +2594,18 @@ Partial Public Class po_order
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub SetINQUARY_NONull()
             Me(Me.tableDataTable1.INQUARY_NOColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsSO_STATUSNull() As Boolean
+            Return Me.IsNull(Me.tableDataTable1.SO_STATUSColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetSO_STATUSNull()
+            Me(Me.tableDataTable1.SO_STATUSColumn) = Global.System.Convert.DBNull
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
