@@ -540,13 +540,13 @@ Public Class OutsourceMatDespatch
         ass_price = 0.0
         'cas4_ass_price = 0.0
         Dim stock_qty As Decimal = 0.0
-        Dim cas4_price, item_qty, unit_rate, discount, pack_forwd, item_cess, item_tcs, terminal_tax, cgst, sgst, igst, qty_send, freight_rate, UNIT_WEIGHT As Decimal
+        Dim item_qty, unit_rate, discount, pack_forwd, item_cess, item_tcs, terminal_tax, cgst, sgst, igst, qty_send, freight_rate, UNIT_WEIGHT As Decimal
         Dim freight_type As String = ""
         Dim ord_au As String = ""
         Dim DISC_TYPE As String = ""
         Dim PACK_TYPE, ITEM_TYPE As New String("")
         Dim ED_TYPE As String = ""
-        cas4_price = 0
+
         unit_rate = 0
         discount = 0
         pack_forwd = 0
@@ -584,7 +584,6 @@ Public Class OutsourceMatDespatch
         ''item assessable value calculatation
         conn.Open()
         mc.CommandText = "select MAX(SO_MAT_ORDER.ITEM_WEIGHT) AS ITEM_WEIGHT,SUM(ITEM_CGST) AS ITEM_CGST,SUM(ITEM_SGST) AS ITEM_SGST,SUM(ITEM_IGST) AS ITEM_IGST, SUM(ITEM_CESS) AS ITEM_CESS,MAX(SO_MAT_ORDER.DISC_TYPE) AS DISC_TYPE,MAX(SO_MAT_ORDER.PACK_TYPE) AS PACK_TYPE ,MAX(SO_MAT_ORDER.ORD_AU) AS ORD_AU, SUM(SO_MAT_ORDER.ITEM_QTY) AS ITEM_QTY, SUM(SO_MAT_ORDER.ITEM_UNIT_RATE) AS ITEM_UNIT_RATE ,SUM(SO_MAT_ORDER .ITEM_DISCOUNT) AS ITEM_DISCOUNT,SUM(SO_MAT_ORDER .ITEM_PACK) AS ITEM_PACK ,SUM(SO_MAT_ORDER .ITEM_QTY_SEND) AS ITEM_QTY_SEND ,SUM(SO_MAT_ORDER .ITEM_TCS) AS ITEM_TCS ,SUM(SO_MAT_ORDER .ITEM_TERMINAL_TAX) AS ITEM_TERMINAL_TAX , MAX(SO_MAT_ORDER .ITEM_FREIGHT_TYPE) AS ITEM_FREIGHT_TYPE ,SUM(SO_MAT_ORDER .ITEM_FREIGHT_PU) AS ITEM_FREIGHT_PU , " &
-                             " (select CAS_4 .COST_VALUE  from outsource_F_ITEM join CAS_4 on outsource_F_ITEM . ITEM_TYPE =CAS_4.MAT_GROUP where ITEM_CODE ='" & DropDownList5.Text & "' and CAS_4 .EFECTIVE_DATE =(select max(CAS_4 .EFECTIVE_DATE)  from CAS_4 join outsource_F_ITEM on outsource_F_ITEM . ITEM_TYPE =CAS_4.MAT_GROUP where outsource_F_ITEM .ITEM_CODE ='" & DropDownList5.Text & "' and CAS_4 .EFECTIVE_DATE <='" & working_date.Year & "-" & working_date.Month & "-" & working_date.Day & "')) as COST_VALUE, " &
                              " MAX(CHPTR_HEADING.TAX_VALUE) AS TAX_VALUE ,MAX(CHPTR_HEADING.ED_SESS) AS ED_SESS ,MAX(CHPTR_HEADING.SHED_CESS) AS SHED_CESS, Max(outsource_F_ITEM.ITEM_TYPE) As ITEM_TYPE FROM SO_MAT_ORDER JOIN outsource_F_ITEM ON SO_MAT_ORDER .ITEM_CODE =outsource_F_ITEM .ITEM_CODE JOIN CHPTR_HEADING on outsource_F_ITEM .ITEM_CHPTR =CHPTR_HEADING .CHPT_CODE where SO_MAT_ORDER .ITEM_SLNO='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim & "' and SO_MAT_ORDER .SO_NO='" & TextBox124.Text & "' and SO_MAT_ORDER .ITEM_CODE='" & DropDownList5.Text & "' AND AMD_DATE <='" & working_date.Year & "-" & working_date.Month & "-" & working_date.Day & "'"
         mc.Connection = conn
         dr = mc.ExecuteReader
@@ -605,11 +604,11 @@ Public Class OutsourceMatDespatch
             item_qty = dr.Item("ITEM_QTY")
             freight_type = dr.Item("ITEM_FREIGHT_TYPE")
             freight_rate = dr.Item("ITEM_FREIGHT_PU")
-            If (IsDBNull(dr.Item("COST_VALUE"))) Then
-                cas4_price = 0.00
-            Else
-                cas4_price = dr.Item("COST_VALUE")
-            End If
+            'If (IsDBNull(dr.Item("COST_VALUE"))) Then
+            '    cas4_price = 0.00
+            'Else
+            '    cas4_price = dr.Item("COST_VALUE")
+            'End If
 
             DISC_TYPE = dr.Item("DISC_TYPE")
             PACK_TYPE = dr.Item("PACK_TYPE")
@@ -1895,111 +1894,111 @@ Public Class OutsourceMatDespatch
                     Else
                         Dim logicClassObj = New EinvoiceLogicClassEY
                         Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(TextBox177.Text + TextBox65.Text, TextBox125.Text)
-                        'If (AuthErrorData.Item(0).status = "1") Then
-                        '    Dim authIdToken As String = AuthErrorData.Item(0).Idtoken
-                        '    Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", tcsFlag, "INV")
-                        '    If (EinvErrorData.Item(0).status = "1") Then
-                        '        TextBox6.Text = EinvErrorData.Item(0).IRN
-                        '        TextBox8.Text = EinvErrorData.Item(0).EwbNo
-                        '        TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
+                        If (AuthErrorData.Item(0).status = "1") Then
+                            Dim authIdToken As String = AuthErrorData.Item(0).Idtoken
+                            Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", tcsFlag, "INV")
+                            If (EinvErrorData.Item(0).status = "1") Then
+                                TextBox6.Text = EinvErrorData.Item(0).IRN
+                                TextBox8.Text = EinvErrorData.Item(0).EwbNo
+                                TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
 
 
-                        '        '================SENDING DATA TO EY PORTAL START==================='
-                        '        'Dim result
-                        '        'If (Label289.Text = "Service") Then
-                        '        '    If (BILL_PARTY_GST = "") Then
-                        '        '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "NO", dr.Item("INV_DATE"))
-                        '        '    Else
-                        '        '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "YES", dr.Item("INV_DATE"))
-                        '        '    End If
+                                '================SENDING DATA TO EY PORTAL START==================='
+                                'Dim result
+                                'If (Label289.Text = "Service") Then
+                                '    If (BILL_PARTY_GST = "") Then
+                                '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "NO", dr.Item("INV_DATE"))
+                                '    Else
+                                '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "YES", "N", "YES", dr.Item("INV_DATE"))
+                                '    End If
 
-                        '        'Else
-                        '        '    If (BILL_PARTY_GST = "") Then
-                        '        '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "NO", dr.Item("INV_DATE"))
-                        '        '    Else
-                        '        '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "YES", dr.Item("INV_DATE"))
-                        '        '    End If
+                                'Else
+                                '    If (BILL_PARTY_GST = "") Then
+                                '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "NO", dr.Item("INV_DATE"))
+                                '    Else
+                                '        result = logicClassObj.SubmitGSTR1DataToEYPortal(AuthErrorData.Item(0).Idtoken, New Guid().ToString(), "", dr.Item("INVOICE_NO"), dr.Item("PARTY_CODE"), dr.Item("CONSIGN_CODE"), "NO", "N", "YES", dr.Item("INV_DATE"))
+                                '    End If
 
-                        '        'End If
+                                'End If
 
-                        '        Dim result
-                        '        If (BILL_PARTY_GST = "") Then
-                        '            result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                        '        Else
-                        '            result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                        '        End If
+                                Dim result
+                                If (BILL_PARTY_GST = "") Then
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                                Else
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                                End If
 
-                        '        '================SENDING DATA TO EY PORTAL END==================='
-                        '        Dim sqlQuery As String = ""
-                        '        sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "',EWB_NO ='" & EinvErrorData.Item(0).EwbNo & "',EWB_DATE ='" & EinvErrorData.Item(0).EwbDt & "',EWB_VALIDITY ='" & EinvErrorData.Item(0).EwbValidTill & "', EWB_STATUS ='ACTIVE', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox65.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
-                        '        Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
-                        '        despatch.ExecuteReader()
-                        '        despatch.Dispose()
-                        '        goAheadFlag = True
+                                '================SENDING DATA TO EY PORTAL END==================='
+                                Dim sqlQuery As String = ""
+                                sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "',EWB_NO ='" & EinvErrorData.Item(0).EwbNo & "',EWB_DATE ='" & EinvErrorData.Item(0).EwbDt & "',EWB_VALIDITY ='" & EinvErrorData.Item(0).EwbValidTill & "', EWB_STATUS ='ACTIVE', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox65.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
+                                Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                                despatch.ExecuteReader()
+                                despatch.Dispose()
+                                goAheadFlag = True
 
-                        '    ElseIf (EinvErrorData.Item(0).status = "2") Then
-                        '        Label31.Visible = True
-                        '        Label42.Visible = True
-                        '        txtEinvoiceErrorCode.Visible = True
-                        '        txtEinvoiceErrorMessage.Visible = True
-                        '        txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorCode
-                        '        txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errorMessage
-                        '        goAheadFlag = False
-                        '        Label308.Text = "There is some response error in E-Invoice generation."
+                            ElseIf (EinvErrorData.Item(0).status = "2") Then
+                                Label31.Visible = True
+                                Label42.Visible = True
+                                txtEinvoiceErrorCode.Visible = True
+                                txtEinvoiceErrorMessage.Visible = True
+                                txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorCode
+                                txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errorMessage
+                                goAheadFlag = False
+                                Label308.Text = "There is some response error in E-Invoice generation."
 
-                        '    ElseIf (EinvErrorData.Item(0).status = "3") Then
-                        '        Label31.Visible = True
-                        '        Label42.Visible = True
-                        '        txtEinvoiceErrorCode.Visible = True
-                        '        txtEinvoiceErrorMessage.Visible = True
-                        '        txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorfield
-                        '        txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errordesc
-                        '        goAheadFlag = False
-                        '        Label308.Text = "There is some response error in E-Invoice generation."
-                        '    ElseIf (EinvErrorData.Item(0).status = "4") Then
-                        '        TextBox6.Text = EinvErrorData.Item(0).IRN
-                        '        Label31.Visible = True
-                        '        Label42.Visible = True
-                        '        txtEinvoiceErrorCode.Visible = True
-                        '        txtEinvoiceErrorMessage.Visible = True
-                        '        txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).infoErrorCode
-                        '        txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).infoErrorMessage
+                            ElseIf (EinvErrorData.Item(0).status = "3") Then
+                                Label31.Visible = True
+                                Label42.Visible = True
+                                txtEinvoiceErrorCode.Visible = True
+                                txtEinvoiceErrorMessage.Visible = True
+                                txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorfield
+                                txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errordesc
+                                goAheadFlag = False
+                                Label308.Text = "There is some response error in E-Invoice generation."
+                            ElseIf (EinvErrorData.Item(0).status = "4") Then
+                                TextBox6.Text = EinvErrorData.Item(0).IRN
+                                Label31.Visible = True
+                                Label42.Visible = True
+                                txtEinvoiceErrorCode.Visible = True
+                                txtEinvoiceErrorMessage.Visible = True
+                                txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).infoErrorCode
+                                txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).infoErrorMessage
 
-                        '        '================SENDING DATA TO EY PORTAL START==================='
+                                '================SENDING DATA TO EY PORTAL START==================='
 
-                        '        Dim result
-                        '        If (BILL_PARTY_GST = "") Then
-                        '            result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                        '        Else
-                        '            result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                        '        End If
+                                Dim result
+                                If (BILL_PARTY_GST = "") Then
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                                Else
+                                    result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox65.Text, TextBox125.Text, TextBox18.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                                End If
 
-                        '        '================SENDING DATA TO EY PORTAL END==================='
+                                '================SENDING DATA TO EY PORTAL END==================='
 
-                        '        Dim sqlQuery As String = ""
-                        '        sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox65.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
-                        '        Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
-                        '        despatch.ExecuteReader()
-                        '        despatch.Dispose()
-                        '        goAheadFlag = True
-                        '        partialSuccess = True
-                        '        Label308.Text = "There is error in E-way bill generation, please generate E-way bill alone with above IRN."
-                        '    End If
+                                Dim sqlQuery As String = ""
+                                sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox65.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
+                                Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                                despatch.ExecuteReader()
+                                despatch.Dispose()
+                                goAheadFlag = True
+                                partialSuccess = True
+                                Label308.Text = "There is error in E-way bill generation, please generate E-way bill alone with above IRN."
+                            End If
 
-                        'ElseIf (AuthErrorData.Item(0).status = "2") Then
+                        ElseIf (AuthErrorData.Item(0).status = "2") Then
 
-                        '    Label31.Visible = True
-                        '    Label42.Visible = True
-                        '    txtEinvoiceErrorCode.Visible = True
-                        '    txtEinvoiceErrorMessage.Visible = True
-                        '    txtEinvoiceErrorCode.Text = AuthErrorData.Item(0).errorCode
-                        '    txtEinvoiceErrorMessage.Text = AuthErrorData.Item(0).errorMessage
-                        '    goAheadFlag = False
-                        '    Label308.Text = "There is some response error in E-invoice Authentication."
-                        'Else
-                        '    goAheadFlag = False
-                        '    Label308.Text = "There is some response error in E-invoice Authentication."
-                        'End If
+                            Label31.Visible = True
+                            Label42.Visible = True
+                            txtEinvoiceErrorCode.Visible = True
+                            txtEinvoiceErrorMessage.Visible = True
+                            txtEinvoiceErrorCode.Text = AuthErrorData.Item(0).errorCode
+                            txtEinvoiceErrorMessage.Text = AuthErrorData.Item(0).errorMessage
+                            goAheadFlag = False
+                            Label308.Text = "There is some response error in E-invoice Authentication."
+                        Else
+                            goAheadFlag = False
+                            Label308.Text = "There is some response error in E-invoice Authentication."
+                        End If
 
 
                     End If

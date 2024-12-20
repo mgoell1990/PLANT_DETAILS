@@ -483,7 +483,7 @@ Public Class PendingGSTPayment
 
                         Dim PSC_PRICE As New Decimal(0)
 
-                        PSC_PRICE = (txtTotalGST.Text - CDec(debitTextBox.Text))
+                        PSC_PRICE = (TextBox5.Text - CDec(debitTextBox.Text))
                         If PSC_PRICE > 0 Then
                             ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), psc_head, "Dr", PSC_PRICE, "PSC", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
                         ElseIf PSC_PRICE < 0 Then
@@ -494,9 +494,9 @@ Public Class PendingGSTPayment
 
 
                         ''SUND DEBIT
-                        ledger_billpass(TextBox55.Text, "PAYMENT", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), ac_head, "Dr", CDec(txtTotalGST.Text), "SUND", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
+                        ledger_billpass(TextBox55.Text, "PAYMENT", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), ac_head, "Dr", txtTotalGST.Text, "SUND", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
                         ''BANK CREDIT
-                        ledger_billpass(TextBox55.Text, "BANK", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), bank_head, "Cr", txtTotalGST.Text, "BANK", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
+                        ledger_billpass(TextBox55.Text, "BANK", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), bank_head, "Cr", CDec(TextBox5.Text), "BANK", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
 
                         Dim cmd11 As New SqlCommand
                         Dim Query11 As String = ""
@@ -763,11 +763,11 @@ Public Class PendingGSTPayment
                 If (IGST_HEAD = "84811") Then
                     da = New SqlDataAdapter("select mb_no as GARN_NO_MB_NO,'" + IGST_HEAD + "' as AC_NO,'" + IGST_DESC + "' as ac_description,igst as AMOUNT_DR,0 as AMOUNT_CR, 'IGST_EXPENSES' as POST_INDICATION,'0' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'
                                             union
-                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,igst as AMOUNT_CR, 'SUND' as POST_INDICATION,'" + TextBox36.Text + "' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
+                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,igst as AMOUNT_CR, 'SUND' as POST_INDICATION,valuation_amt as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
                 Else
                     da = New SqlDataAdapter("select mb_no as GARN_NO_MB_NO,'" + IGST_HEAD + "' as AC_NO,'" + IGST_DESC + "' as ac_description,igst as AMOUNT_DR,0 as AMOUNT_CR, 'IGST' as POST_INDICATION,'0' as TAXABLE_VALUE  from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'
                                             union
-                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,igst as AMOUNT_CR, 'SUND' as POST_INDICATION,'" + TextBox36.Text + "' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
+                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,igst as AMOUNT_CR, 'SUND' as POST_INDICATION,valuation_amt as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
                 End If
 
             Else
@@ -776,23 +776,25 @@ Public Class PendingGSTPayment
                                             union
                                             select mb_no as GARN_NO_MB_NO,'" + SGST_HEAD + "' as AC_NO,'" + SGST_DESC + "' as ac_description,sgst as AMOUNT_DR,0 as AMOUNT_CR, 'SGST_EXPENSES' as POST_INDICATION,'0' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'
                                             union
-                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,(cgst+sgst) as AMOUNT_CR, 'SUND' as POST_INDICATION,'" + TextBox36.Text + "' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
+                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,(cgst+sgst) as AMOUNT_CR, 'SUND' as POST_INDICATION,valuation_amt as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
                 Else
                     da = New SqlDataAdapter("select mb_no as GARN_NO_MB_NO,'" + CGST_HEAD + "' as AC_NO,'" + CGST_DESC + "' as ac_description,cgst as AMOUNT_DR,0 as AMOUNT_CR, 'CGST' as POST_INDICATION,'0' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'
                                             union
                                             select mb_no as GARN_NO_MB_NO,'" + SGST_HEAD + "' as AC_NO,'" + SGST_DESC + "' as ac_description,sgst as AMOUNT_DR,0 as AMOUNT_CR, 'SGST' as POST_INDICATION,'0' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'
                                             union
-                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,(cgst+sgst) as AMOUNT_CR, 'SUND' as POST_INDICATION,'" + TextBox36.Text + "' as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
+                                            select mb_no as GARN_NO_MB_NO,'" + SUND_HEAD + "' as AC_NO,'SUNDRY CREDITOR' as ac_description,0 as AMOUNT_DR,(cgst+sgst) as AMOUNT_CR, 'SUND' as POST_INDICATION,valuation_amt as TAXABLE_VALUE from mb_book where inv_no='" & TextBox169.Text & "' and v_ind ='V' AND PO_NO='" & TextBox55.Text & "' and GST_STATUS='PENDING'", conn)
                 End If
 
             End If
 
-
-
-            ''da.Fill(dt1)
-            dt1.Rows.Add(da)
-            ViewState("mat1") = dt1
-            Me.BINDGRID1()
+            Dim ds As New DataSet
+            da.Fill(ds)
+            GridView5.DataSource = ds.Tables(0)
+            GridView5.DataBind()
+            'da.Fill(dt1)
+            'dt1.Rows.Add(da)
+            'ViewState("mat1") = dt1
+            'Me.BINDGRID1()
 
         Else
             If (CDec(TextBox4.Text) > 0) Then

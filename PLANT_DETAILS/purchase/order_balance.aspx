@@ -130,6 +130,7 @@
                                     </div>
                                     <div class="col text-start">
                                         <asp:Button ID="Button64" runat="server" Text="Search" CssClass="btn btn-primary" />
+                                        <asp:Button ID="Button30" runat="server" Text="Download" CssClass="btn btn-primary" />
                                         <asp:Button ID="Button68" runat="server" Text="Print" CssClass="btn btn-success" />
                                     </div>
                                 </div>
@@ -156,9 +157,10 @@
                                                 <asp:GridView ID="GridView4" CssClass="table table-bordered border-2 table-responsive text-center" Style="font-size: 15px" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
                                                     <Columns>
                                                         <asp:BoundField DataField="PO_NO" HeaderText="Order No" />
-                                                        <asp:BoundField DataField="W_SLNO" HeaderText="W.O. SLNo" />
-                                                        <asp:BoundField DataField="W_NAME" HeaderText="Work Name" />
+                                                        <asp:BoundField DataField="W_SLNO" HeaderText="Order SLNo" />
+                                                        <asp:BoundField DataField="W_NAME" HeaderText="Description" />
                                                         <asp:BoundField DataField="W_AU" HeaderText="Acc.Unit" />
+                                                        <asp:BoundField DataField="UNIT_PRICE" HeaderText="Unit Price" />
                                                         <asp:BoundField DataField="W_START_DATE" HeaderText="Start Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                         <asp:BoundField DataField="W_END_DATE" HeaderText="End Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                         <asp:BoundField DataField="W_QTY" HeaderText="Order Qty." />

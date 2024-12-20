@@ -2013,9 +2013,10 @@ Public Class s_report
         dt3.Columns.Add(New DataColumn("Stock", GetType(Decimal)))
         dt3.Columns.Add(New DataColumn("Unit Price", GetType(Decimal)))
         dt3.Columns.Add(New DataColumn("Value", GetType(Decimal)))
-
+        dt3.Columns.Add(New DataColumn("Purpose", GetType(String)))
+        dt3.Columns.Add(New DataColumn("Remarks", GetType(String)))
         For Me.count = 0 To GridView5.Rows.Count - 1
-            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, GridView5.Rows(count).Cells(3).Text, GridView5.Rows(count).Cells(4).Text, GridView5.Rows(count).Cells(5).Text, CDec(GridView5.Rows(count).Cells(6).Text), CDec(GridView5.Rows(count).Cells(7).Text), CDec(GridView5.Rows(count).Cells(8).Text))
+            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, CDate(GridView5.Rows(count).Cells(3).Text), CDate(GridView5.Rows(count).Cells(4).Text), GridView5.Rows(count).Cells(5).Text, CDec(GridView5.Rows(count).Cells(6).Text), CDec(GridView5.Rows(count).Cells(7).Text), CDec(GridView5.Rows(count).Cells(8).Text), GridView5.Rows(count).Cells(9).Text, GridView5.Rows(count).Cells(10).Text)
         Next
 
         Using wb As New XLWorkbook()

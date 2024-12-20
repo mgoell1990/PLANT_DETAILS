@@ -548,6 +548,8 @@
                                             </div>
                                             <div class="col text-start">
                                                 <asp:DropDownList class="form-select" ID="DropDownList10" runat="server">
+                                                    <asp:ListItem>1</asp:ListItem>
+                                                    <asp:ListItem>2</asp:ListItem>
                                                     <asp:ListItem>3</asp:ListItem>
                                                     <asp:ListItem Selected="True">5</asp:ListItem>
                                                     <asp:ListItem>10</asp:ListItem>

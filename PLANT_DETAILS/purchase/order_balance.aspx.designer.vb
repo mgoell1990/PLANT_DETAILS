@@ -131,6 +131,15 @@ Partial Public Class order_balance
     Protected WithEvents Button64 As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
+    '''Button30 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button30 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
     '''Button68 control.
     '''</summary>
     '''<remarks>

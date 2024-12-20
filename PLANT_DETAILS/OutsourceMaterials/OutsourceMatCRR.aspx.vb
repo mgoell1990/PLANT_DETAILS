@@ -361,8 +361,13 @@ Public Class OutsourceMatCRR
 
         If (au_TextBox.Text = "PCS") Then
             net_rcd_qty.Text = CDec(rcv_qty_TextBox.Text)
+            net_rcd_qty.ReadOnly = True
+        ElseIf (au_TextBox.Text = "SET") Then
+            'net_rcd_qty.Text = "0"
+            net_rcd_qty.ReadOnly = False
         Else
             net_rcd_qty.Text = CDec(rcv_qty_TextBox.Text - CDec(bag_weightTextBox.Text))
+            net_rcd_qty.ReadOnly = True
         End If
 
 

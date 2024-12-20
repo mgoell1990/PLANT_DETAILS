@@ -239,7 +239,7 @@
 
                                 </div>
                             </div>
-                           
+
                         </div>
                     </div>
                 </asp:Panel>
@@ -2003,57 +2003,58 @@
                                                 <asp:Label ID="Label19" runat="server" ForeColor="#CC0000"></asp:Label>
                                             </div>
                                         </div>
-                                        <div class="row align-items-center">
-                                            <div class="col-6 text-start">
+
+                                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                            <ContentTemplate>
+
                                                 <div class="row align-items-center">
-                                                    <div class="col-5">
-                                                        <asp:Label ID="Label22" runat="server" Font-Bold="True" Text="GST Payment"></asp:Label>
+                                                    <div class="col-6 text-start">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-5">
+                                                                <asp:Label ID="Label22" runat="server" Font-Bold="True" Text="GST Payment"></asp:Label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <asp:DropDownList class="form-select" ID="DropDownList7" runat="server" AutoPostBack="True">
+                                                                    
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-7">
-                                                        <asp:DropDownList class="form-select" ID="DropDownList7" runat="server">
-                                                            <asp:ListItem>Select</asp:ListItem>
-                                                            <asp:ListItem Selected="True">Yes</asp:ListItem>
-                                                            <asp:ListItem>No</asp:ListItem>
-                                                        </asp:DropDownList>
+                                                    <div class="col-6 text-start">
+                                                        <div class="row align-items-center">
+                                                            <div class="col">
+                                                            </div>
+
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-6 text-start">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
+                                                <div class="row">
+                                                    <div class="col-6 text-start">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-5">
+                                                                <asp:Label ID="Label6" runat="server" Font-Bold="True" Text="R.C.M."></asp:Label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <asp:DropDownList class="form-select" ID="DropDownList2" runat="server">
+                                                                    
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6 text-start">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-5">
+                                                                <asp:Label ID="Label54" runat="server" Font-Bold="True" Text="S.D. (%)"></asp:Label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <asp:TextBox class="form-control" ID="TextBox4" runat="server" Font-Names="Times New Roman">0.00</asp:TextBox>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6 text-start">
-                                                <div class="row align-items-center">
-                                                    <div class="col-5">
-                                                        <asp:Label ID="Label6" runat="server" Font-Bold="True" Text="R.C.M."></asp:Label>
-                                                    </div>
-                                                    <div class="col-7">
-                                                        <asp:DropDownList class="form-select" ID="DropDownList2" runat="server">
-                                                            <asp:ListItem>Select</asp:ListItem>
-                                                            <asp:ListItem Selected="True">Yes</asp:ListItem>
-                                                            <asp:ListItem>No</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 text-start">
-                                                <div class="row align-items-center">
-                                                    <div class="col-5">
-                                                        <asp:Label ID="Label54" runat="server" Font-Bold="True" Text="S.D. (%)"></asp:Label>
-                                                    </div>
-                                                    <div class="col-7">
-                                                        <asp:TextBox class="form-control" ID="TextBox4" runat="server" Font-Names="Times New Roman">0.00</asp:TextBox>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
+                                            </ContentTemplate>
+                                        </asp:UpdatePanel>
                                         <div class="row">
                                             <div class="col-6 text-start">
                                                 <div class="row align-items-center">

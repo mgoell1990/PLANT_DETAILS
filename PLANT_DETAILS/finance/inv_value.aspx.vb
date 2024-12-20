@@ -39,6 +39,15 @@ Public Class inv_value
             DropDownList40.Items.Add("Select")
             DropDownList40.SelectedValue = "Select"
             Panel30.Visible = True
+
+            DropDownList7.Items.Insert(0, "Select")
+            DropDownList7.Items.Insert(1, "Yes")
+            DropDownList7.Items.Insert(2, "No")
+            DropDownList7.SelectedValue = "No"
+            DropDownList2.Items.Insert(0, "Select")
+            DropDownList2.Items.Insert(1, "Yes")
+            DropDownList2.Items.Insert(2, "No")
+            DropDownList2.SelectedValue = "Yes"
         End If
         TextBox32_CalendarExtender.EndDate = DateTime.Now.Date
 
@@ -288,6 +297,8 @@ Public Class inv_value
             MultiView1.ActiveViewIndex = 2
             Label12.Text = TextBox171.Text
             Label16.Text = TextBox168.Text
+
+
 
         End If
         Panel37.Visible = False
@@ -1062,11 +1073,33 @@ Public Class inv_value
                                 save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CESS_HEAD, "Dr", cess_price, "CESS_EXPENSES", DropDownList40.Text, 2, "")
                             End If
 
-                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), SGST_LIAB_HEAD, "Cr", sgst_liab, "SGST_LIAB", DropDownList40.Text, 3, "")
-                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CGST_LIAB_HEAD, "Cr", cgst_liab, "CGST_LIAB", DropDownList40.Text, 3, "")
-                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), IGST_LIAB_HEAD, "Cr", igst_liab, "IGST_LIAB", DropDownList40.Text, 3, "")
-                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CESS_LIAB_HEAD, "Cr", cess_liab, "CESS_LIAB", DropDownList40.Text, 3, "")
+                            ''save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), SGST_LIAB_HEAD, "Cr", sgst_liab, "SGST_LIAB", DropDownList40.Text, 3, "")
+                            ''save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CGST_LIAB_HEAD, "Cr", cgst_liab, "CGST_LIAB", DropDownList40.Text, 3, "")
+                            ''save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), IGST_LIAB_HEAD, "Cr", igst_liab, "IGST_LIAB", DropDownList40.Text, 3, "")
+                            ''save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CESS_LIAB_HEAD, "Cr", cess_liab, "CESS_LIAB", DropDownList40.Text, 3, "")
                             ''RCM LIAB
+
+                        ElseIf (DropDownList4.SelectedValue = "No") Then
+                            If (DropDownList43.SelectedValue = "Yes") Then
+                                If (DropDownList3.SelectedValue = "Yes") Then
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), SGST_HEAD, "Dr", sgst_price, "SGST", DropDownList40.Text, 2, "")
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CGST_HEAD, "Dr", cgst_price, "CGST", DropDownList40.Text, 2, "")
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), IGST_HEAD, "Dr", igst_price, "IGST", DropDownList40.Text, 2, "")
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CESS_HEAD, "Dr", cess_price, "CESS", DropDownList40.Text, 2, "")
+
+                                Else
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), SGST_HEAD, "Dr", sgst_price, "SGST_EXPENSES", DropDownList40.Text, 2, "")
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CGST_HEAD, "Dr", cgst_price, "CGST_EXPENSES", DropDownList40.Text, 2, "")
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), IGST_HEAD, "Dr", igst_price, "IGST_EXPENSES", DropDownList40.Text, 2, "")
+                                    save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CESS_HEAD, "Dr", cess_price, "CESS_EXPENSES", DropDownList40.Text, 2, "")
+                                End If
+
+                                save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), SGST_LIAB_HEAD, "Cr", sgst_liab, "SGST_LIAB", DropDownList40.Text, 3, "")
+                                save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CGST_LIAB_HEAD, "Cr", cgst_liab, "CGST_LIAB", DropDownList40.Text, 3, "")
+                                save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), IGST_LIAB_HEAD, "Cr", igst_liab, "IGST_LIAB", DropDownList40.Text, 3, "")
+                                save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), CESS_LIAB_HEAD, "Cr", cess_liab, "CESS_LIAB", DropDownList40.Text, 3, "")
+                            End If
+
                         End If
 
 
@@ -2618,7 +2651,7 @@ Public Class inv_value
                             If DropDownList7.SelectedValue = "Yes" Then
                                 SUND_PRICE = FormatNumber(CDec(GridView1.Rows(I).Cells(13).Text) + SGST_VALUE + CGST_VALUE + IGST_VALUE + CESS_VALUE - (CDec(TextBox25.Text) + CDec(TextBox22.Text) + sd_order + tds_price + CDec(GridView1.Rows(I).Cells(19).Text) + CDec(GridView1.Rows(I).Cells(20).Text) + CDec(GridView1.Rows(I).Cells(21).Text) + CDec(GridView1.Rows(I).Cells(22).Text) + TDS_SGST + TDS_CGST + TDS_IGST), 2)
                             ElseIf DropDownList7.SelectedValue = "No" Then
-                                SUND_PRICE = FormatNumber(CDec(GridView1.Rows(I).Cells(13).Text) - (CDec(TextBox25.Text) + CDec(TextBox22.Text) + sd_order + tds_price + CDec(GridView1.Rows(I).Cells(19).Text) + CDec(GridView1.Rows(I).Cells(20).Text) + CDec(GridView1.Rows(I).Cells(21).Text) + CDec(GridView1.Rows(I).Cells(22).Text) + TDS_SGST + TDS_CGST + TDS_IGST), 2)
+                                SUND_PRICE = FormatNumber(CDec(GridView1.Rows(I).Cells(13).Text) - (CDec(TextBox25.Text) + CDec(TextBox22.Text) + sd_order + tds_price + TDS_SGST + TDS_CGST + TDS_IGST), 2)
                             End If
 
 
@@ -2764,7 +2797,7 @@ Public Class inv_value
                             If DropDownList7.SelectedValue = "Yes" Then
                                 SUND_PRICE = FormatNumber(CDec(GridView1.Rows(I).Cells(13).Text) + SGST_VALUE + CGST_VALUE + IGST_VALUE + CESS_VALUE - (CDec(TextBox25.Text) + CDec(TextBox22.Text) + sd_order + tds_price + CDec(GridView1.Rows(I).Cells(19).Text) + CDec(GridView1.Rows(I).Cells(20).Text) + CDec(GridView1.Rows(I).Cells(21).Text) + CDec(GridView1.Rows(I).Cells(22).Text) + TDS_SGST + TDS_CGST + TDS_IGST), 2)
                             ElseIf DropDownList7.SelectedValue = "No" Then
-                                SUND_PRICE = FormatNumber(CDec(GridView1.Rows(I).Cells(13).Text) - (CDec(TextBox25.Text) + CDec(TextBox22.Text) + sd_order + tds_price + CDec(GridView1.Rows(I).Cells(19).Text) + CDec(GridView1.Rows(I).Cells(20).Text) + CDec(GridView1.Rows(I).Cells(21).Text) + CDec(GridView1.Rows(I).Cells(22).Text) + TDS_SGST + TDS_CGST + TDS_IGST), 2)
+                                SUND_PRICE = FormatNumber(CDec(GridView1.Rows(I).Cells(13).Text) - (CDec(TextBox25.Text) + CDec(TextBox22.Text) + sd_order + tds_price + TDS_SGST + TDS_CGST + TDS_IGST), 2)
                             End If
 
                             GridView1.Rows(I).Cells(25).Text = FormatNumber((CDec(GridView1.Rows(I).Cells(12).Text) - CDec(GridView1.Rows(I).Cells(13).Text)) + (SUND_PRICE - CInt(SUND_PRICE)), 2)
@@ -3064,7 +3097,7 @@ Public Class inv_value
 
                                     'update mb book
                                     Dim cmd As New SqlCommand
-                                    Dim Query_1 As String = "update mb_book set TAXABLE_VALUE@TAXABLE_VALUE,BillTrackID=@BillTrackID,GST_STATUS=@GST_STATUS,Valuation_Date=@Valuation_Date,fiscal_year=@fiscal_year,valuation_amt=@valuation_amt,rcm_sgst=@rcm_sgst,rcm_cgst=@rcm_cgst,rcm_igst=@rcm_igst,rcm_cess=@rcm_cess,ld=@ld, rcm=@rcm, sgst=@sgst,cgst=@cgst ,igst=@igst,cess=@cess,sgst_liab=@sgst_liab,cgst_liab=@cgst_liab,igst_liab=@igst_liab,cess_liab=@cess_liab,inv_no=@inv_no,inv_date=@inv_date,prov_amt=@prov_amt,pen_amt=@pen_amt,it_amt=@it_amt,pay_ind=@pay_ind,v_ind=@v_ind,mat_rate=@mat_rate WHERE po_no ='" & Label12.Text & "' AND wo_slno =" & CDec(row.Cells(4).Text) & " AND mb_no  ='" & row.Cells(1).Text & "'  AND v_ind IS NULL"
+                                    Dim Query_1 As String = "update mb_book set TAXABLE_VALUE=@TAXABLE_VALUE,BillTrackID=@BillTrackID,GST_STATUS=@GST_STATUS,Valuation_Date=@Valuation_Date,fiscal_year=@fiscal_year,valuation_amt=@valuation_amt,rcm_sgst=@rcm_sgst,rcm_cgst=@rcm_cgst,rcm_igst=@rcm_igst,rcm_cess=@rcm_cess,ld=@ld, rcm=@rcm, sgst=@sgst,cgst=@cgst ,igst=@igst,cess=@cess,sgst_liab=@sgst_liab,cgst_liab=@cgst_liab,igst_liab=@igst_liab,cess_liab=@cess_liab,inv_no=@inv_no,inv_date=@inv_date,prov_amt=@prov_amt,pen_amt=@pen_amt,it_amt=@it_amt,pay_ind=@pay_ind,v_ind=@v_ind,mat_rate=@mat_rate WHERE po_no ='" & Label12.Text & "' AND wo_slno =" & CDec(row.Cells(4).Text) & " AND mb_no  ='" & row.Cells(1).Text & "'  AND v_ind IS NULL"
                                     cmd = New SqlCommand(Query_1, conn_trans, myTrans)
                                     cmd.Parameters.AddWithValue("@inv_no", TextBox160.Text)
                                     cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
@@ -3136,7 +3169,7 @@ Public Class inv_value
                                     If DropDownList7.SelectedValue = "Yes" Then
                                         SUND_PRICE = (SUND_PRICE + sgst_price + cgst_price + igst_price + cess_price) - (LD_PRICE + PEN_PRICE + SD_PRICE + TDS_PRICE + sgst_liab + cgst_liab + igst_liab + cess_liab + TDS_SGST + TDS_CGST + TDS_IGST)
                                     ElseIf DropDownList7.SelectedValue = "No" Then
-                                        SUND_PRICE = (SUND_PRICE) - (LD_PRICE + PEN_PRICE + SD_PRICE + TDS_PRICE + sgst_liab + cgst_liab + igst_liab + cess_liab + TDS_SGST + TDS_CGST + TDS_IGST)
+                                        SUND_PRICE = (SUND_PRICE) - (LD_PRICE + PEN_PRICE + SD_PRICE + TDS_PRICE + TDS_SGST + TDS_CGST + TDS_IGST)
                                     End If
 
 
@@ -3412,16 +3445,7 @@ Public Class inv_value
 
     End Sub
 
-    Protected Sub DropDownList2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList2.SelectedIndexChanged
-        If DropDownList2.SelectedValue = "Yes" Then
-            DropDownList7.Items.Clear()
-            DropDownList7.Items.Insert(0, "No")
-        Else
-            DropDownList7.Items.Clear()
-            DropDownList7.Items.Insert(0, "Yes")
-            DropDownList7.Items.Insert(1, "No")
-        End If
-    End Sub
+
 
     Protected Sub DropDownList44_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList44.SelectedIndexChanged
         If DropDownList44.SelectedValue = "Yes" Then
@@ -3444,5 +3468,18 @@ Public Class inv_value
             DropDownList4.Items.Insert(1, "No")
         End If
     End Sub
+
+    Protected Sub DropDownList7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList7.SelectedIndexChanged
+        If DropDownList7.SelectedValue = "Yes" Then
+            DropDownList2.Items.Clear()
+            DropDownList2.Items.Insert(0, "No")
+        Else
+            DropDownList2.Items.Clear()
+            DropDownList2.Items.Insert(0, "Yes")
+            DropDownList2.Items.Insert(1, "No")
+        End If
+
+    End Sub
+
 
 End Class
