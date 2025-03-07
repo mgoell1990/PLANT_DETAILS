@@ -303,17 +303,47 @@ Public Class item_transfer
                         f_qty = 0
                     End If
 
+                    Dim fromFGUnitWeight, toFGUnitWeight As Decimal
+
+                    conn.Open()
+                    Dim mc1 As New SqlCommand
+                    mc1.CommandText = "select * from F_ITEM WITH(NOLOCK) where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
+                    mc1.Connection = conn
+                    dr = mc1.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        fromFGUnitWeight = dr.Item("ITEM_WEIGHT")
+
+                        dr.Close()
+                    Else
+                        dr.Close()
+                    End If
+                    conn.Close()
+                    conn.Open()
+                    mc1.CommandText = "select * from F_ITEM WITH(NOLOCK) where ITEM_CODE='" & DropDownList4.Text.Substring(0, (DropDownList4.Text.IndexOf(",") - 1)).Trim & "' "
+                    mc1.Connection = conn
+                    dr = mc1.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        toFGUnitWeight = dr.Item("ITEM_WEIGHT")
+
+                        dr.Close()
+                    Else
+                        dr.Close()
+                    End If
+                    conn.Close()
+
 
                     Dim item_code1, item_code2 As String
                     item_code1 = DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim
                     item_code2 = DropDownList4.Text.Substring(0, (DropDownList4.Text.IndexOf(",") - 1)).Trim
                     'save production table FOR TRANSFER
                     ''from
-                    PROD_SAVE(item_code1, CDate(TextBox49.Text), f_qty * (-1), b_qty * (-1), DropDownList5.SelectedValue, Session("userName"))
+                    PROD_SAVE(fromFGUnitWeight, item_code1, CDate(TextBox49.Text), f_qty * (-1), b_qty * (-1), DropDownList5.SelectedValue, Session("userName"))
                     'to
-                    PROD_SAVE(item_code2, CDate(TextBox49.Text), f_qty, b_qty, DropDownList5.SelectedValue, Session("userName"))
+                    PROD_SAVE(toFGUnitWeight, item_code2, CDate(TextBox49.Text), f_qty, b_qty, DropDownList5.SelectedValue, Session("userName"))
                     conn.Open()
-                    Dim mc1 As New SqlCommand
+                    ''Dim mc1 As New SqlCommand
                     mc1.CommandText = "select * from F_ITEM WITH(NOLOCK) where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
                     mc1.Connection = conn
                     dr = mc1.ExecuteReader
@@ -383,14 +413,33 @@ Public Class item_transfer
                         f_qty = 0
                     End If
 
+
                     Dim item_code1 As String
                     item_code1 = DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim
 
-                    ''''save production table FOR TRANSFER
-                    PROD_SAVE(item_code1, CDate(TextBox49.Text), f_qty, b_qty, DropDownList5.SelectedValue, Session("userName"))
+
+                    Dim fromFGUnitWeight As Decimal
 
                     conn.Open()
                     Dim mc1 As New SqlCommand
+                    mc1.CommandText = "select * from F_ITEM WITH(NOLOCK) where ITEM_CODE='" & item_code1 & "' "
+                    mc1.Connection = conn
+                    dr = mc1.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        fromFGUnitWeight = dr.Item("ITEM_WEIGHT")
+
+                        dr.Close()
+                    Else
+                        dr.Close()
+                    End If
+                    conn.Close()
+
+                    ''''save production table FOR TRANSFER
+                    PROD_SAVE(fromFGUnitWeight, item_code1, CDate(TextBox49.Text), f_qty, b_qty, DropDownList5.SelectedValue, Session("userName"))
+
+                    conn.Open()
+                    ''Dim mc1 As New SqlCommand
                     mc1.CommandText = "select * from F_ITEM WITH(NOLOCK) where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
                     mc1.Connection = conn
                     dr = mc1.ExecuteReader
@@ -467,7 +516,7 @@ Public Class item_transfer
         TextBox49.Text = ""
         TextBox56.Text = ""
     End Sub
-    Private Sub PROD_SAVE(ITEM_CODE As String, PROD_DATE As Date, F_QTY As Decimal, B_QTY As Decimal, P_TYPE As String, name_user As String)
+    Private Sub PROD_SAVE(UNIT_WEIGHT As Decimal, ITEM_CODE As String, PROD_DATE As Date, F_QTY As Decimal, B_QTY As Decimal, P_TYPE As String, name_user As String)
         Dim fr_stock, bsr_stock As Decimal
         fr_stock = 0
         bsr_stock = 0
@@ -512,6 +561,7 @@ Public Class item_transfer
         cmd1.Parameters.AddWithValue("@name_user", name_user)
         cmd1.Parameters.AddWithValue("@fiscal_year", STR1)
         cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
+        cmd1.Parameters.AddWithValue("@ITEM_WEIGHT", UNIT_WEIGHT)
         cmd1.ExecuteReader()
         cmd1.Dispose()
 

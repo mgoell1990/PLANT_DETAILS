@@ -458,6 +458,13 @@ Public Class report3
             MultiView2.ActiveViewIndex = 19
             TextBox28.Text = ""
             TextBox29.Text = ""
+        ElseIf DropDownList9.SelectedValue = "Asset Register" Then
+
+            MultiView2.ActiveViewIndex = 20
+        ElseIf DropDownList9.SelectedValue = "Pending Payment" Then
+
+            MultiView2.ActiveViewIndex = 21
+
         End If
     End Sub
 
@@ -632,41 +639,60 @@ Public Class report3
             STR1 = (STR1 - 1) & STR1
         End If
 
-        conn.Open()
-        dt.Clear()
+        'conn.Open()
+        'dt.Clear()
 
-        Dim quary As String = "DECLARE @TT TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),AC_NAME VARCHAR(250),AMOUNT_DR DECIMAL(16,2),AMOUNT_CR DECIMAL(16,2))
-            INSERT INTO @TT
-            SELECT LEDGER .AC_NO,LEDGER.SUPL_ID,MAX(SUPL.SUPL_NAME) AS SUPL_NAME  ,MAX(ACDIC .ac_description) AS AC_NAME , 
-            SUM(LEDGER .AMOUNT_DR) AS AMOUNT_DR, SUM(LEDGER.AMOUNT_CR) AS AMOUNT_CR
-            FROM LEDGER JOIN ACDIC ON LEDGER .AC_NO =ACDIC .ac_code JOIN SUPL ON LEDGER.SUPL_ID =SUPL.SUPL_ID 
-            WHERE LEDGER .AC_NO in (select distinct ac_code  from ACDIC where ac_ledg <> 0 ) and (LEDGER .SUPL_ID <>'' or LEDGER .SUPL_ID is null) AND LEDGER .EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
-            AND (PAYMENT_INDICATION  <>'X') GROUP BY  LEDGER .AC_NO,LEDGER .SUPL_ID 
-            UNION 
-            SELECT LEDGER .AC_NO,LEDGER.SUPL_ID,MAX(dater.d_name) AS SUPL_NAME  ,MAX(ACDIC .ac_description) AS AC_NAME , 
-            SUM(LEDGER .AMOUNT_DR) AS AMOUNT_DR, SUM(LEDGER.AMOUNT_CR) AS AMOUNT_CR
-            FROM LEDGER JOIN ACDIC ON LEDGER .AC_NO =ACDIC .ac_code JOIN dater ON LEDGER.SUPL_ID =dater.d_code 
-            WHERE LEDGER .AC_NO in (select distinct ac_code  from ACDIC where ac_ledg <> 0 ) and (LEDGER .SUPL_ID <>'' or LEDGER .SUPL_ID is null) AND LEDGER .EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
-            AND (PAYMENT_INDICATION  <>'X') GROUP BY  LEDGER .AC_NO,LEDGER .SUPL_ID ORDER BY LEDGER .AC_NO	
+        'Dim quary As String = "DECLARE @TT TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),AC_NAME VARCHAR(250),AMOUNT_DR DECIMAL(16,2),AMOUNT_CR DECIMAL(16,2))
+        '    INSERT INTO @TT
+        '    SELECT LEDGER .AC_NO,LEDGER.SUPL_ID,MAX(SUPL.SUPL_NAME) AS SUPL_NAME  ,MAX(ACDIC .ac_description) AS AC_NAME , 
+        '    SUM(LEDGER .AMOUNT_DR) AS AMOUNT_DR, SUM(LEDGER.AMOUNT_CR) AS AMOUNT_CR
+        '    FROM LEDGER JOIN ACDIC ON LEDGER .AC_NO =ACDIC .ac_code JOIN SUPL ON LEDGER.SUPL_ID =SUPL.SUPL_ID 
+        '    WHERE LEDGER .AC_NO in (select distinct ac_code  from ACDIC where ac_ledg <> 0 ) and (LEDGER .SUPL_ID <>'' or LEDGER .SUPL_ID is null) AND LEDGER .EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
+        '    AND (PAYMENT_INDICATION  <>'X') GROUP BY  LEDGER .AC_NO,LEDGER .SUPL_ID 
+        '    UNION 
+        '    SELECT LEDGER .AC_NO,LEDGER.SUPL_ID,MAX(dater.d_name) AS SUPL_NAME  ,MAX(ACDIC .ac_description) AS AC_NAME , 
+        '    SUM(LEDGER .AMOUNT_DR) AS AMOUNT_DR, SUM(LEDGER.AMOUNT_CR) AS AMOUNT_CR
+        '    FROM LEDGER JOIN ACDIC ON LEDGER .AC_NO =ACDIC .ac_code JOIN dater ON LEDGER.SUPL_ID =dater.d_code 
+        '    WHERE LEDGER .AC_NO in (select distinct ac_code  from ACDIC where ac_ledg <> 0 ) and (LEDGER .SUPL_ID <>'' or LEDGER .SUPL_ID is null) AND LEDGER .EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
+        '    AND (PAYMENT_INDICATION  <>'X') GROUP BY  LEDGER .AC_NO,LEDGER .SUPL_ID ORDER BY LEDGER .AC_NO	
 
-            INSERT INTO @TT
-            select o1.ac_no as AC_NO,o1.supl_id,(CASE WHEN o1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME,ac_description AS AC_NAME,debit AS AMOUNT_DR, credit AS AMOUNT_CR
-            from ob_party_ledger o1 join ACDIC a1 on o1.ac_no=a1.ac_code left join SUPL s1 on o1.supl_id=s1.SUPL_ID left join dater d1 on o1.supl_id=d1.d_code where fiscal_year= " & STR1 & "
-            
-            DECLARE @TT1 TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),AC_NAME VARCHAR(250),AMOUNT DECIMAL(16,2),AMOUNT_TYPE VARCHAR(5))
-            INSERT INTO @TT1
-            SELECT AC_NO,SUPL_ID,SUPL_NAME,AC_NAME,(CASE WHEN( SUM(AMOUNT_DR) - SUM(AMOUNT_CR)) > 0 THEN (SUM(AMOUNT_DR) -SUM(AMOUNT_CR)) ELSE (SUM(AMOUNT_CR) -SUM(AMOUNT_DR)) END) AS AMOUNT, (CASE WHEN( SUM(AMOUNT_DR) -SUM(AMOUNT_CR)) > 0 THEN 'DR' ELSE 'CR' END) AS AMOUNT_TYPE FROM @TT WHERE AMOUNT_DR <> 0 or AMOUNT_CR <> 0 group by AC_NO,SUPL_ID,SUPL_NAME,AC_NAME ORDER BY AC_NO
-            SELECT * FROM @TT1 WHERE AMOUNT > 0 ORDER BY AC_NO"
+        '    INSERT INTO @TT
+        '    select o1.ac_no as AC_NO,o1.supl_id,(CASE WHEN o1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME,ac_description AS AC_NAME,debit AS AMOUNT_DR, credit AS AMOUNT_CR
+        '    from ob_party_ledger o1 join ACDIC a1 on o1.ac_no=a1.ac_code left join SUPL s1 on o1.supl_id=s1.SUPL_ID left join dater d1 on o1.supl_id=d1.d_code where fiscal_year= " & STR1 & "
+
+        '    DECLARE @TT1 TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),AC_NAME VARCHAR(250),AMOUNT DECIMAL(16,2),AMOUNT_TYPE VARCHAR(5))
+        '    INSERT INTO @TT1
+        '    SELECT AC_NO,SUPL_ID,SUPL_NAME,AC_NAME,(CASE WHEN( SUM(AMOUNT_DR) - SUM(AMOUNT_CR)) > 0 THEN (SUM(AMOUNT_DR) -SUM(AMOUNT_CR)) ELSE (SUM(AMOUNT_CR) -SUM(AMOUNT_DR)) END) AS AMOUNT, (CASE WHEN( SUM(AMOUNT_DR) -SUM(AMOUNT_CR)) > 0 THEN 'DR' ELSE 'CR' END) AS AMOUNT_TYPE FROM @TT WHERE AMOUNT_DR <> 0 or AMOUNT_CR <> 0 group by AC_NO,SUPL_ID,SUPL_NAME,AC_NAME ORDER BY AC_NO
+        '    SELECT * FROM @TT1 WHERE AMOUNT > 0 ORDER BY AC_NO"
 
 
-        da = New SqlDataAdapter(quary, conn)
-        da.SelectCommand.CommandTimeout = 100
-        da.Fill(dt)
-        conn.Close()
-        GridView3.DataSource = dt
-        GridView3.DataBind()
+        'da = New SqlDataAdapter(quary, conn)
+        'da.SelectCommand.CommandTimeout = 100
+        'da.Fill(dt)
+        'conn.Close()
+        'GridView3.DataSource = dt
+        'GridView3.DataBind()
 
         '''''''''''''''''''''''''''''
+
+        Dim spName As String = "GetScheduleReport"
+        'Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
+        Dim conn As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
+        Using conn
+            Using cmd As New SqlCommand(spName, conn)
+                cmd.CommandType = CommandType.StoredProcedure
+                cmd.Parameters.AddWithValue("@from_date", from_date)
+                cmd.Parameters.AddWithValue("@to_date", to_date)
+                cmd.Parameters.AddWithValue("@fiscal_year", STR1)
+                Using sda As New SqlDataAdapter(cmd)
+                    Using dt As New DataTable()
+                        sda.Fill(dt)
+                        GridView3.DataSource = dt
+                        GridView3.DataBind()
+                    End Using
+                End Using
+            End Using
+        End Using
 
         '''''''''''''''''''''''''''''
     End Sub
@@ -2339,6 +2365,107 @@ Public Class report3
         conn.Close()
         GridView13.DataSource = dt
         GridView13.DataBind()
+
+
+    End Sub
+
+    Protected Sub DropDownList5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList5.SelectedIndexChanged
+        If DropDownList5.SelectedValue = "Asset Register" Then
+
+            MultiView3.ActiveViewIndex = 0
+
+            conn.Open()
+            dt.Clear()
+            da = New SqlDataAdapter("select * from AssetMaster", conn)
+            da.Fill(dt)
+            conn.Close()
+            GridView15.DataSource = dt
+            GridView15.DataBind()
+        ElseIf DropDownList5.SelectedValue = "Depreciation Entry" Then
+
+            MultiView3.ActiveViewIndex = 1
+
+        End If
+    End Sub
+
+    Protected Sub Button49_Click(sender As Object, e As EventArgs) Handles Button49.Click
+
+        If (DropDownList6.SelectedValue = "Select") Then
+        Else
+            conn.Open()
+            dt.Clear()
+            da = New SqlDataAdapter("DECLARE @TT TABLE([AssetCode] VARCHAR(30),[FISCALYEAR] VARCHAR(10),Quarter1 VARCHAR(10),
+            CummDeprBeforeQ1 decimal(16,2),DeprValueQ1 DECIMAL(16,2),Quarter2 VARCHAR(10),CummDeprBeforeQ2 decimal(16,2),DeprValueQ2 DECIMAL(16,2),
+            Quarter3 VARCHAR(10),CummDeprBeforeQ3 decimal(16,2),DeprValueQ3 DECIMAL(16,2),Quarter4 VARCHAR(10),CummDeprBeforeQ4 decimal(16,2),DeprValueQ4 DECIMAL(16,2))
+            INSERT INTO @TT
+            SELECT *,'Q2' as Quarter2, 0 as CummDeprBeforeQ2, 0 as DeprValueQ2,'Q3' as Quarter3, 0 as CummDeprBeforeQ3, 0 as DeprValueQ3,'Q4' as Quarter4, 0 as CummDeprBeforeQ4, 0 as DeprValueQ4
+            FROM
+            (
+                SELECT [AssetCode],
+	            [FISCALYEAR],
+		        'Q1' as Quarter1,
+		        [Quarter],
+		        CummulativeDeprBeforeQuarter as CummDeprBeforeQ1,
+                [DepreciationValue] as DeprValueQ1
+                FROM AssetDepreciation where FiscalYear=" + DropDownList6.SelectedValue + " and Quarter='Q1'
+            ) AS SourceTable PIVOT(SUM([DeprValueQ1]) FOR [Quarter] IN([Q1])) AS PivotTable order by AssetCode
+
+            INSERT INTO @TT
+            SELECT *,'Q3' as Quarter3, 0 as CummDeprBeforeQ3, 0 as DeprValueQ3,'Q4' as Quarter4, 0 as CummDeprBeforeQ4, 0 as DeprValueQ4
+            FROM
+            (
+                SELECT [AssetCode],
+	            [FISCALYEAR],
+		        'Q1' as Quarter1, 0 as CummDeprBeforeQ1, 0 as DeprValueQ1,
+		        'Q2' as Quarter2,
+		        [Quarter],
+		        CummulativeDeprBeforeQuarter as CummDeprBeforeQ2,
+                [DepreciationValue] as DeprValueQ2
+                FROM AssetDepreciation where FiscalYear=" + DropDownList6.SelectedValue + " and Quarter='Q2'
+            ) AS SourceTable PIVOT(SUM([DeprValueQ2]) FOR [Quarter] IN([Q2])) AS PivotTable order by AssetCode
+
+            INSERT INTO @TT
+            SELECT *,'Q4' as Quarter4, 0 as CummDeprBeforeQ4, 0 as DeprValueQ4
+            FROM
+            (
+                SELECT [AssetCode],
+	            [FISCALYEAR],
+		        'Q1' as Quarter1, 0 as CummDeprBeforeQ1, 0 as DeprValueQ1,
+		        'Q2' as Quarter2, 0 as CummDeprBeforeQ2, 0 as DeprValueQ2,
+		        'Q3' as Quarter3,
+		        [Quarter],
+		        CummulativeDeprBeforeQuarter as CummDeprBeforeQ3,
+                [DepreciationValue] as DeprValueQ3
+                FROM AssetDepreciation where FiscalYear=" + DropDownList6.SelectedValue + " and Quarter='Q3'
+            ) AS SourceTable PIVOT(SUM([DeprValueQ3]) FOR [Quarter] IN([Q3])) AS PivotTable order by AssetCode
+
+            INSERT INTO @TT
+            SELECT *
+            FROM
+            (
+                SELECT [AssetCode],
+	            [FISCALYEAR],
+		        'Q1' as Quarter1, 0 as CummDeprBeforeQ1, 0 as DeprValueQ1,
+		        'Q2' as Quarter2, 0 as CummDeprBeforeQ2, 0 as DeprValueQ2,
+		        'Q3' as Quarter3, 0 as CummDeprBeforeQ3, 0 as DeprValueQ3,
+		        'Q4' as Quarter4,
+		        [Quarter],
+		        CummulativeDeprBeforeQuarter as CummDeprBeforeQ4,
+                [DepreciationValue] as DeprValueQ4
+                FROM AssetDepreciation where FiscalYear=" + DropDownList6.SelectedValue + " and Quarter='Q4'
+            ) AS SourceTable PIVOT(SUM([DeprValueQ4]) FOR [Quarter] IN([Q4])) AS PivotTable order by AssetCode
+
+            select A1.AssetCode,Max(A1.AccountCode) as AccountCode,A1.AssetName,Max(A1.DateOfCommisioning) as DateOfCommisioning,Max(A1.PhysicalQuantity) as PhysicalQuantity,Max(A1.PhysicalLocation) as PhysicalLocation,
+            Max(A1.DepreciationPercentage) as DepreciationPercentage,Max(A1.GrossBlock) as GrossBlock,Max(A1.CummulativeDepriciation) as CummulativeDepriciation,max(T1.FISCALYEAR) as fiscalYear,
+            Max(T1.Quarter1) as Quarter1,sum(T1.CummDeprBeforeQ1) as CummDeprBeforeQ1,sum(T1.DeprValueQ1) as DeprValueQ1,max(T1.Quarter2) as Quarter2,sum(T1.CummDeprBeforeQ2) as CummDeprBeforeQ2,sum(T1.DeprValueQ2) as DeprValueQ2,
+            max(T1.Quarter3) as Quarter3,sum(T1.CummDeprBeforeQ3) as CummDeprBeforeQ3,sum(T1.DeprValueQ3) as DeprValueQ3,max(T1.Quarter4) as Quarter4,sum(T1.CummDeprBeforeQ4) as CummDeprBeforeQ4,sum(T1.DeprValueQ4) as DeprValueQ4,max(A1.Remarks) as Remarks from AssetMaster A1 join @TT T1 on A1.AssetCode=T1.AssetCode group by A1.AssetCode,A1.AssetName order by AccountCode", conn)
+            da.Fill(dt)
+            conn.Close()
+            GridView14.DataSource = dt
+            GridView14.DataBind()
+
+        End If
+
 
 
     End Sub

@@ -243,6 +243,8 @@
                                 <asp:ListItem>Ledger Entry</asp:ListItem>
                                 <asp:ListItem>AGING</asp:ListItem>
                                 <asp:ListItem>Pending GARN</asp:ListItem>
+                                <asp:ListItem>Pending Payment</asp:ListItem>
+                                <asp:ListItem>Asset Register</asp:ListItem>
                             </asp:DropDownList>
                         </div>
                     </div>
@@ -623,7 +625,7 @@
                                         <asp:Button ID="Button9" runat="server" CssClass="btn btn-primary" Text="Go" />
                                         <asp:Button ID="Button13" runat="server" Text="Download" CssClass="btn btn-primary" />
                                         <asp:Button ID="Button10" runat="server" CssClass="btn btn-success" Text="Print" />
-                                        
+
                                     </div>
                                 </div>
 
@@ -1394,6 +1396,189 @@
                                 </div>
                             </div>
                         </div>
+
+                    </asp:View>
+
+
+                    <%--=====VIEW 23 ASSET REGISTER START=====--%>
+                    <asp:View ID="View23" runat="server">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <div class="row align-items-center">
+                                            <div class="col text-center">
+                                                <asp:Label ID="Label45" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Asset Register" Font-Underline="True"></asp:Label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center mt-1">
+                                            <div class="col-5 text-end">
+                                                <asp:Label ID="Label47" runat="server" ForeColor="Blue" Text="Report Type"></asp:Label>
+
+                                            </div>
+                                            <div class="col-2 text-start">
+                                                <asp:DropDownList class="form-select" ID="DropDownList5" runat="server" AutoPostBack="True">
+                                                    <asp:ListItem>Select</asp:ListItem>
+                                                    <asp:ListItem>Asset Register</asp:ListItem>
+                                                    <asp:ListItem>Depreciation Entry</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+
+                                        <asp:MultiView ID="MultiView3" runat="server">
+                                            <asp:View ID="View24" runat="server">
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col g-0">
+                                                        <asp:Panel ID="Panel11" runat="server" ScrollBars="Auto" Width="100%">
+                                                            <asp:GridView ID="GridView15" Style="font-size: 15px" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                                <Columns>
+                                                                    <asp:BoundField DataField="AssetCode" HeaderText="Asset Code" />
+                                                                    <asp:BoundField DataField="AccountCode" HeaderText="Account Code" />
+                                                                    <asp:BoundField DataField="AssetName" HeaderText="Asset Name" />
+                                                                    <asp:BoundField DataField="DateOfCommisioning" HeaderText="Commisioning Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                                    <asp:BoundField DataField="PhysicalQuantity" HeaderText="Quantity" />
+                                                                    <asp:BoundField DataField="PhysicalLocation" HeaderText="Physical Location" />
+                                                                    <asp:BoundField DataField="DepreciationPercentage" HeaderText="Depreciation Percentage" />
+                                                                    <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
+                                                                    <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
+                                                                    <asp:BoundField DataField="Remarks" HeaderText="Remarks" />
+
+                                                                </Columns>
+
+                                                            </asp:GridView>
+                                                        </asp:Panel>
+                                                    </div>
+
+                                                </div>
+
+                                            </asp:View>
+                                            <asp:View ID="View25" runat="server">
+
+                                                <div class="row align-items-center">
+                                                    <div class="col-5 text-end">
+                                                        <asp:Label ID="Label62" runat="server" Text="Fiscal Year" ForeColor="Blue"></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-start">
+                                                        <asp:DropDownList class="form-select" ID="DropDownList6" runat="server">
+                                                            <asp:ListItem>Select</asp:ListItem>
+                                                            <asp:ListItem>2425</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                    
+                                                    <div class="col text-start">
+                                                        <asp:Button ID="Button49" runat="server" CssClass="btn btn-primary" Text="Go" />
+                                                        <asp:Button ID="Button50" runat="server" Text="Download" CssClass="btn btn-primary" />
+                                                        <asp:Button ID="Button51" runat="server" CssClass="btn btn-success" Text="Print" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col g-0">
+                                                        <asp:Panel ID="Panel9" runat="server" ScrollBars="Auto" Width="100%">
+                                                            <asp:GridView ID="GridView14" Style="font-size: 15px" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                                <Columns>
+                                                                    <asp:BoundField DataField="AssetCode" HeaderText="Asset Code" />
+                                                                    <asp:BoundField DataField="AccountCode" HeaderText="Account Code" />
+                                                                    <asp:BoundField DataField="AssetName" HeaderText="Asset Name" />
+                                                                    <asp:BoundField DataField="DateOfCommisioning" HeaderText="Commisioning Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                                    <asp:BoundField DataField="PhysicalQuantity" HeaderText="Quantity" />
+                                                                    <asp:BoundField DataField="PhysicalLocation" HeaderText="Physical Location" />
+                                                                    <asp:BoundField DataField="DepreciationPercentage" HeaderText="Depreciation Percentage" />
+                                                                    <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
+                                                                    <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
+                                                                    <asp:BoundField DataField="FiscalYear" HeaderText="Fiscal Year"/>
+                                                                    <asp:BoundField DataField="Quarter1" HeaderText="Quarter"/>
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ1" HeaderText="Cumm. Dep. before Q1"/>
+                                                                    <asp:BoundField DataField="DeprValueQ1" HeaderText="Dep. for Q1"/>
+                                                                    
+                                                                    
+                                                                    <asp:BoundField DataField="Quarter2" HeaderText="Quarter"/>
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ2" HeaderText="Cumm. Dep. before Q2"/>
+                                                                    <asp:BoundField DataField="DeprValueQ2" HeaderText="Dep. for Q2"/>
+                                                                    
+                                                                    <asp:BoundField DataField="Quarter3" HeaderText="Quarter"/>
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ3" HeaderText="Cumm. Dep. before Q3"/>
+                                                                    <asp:BoundField DataField="DeprValueQ3" HeaderText="Dep. for Q3"/>
+                                                                    
+                                                                    <asp:BoundField DataField="Quarter4" HeaderText="Quarter"/>
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ4" HeaderText="Cumm. Dep. before Q4"/>
+                                                                    <asp:BoundField DataField="DeprValueQ4" HeaderText="Dep. for Q4"/>
+                                                                    <asp:BoundField DataField="Remarks" HeaderText="Remarks" />
+
+                                                                </Columns>
+
+                                                            </asp:GridView>
+                                                        </asp:Panel>
+                                                    </div>
+
+                                                </div>
+
+                                            </asp:View>
+                                        </asp:MultiView>
+
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </asp:View>
+
+
+                     <%--=====VIEW 24 BILL TRACK START=====--%>
+                    <asp:View ID="View26" runat="server">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <div class="row align-items-center">
+                                            <div class="col text-center">
+                                                <asp:Label ID="Label48" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Pending Payments" Font-Underline="True"></asp:Label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center mt-1">
+                                            <div class="col-3 text-end">
+                                                <asp:Label ID="Label52" runat="server" ForeColor="Blue" Style="text-align: left" Text="Date Between"></asp:Label>
+                                            </div>
+                                            
+                                            <div class="col text-start">
+                                                <asp:Button ID="Button46" runat="server" CssClass="btn btn-primary" Text="Go" />
+                                                <asp:Button ID="Button47" runat="server" Text="Download" CssClass="btn btn-primary" />
+                                                <asp:Button ID="Button48" runat="server" CssClass="btn btn-success" Text="Print" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mt-1">
+                                    <div class="col g-0">
+                                        <asp:Panel ID="Panel12" runat="server" ScrollBars="Auto" Width="100%">
+                                            <asp:GridView ID="GridView16" Style="font-size: 15px" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                <Columns>
+                                                    <asp:BoundField DataField="bill_id" HeaderText="Reg. No" />
+                                                    <asp:BoundField DataField="post_date" HeaderText="Reg. Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                    <asp:BoundField DataField="po_no" HeaderText="Order No" />
+                                                    <asp:BoundField DataField="PO_TYPE" HeaderText="Order Type" />
+                                                    <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
+                                                    <asp:BoundField DataField="inv_no" HeaderText="Inv. No" />
+                                                    <asp:BoundField DataField="inv_date" HeaderText="Inv. Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                    <asp:TemplateField HeaderText="GARN/MB Date"></asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Payment Date"></asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Cheque No."></asp:TemplateField>
+                                                    <asp:BoundField DataField="inv_amount" HeaderText="Invoice Amount" />
+
+                                                </Columns>
+
+                                            </asp:GridView>
+                                        </asp:Panel>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
                     </asp:View>
 
                 </asp:MultiView>

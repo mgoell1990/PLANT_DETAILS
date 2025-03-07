@@ -204,7 +204,8 @@ Public Class OutsourceMatDespatch
             ''SEARCH LINE NO DETAILS
             conn.Open()
             dt.Clear()
-            da = New SqlDataAdapter("select distinct convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB AS ITEM_SLNO from SO_MAT_ORDER where item_status='PENDING' and ORD_AU <>'Activity' and ORD_AU <>'Service/Mt' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "'", conn)
+            ''da = New SqlDataAdapter("select distinct                   convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB AS ITEM_SLNO                                     from SO_MAT_ORDER where item_status='PENDING' and ORD_AU <>'Activity' and ORD_AU <>'Service/Mt' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "'", conn)
+            da = New SqlDataAdapter("select distinct ITEM_SLNO as slNo,convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB AS ITEM_SLNO, Max(ITEM_DELIVERY) as mat_delivery from SO_MAT_ORDER where item_status='PENDING' and ORD_AU <>'Activity' and ORD_AU <>'Service/Mt' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "' and DELIVERY_START_DATE<='" & Today.Date.Year & "-" & Today.Date.Month & "-" & Today.Date.Day & "' group by ITEM_SLNO, convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB having Max(ITEM_DELIVERY)>='" & Today.Date.Year & "-" & Today.Date.Month & "-" & Today.Date.Day & "' order by slNo", conn)
             da.Fill(dt)
             conn.Close()
             DropDownList4.Items.Clear()

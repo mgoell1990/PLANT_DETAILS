@@ -572,6 +572,24 @@ Partial Public Class add_order
     Protected WithEvents Delvdate7_CalendarExtender As Global.AjaxControlToolkit.CalendarExtender
     
     '''<summary>
+    '''Label2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label2 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox57 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox57 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
     '''Label442 control.
     '''</summary>
     '''<remarks>
@@ -1589,6 +1607,24 @@ Partial Public Class add_order
     Protected WithEvents Delvdate8_CalendarExtender As Global.AjaxControlToolkit.CalendarExtender
     
     '''<summary>
+    '''Label14 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label14 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox58 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox58 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
     '''Label653 control.
     '''</summary>
     '''<remarks>
@@ -1929,6 +1965,24 @@ Partial Public Class add_order
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents CalendarExtender4 As Global.AjaxControlToolkit.CalendarExtender
+    
+    '''<summary>
+    '''Label21 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label21 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox61 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox61 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
     '''Label74 control.
@@ -2273,6 +2327,24 @@ Partial Public Class add_order
     Protected WithEvents CalendarExtender2 As Global.AjaxControlToolkit.CalendarExtender
     
     '''<summary>
+    '''Label22 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label22 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox66 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox66 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
     '''Label121 control.
     '''</summary>
     '''<remarks>
@@ -2595,6 +2667,24 @@ Partial Public Class add_order
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents TextBox671 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''Label23 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label23 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox67 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox67 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
     '''Label663 control.
@@ -3569,6 +3659,24 @@ Partial Public Class add_order
     Protected WithEvents Delvdate_CalendarExtender As Global.AjaxControlToolkit.CalendarExtender
     
     '''<summary>
+    '''Label67 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label67 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox68 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox68 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
     '''Button39 control.
     '''</summary>
     '''<remarks>
@@ -4179,6 +4287,24 @@ Partial Public Class add_order
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents CalendarExtender3 As Global.AjaxControlToolkit.CalendarExtender
+    
+    '''<summary>
+    '''Label77 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label77 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox69 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox69 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
     '''Button11 control.

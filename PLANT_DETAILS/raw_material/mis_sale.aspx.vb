@@ -173,7 +173,7 @@ Public Class mis_sale
         ''item assessable value calculatation
         Dim mc As New SqlCommand
         conn.Open()
-        mc.CommandText = "select MAX(MATERIAL .MAT_AU ) as ORD_AU, SUM(ITEM_SGST) AS ITEM_SGST,SUM(ITEM_CESS) AS ITEM_CESS,SUM(ITEM_CGST) AS ITEM_CGST,SUM(ITEM_IGST) AS ITEM_IGST,MAX(SO_MAT_ORDER.DISC_TYPE) AS DISC_TYPE,MAX(SO_MAT_ORDER.PACK_TYPE) AS PACK_TYPE ,MAX(SO_MAT_ORDER.ORD_AU) AS ORD_AU, SUM(SO_MAT_ORDER.ITEM_QTY) AS ITEM_QTY, SUM(SO_MAT_ORDER.ITEM_UNIT_RATE) AS ITEM_UNIT_RATE ,SUM(SO_MAT_ORDER .ITEM_DISCOUNT) AS ITEM_DISCOUNT,SUM(SO_MAT_ORDER .ITEM_PACK) AS ITEM_PACK  ,SUM(SO_MAT_ORDER .ITEM_QTY_SEND) AS ITEM_QTY_SEND ,SUM(SO_MAT_ORDER .ITEM_TCS) AS ITEM_TCS ,SUM(SO_MAT_ORDER .ITEM_TERMINAL_TAX) AS ITEM_TERMINAL_TAX , MAX(SO_MAT_ORDER .ITEM_FREIGHT_TYPE) AS ITEM_FREIGHT_TYPE ,SUM(SO_MAT_ORDER .ITEM_FREIGHT_PU) AS ITEM_FREIGHT_PU  FROM SO_MAT_ORDER JOIN MATERIAL  ON SO_MAT_ORDER .ITEM_CODE =MATERIAL .MAT_CODE JOIN CHPTR_HEADING on (MATERIAL .CHPTR_HEAD = CHPTR_HEADING .CHPT_CODE) where SO_MAT_ORDER .ITEM_SLNO='" & DropDownList11.Text & "' and SO_MAT_ORDER .SO_NO='" & TextBox123.Text & "' and SO_MAT_ORDER .ITEM_CODE='" & DropDownList12.Text.Substring(0, DropDownList12.Text.IndexOf(",") - 1) & "' AND AMD_DATE <='" & Today.Year & "-" & Today.Month & "-" & Today.Day & "'"
+        mc.CommandText = "select MAX(MATERIAL .MAT_AU ) as ORD_AU, SUM(ITEM_SGST) AS ITEM_SGST,SUM(ITEM_CESS) AS ITEM_CESS,SUM(ITEM_CGST) AS ITEM_CGST,SUM(ITEM_IGST) AS ITEM_IGST,MAX(SO_MAT_ORDER.DISC_TYPE) AS DISC_TYPE,MAX(SO_MAT_ORDER.PACK_TYPE) AS PACK_TYPE ,MAX(SO_MAT_ORDER.ORD_AU) AS ORD_AU, SUM(SO_MAT_ORDER.ITEM_QTY) AS ITEM_QTY, SUM(SO_MAT_ORDER.ITEM_UNIT_RATE) AS ITEM_UNIT_RATE ,SUM(SO_MAT_ORDER .ITEM_DISCOUNT) AS ITEM_DISCOUNT,SUM(SO_MAT_ORDER .ITEM_PACK) AS ITEM_PACK  ,SUM(SO_MAT_ORDER .ITEM_QTY_SEND) AS ITEM_QTY_SEND ,SUM(SO_MAT_ORDER .ITEM_TCS) AS ITEM_TCS ,SUM(SO_MAT_ORDER .ITEM_TERMINAL_TAX) AS ITEM_TERMINAL_TAX , MAX(SO_MAT_ORDER .ITEM_FREIGHT_TYPE) AS ITEM_FREIGHT_TYPE ,SUM(SO_MAT_ORDER .ITEM_FREIGHT_PU) AS ITEM_FREIGHT_PU  FROM SO_MAT_ORDER JOIN MATERIAL  ON SO_MAT_ORDER .ITEM_CODE =MATERIAL .MAT_CODE JOIN CHPTR_HEADING on (MATERIAL .CHPTR_HEAD = CHPTR_HEADING .CHPT_CODE) where SO_MAT_ORDER .ITEM_SLNO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and SO_MAT_ORDER .SO_NO='" & TextBox123.Text & "' and SO_MAT_ORDER .ITEM_CODE='" & DropDownList12.Text.Substring(0, DropDownList12.Text.IndexOf(",") - 1) & "' AND AMD_DATE <='" & Today.Year & "-" & Today.Month & "-" & Today.Day & "'"
         mc.Connection = conn
         dr = mc.ExecuteReader
         If dr.HasRows Then
@@ -309,7 +309,7 @@ Public Class mis_sale
         ''SEARCH ITEM CODE
         conn.Open()
         dt.Clear()
-        da = New SqlDataAdapter("select DISTINCT (SO_MAT_ORDER.ITEM_CODE + ' , ' + MATERIAL.MAT_NAME) AS ITEM_CODE from SO_MAT_ORDER JOIN MATERIAL ON SO_MAT_ORDER.ITEM_CODE=MATERIAL.MAT_CODE  where SO_MAT_ORDER.item_status='PENDING' and SO_MAT_ORDER.SO_NO='" & TextBox123.Text & "' and SO_MAT_ORDER.ITEM_SLNO='" & DropDownList11.SelectedValue & "' ", conn)
+        da = New SqlDataAdapter("select DISTINCT (SO_MAT_ORDER.ITEM_CODE + ' , ' + MATERIAL.MAT_NAME) AS ITEM_CODE from SO_MAT_ORDER JOIN MATERIAL ON SO_MAT_ORDER.ITEM_CODE=MATERIAL.MAT_CODE  where SO_MAT_ORDER.item_status='PENDING' and SO_MAT_ORDER.SO_NO='" & TextBox123.Text & "' and SO_MAT_ORDER.ITEM_SLNO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' ", conn)
         da.Fill(dt)
         conn.Close()
         DropDownList12.Items.Clear()
@@ -321,7 +321,7 @@ Public Class mis_sale
         ''SELECT AMD NO AND DATE
         conn.Open()
         Dim mc3 As New SqlCommand
-        mc3.CommandText = "SELECT AMD_NO , AMD_DATE FROM SO_MAT_ORDER WHERE AMD_DATE=(SELECT MAX(AMD_DATE) FROM SO_MAT_ORDER WHERE ITEM_SLNO=" & DropDownList11.SelectedValue & " AND SO_NO='" & TextBox123.Text & "') AND SO_NO='" & TextBox123.Text & "' AND ITEM_SLNO=" & DropDownList11.SelectedValue
+        mc3.CommandText = "SELECT AMD_NO , AMD_DATE FROM SO_MAT_ORDER WHERE AMD_DATE=(SELECT MAX(AMD_DATE) FROM SO_MAT_ORDER WHERE ITEM_SLNO=" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & " AND SO_NO='" & TextBox123.Text & "') AND SO_NO='" & TextBox123.Text & "' AND ITEM_SLNO=" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim
         mc3.Connection = conn
         dr = mc3.ExecuteReader
         If dr.HasRows Then
@@ -336,7 +336,7 @@ Public Class mis_sale
         ''SEARCH VOCAB NO
         conn.Open()
         Dim mc1 As New SqlCommand
-        mc1.CommandText = "select distinct ITEM_VOCAB AS ITEM_VOCAB from SO_MAT_ORDER where ITEM_SLNO='" & DropDownList11.SelectedValue & "' and SO_NO='" & TextBox123.Text & "'"
+        mc1.CommandText = "select distinct ITEM_VOCAB AS ITEM_VOCAB from SO_MAT_ORDER where ITEM_SLNO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and SO_NO='" & TextBox123.Text & "'"
         mc1.Connection = conn
         dr = mc1.ExecuteReader
         If dr.HasRows Then
@@ -364,7 +364,7 @@ Public Class mis_sale
         If FINANCE_ARRANGE = "ADVANCE" Then
             conn.Open()
             dt.Clear()
-            da = New SqlDataAdapter("SELECT VOUCHER_TYPE + VOUCHER_NO AS VOUCHER_NO FROM SALE_RCD_VOUCHAR WHERE SO_NO ='" & TextBox123.Text & "' AND VOUCHER_STATUS='PENDING' AND ITEM_SLNO ='" & DropDownList11.Text & "' ", conn)
+            da = New SqlDataAdapter("SELECT VOUCHER_TYPE + VOUCHER_NO AS VOUCHER_NO FROM SALE_RCD_VOUCHAR WHERE SO_NO ='" & TextBox123.Text & "' AND VOUCHER_STATUS='PENDING' AND ITEM_SLNO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' ", conn)
             da.Fill(dt)
             conn.Close()
             DropDownList1.Items.Clear()
@@ -389,7 +389,7 @@ Public Class mis_sale
 
         conn.Open()
         dt.Clear()
-        da = New SqlDataAdapter("select MAX(SO_MAT_ORDER.ITEM_CODE) AS ITEM_CODE ,MAX(MATERIAL.MAT_NAME) AS ITEM_NAME,MAX(MATERIAL.MAT_AU) AS ITEM_AU, ('....') AS ITEM_WEIGHT,SUM(SO_MAT_ORDER .ITEM_QTY) As ITEM_QTY,(SUM(SO_MAT_ORDER.ITEM_QTY)-SUM(SO_MAT_ORDER.ITEM_QTY_SEND)) AS ITEM_BAL_QTY,MAX(MATERIAL.MAT_STOCK) AS ITEM_B_STOCK,('....') AS ITEM_B_STOCK_MT FROM SO_MAT_ORDER JOIN MATERIAL ON SO_MAT_ORDER .ITEM_CODE = MATERIAL.MAT_CODE where SO_MAT_ORDER .ITEM_CODE='" & DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim & "' AND SO_MAT_ORDER.SO_NO='" & TextBox123.Text & "' AND SO_MAT_ORDER.ITEM_SLNO='" & DropDownList11.SelectedValue & "'", conn)
+        da = New SqlDataAdapter("select MAX(SO_MAT_ORDER.ITEM_CODE) AS ITEM_CODE ,MAX(MATERIAL.MAT_NAME) AS ITEM_NAME,MAX(MATERIAL.MAT_AU) AS ITEM_AU, ('....') AS ITEM_WEIGHT,SUM(SO_MAT_ORDER .ITEM_QTY) As ITEM_QTY,(SUM(SO_MAT_ORDER.ITEM_QTY)-SUM(SO_MAT_ORDER.ITEM_QTY_SEND)) AS ITEM_BAL_QTY,MAX(MATERIAL.MAT_STOCK) AS ITEM_B_STOCK,('....') AS ITEM_B_STOCK_MT FROM SO_MAT_ORDER JOIN MATERIAL ON SO_MAT_ORDER .ITEM_CODE = MATERIAL.MAT_CODE where SO_MAT_ORDER .ITEM_CODE='" & DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim & "' AND SO_MAT_ORDER.SO_NO='" & TextBox123.Text & "' AND SO_MAT_ORDER.ITEM_SLNO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'", conn)
         'da = New SqlDataAdapter("select MAX(SO_MAT_ORDER.ITEM_CODE) AS ITEM_CODE ,MAX(F_ITEM .ITEM_NAME) AS ITEM_NAME,MAX(F_ITEM .ITEM_AU) AS ITEM_AU,M_WEIGHT) AS ITEM_WEIGHT,SUM(SO_MAT_ORDER .ITEM_QTY) AS ITEM_QTY,(SUM(SO_MAT_ORDER.ITEM_QTY)-SUM(SO_MAT_ORDER.ITEM_QTY_SEND)) AS ITEM_BAL_QTY,MAX(F_ITEM .ITEM_B_STOC AS ITEM_B_STOCK,convert( AS ITEM_B_STOCK_MT FROM SO_MAT_ORDER JOIN F_ITEM ON SO_MAT_ORDER .ITEM_CODE = F_ITEM .ITEM_CODE where SO_MAT_ORDER .ITEM_CODE='" & DropDownList5.Text & "' AND SO_MAT_ORDER.SO_NO='" & TextBox124.Text & "' AND SO_MAT_ORDER.ITEM_SLNO='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim & "'", conn)
         da.Fill(dt)
         conn.Close()
@@ -597,7 +597,8 @@ Public Class mis_sale
                 ''SEARCH LINE NO DETAILS
                 conn.Open()
                 dt.Clear()
-                da = New SqlDataAdapter("select distinct ITEM_SLNO from SO_MAT_ORDER where item_status='PENDING' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "'", conn)
+                ''da = New SqlDataAdapter("select distinct ITEM_SLNO                                                                                                              from SO_MAT_ORDER where item_status='PENDING'                                                   and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "'", conn)
+                da = New SqlDataAdapter("select distinct ITEM_SLNO as slNo,convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB AS ITEM_SLNO, Max(ITEM_DELIVERY) as mat_delivery from SO_MAT_ORDER where item_status='PENDING' and ORD_AU <>'Activity' and ORD_AU <>'Service/Mt' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "' and DELIVERY_START_DATE<='" & Today.Date.Year & "-" & Today.Date.Month & "-" & Today.Date.Day & "' group by ITEM_SLNO, convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB having Max(ITEM_DELIVERY)>='" & Today.Date.Year & "-" & Today.Date.Month & "-" & Today.Date.Day & "' order by slNo", conn)
                 da.Fill(dt)
                 conn.Close()
                 DropDownList11.Items.Clear()
@@ -668,7 +669,7 @@ Public Class mis_sale
                 Dim ORDER_TO As String = ""
                 conn.Open()
                 Dim mc1 As New SqlCommand
-                mc1.CommandText = "select ORDER_DETAILS.ORDER_TO, ORDER_DETAILS.DESTINATION,ORDER_DETAILS.CONSIGN_CODE,ORDER_DETAILS.SO_ACTUAL_DATE, ORDER_DETAILS . PAYMENT_MODE , ORDER_DETAILS.SO_DATE,ORDER_DETAILS.PARTY_CODE, ORDER_DETAILS.PAYMENT_TERM,ORDER_DETAILS.MODE_OF_DESPATCH ,MATERIAL .CHPTR_HEAD, CHPTR_HEADING.CHPT_NAME FROM SO_MAT_ORDER JOIN ORDER_DETAILS ON SO_MAT_ORDER .SO_NO =ORDER_DETAILS .SO_NO JOIN MATERIAL ON SO_MAT_ORDER .ITEM_CODE =MATERIAL .MAT_CODE JOIN CHPTR_HEADING ON MATERIAL  .CHPTR_HEAD  =CHPTR_HEADING .CHPT_CODE  WHERE SO_MAT_ORDER.ITEM_SLNO  ='" & DropDownList11.Text & "' AND SO_MAT_ORDER .SO_NO ='" & TextBox123.Text.Trim & "'"
+                mc1.CommandText = "select ORDER_DETAILS.ORDER_TO, ORDER_DETAILS.DESTINATION,ORDER_DETAILS.CONSIGN_CODE,ORDER_DETAILS.SO_ACTUAL_DATE, ORDER_DETAILS . PAYMENT_MODE , ORDER_DETAILS.SO_DATE,ORDER_DETAILS.PARTY_CODE, ORDER_DETAILS.PAYMENT_TERM,ORDER_DETAILS.MODE_OF_DESPATCH ,MATERIAL .CHPTR_HEAD, CHPTR_HEADING.CHPT_NAME FROM SO_MAT_ORDER JOIN ORDER_DETAILS ON SO_MAT_ORDER .SO_NO =ORDER_DETAILS .SO_NO JOIN MATERIAL ON SO_MAT_ORDER .ITEM_CODE =MATERIAL .MAT_CODE JOIN CHPTR_HEADING ON MATERIAL  .CHPTR_HEAD  =CHPTR_HEADING .CHPT_CODE  WHERE SO_MAT_ORDER.ITEM_SLNO  ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' AND SO_MAT_ORDER .SO_NO ='" & TextBox123.Text.Trim & "'"
                 mc1.Connection = conn
                 dr = mc1.ExecuteReader
                 If dr.HasRows Then
@@ -847,7 +848,7 @@ Public Class mis_sale
                 Dim freight_type, pack_type, actual_so, DISC_TYPE As New String("")
                 conn.Open()
                 Dim mc As New SqlCommand
-                mc.CommandText = "select MAX(ORDER_DETAILS .SO_ACTUAL ) AS SO_ACTUAL, MAX(MATERIAL .MAT_AU ) as ORD_AU, SUM(ITEM_SGST) AS ITEM_SGST,SUM(ITEM_CESS) AS ITEM_CESS,SUM(ITEM_CGST) AS ITEM_CGST,SUM(ITEM_IGST) AS ITEM_IGST,MAX(SO_MAT_ORDER.DISC_TYPE) AS DISC_TYPE,MAX(SO_MAT_ORDER.PACK_TYPE) AS PACK_TYPE ,MAX(SO_MAT_ORDER.ORD_AU) AS ORD_AU, SUM(SO_MAT_ORDER.ITEM_QTY) AS ITEM_QTY, SUM(SO_MAT_ORDER.ITEM_UNIT_RATE) AS ITEM_UNIT_RATE ,SUM(SO_MAT_ORDER .ITEM_DISCOUNT) AS ITEM_DISCOUNT,SUM(SO_MAT_ORDER .ITEM_PACK) AS ITEM_PACK  ,SUM(SO_MAT_ORDER .ITEM_QTY_SEND) AS ITEM_QTY_SEND ,SUM(SO_MAT_ORDER .ITEM_TCS) AS ITEM_TCS ,SUM(SO_MAT_ORDER .ITEM_TERMINAL_TAX) AS ITEM_TERMINAL_TAX , MAX(SO_MAT_ORDER .ITEM_FREIGHT_TYPE) AS ITEM_FREIGHT_TYPE ,SUM(SO_MAT_ORDER .ITEM_FREIGHT_PU) AS ITEM_FREIGHT_PU  FROM SO_MAT_ORDER JOIN MATERIAL  ON SO_MAT_ORDER .ITEM_CODE =MATERIAL .MAT_CODE  JOIN CHPTR_HEADING on MATERIAL .CHPTR_HEAD  =CHPTR_HEADING .CHPT_CODE JOIN ORDER_DETAILS ON SO_MAT_ORDER .SO_NO =ORDER_DETAILS .SO_NO  where SO_MAT_ORDER .ITEM_SLNO='" & DropDownList11.Text & "' and SO_MAT_ORDER .SO_NO='" & TextBox123.Text & "' and SO_MAT_ORDER .ITEM_CODE='" & DropDownList12.Text.Substring(0, DropDownList12.Text.IndexOf(",") - 1) & "' AND AMD_DATE <='" & Today.Year & "-" & Today.Month & "-" & Today.Day & "'"
+                mc.CommandText = "select MAX(ORDER_DETAILS .SO_ACTUAL ) AS SO_ACTUAL, MAX(MATERIAL .MAT_AU ) as ORD_AU, SUM(ITEM_SGST) AS ITEM_SGST,SUM(ITEM_CESS) AS ITEM_CESS,SUM(ITEM_CGST) AS ITEM_CGST,SUM(ITEM_IGST) AS ITEM_IGST,MAX(SO_MAT_ORDER.DISC_TYPE) AS DISC_TYPE,MAX(SO_MAT_ORDER.PACK_TYPE) AS PACK_TYPE ,MAX(SO_MAT_ORDER.ORD_AU) AS ORD_AU, SUM(SO_MAT_ORDER.ITEM_QTY) AS ITEM_QTY, SUM(SO_MAT_ORDER.ITEM_UNIT_RATE) AS ITEM_UNIT_RATE ,SUM(SO_MAT_ORDER .ITEM_DISCOUNT) AS ITEM_DISCOUNT,SUM(SO_MAT_ORDER .ITEM_PACK) AS ITEM_PACK  ,SUM(SO_MAT_ORDER .ITEM_QTY_SEND) AS ITEM_QTY_SEND ,SUM(SO_MAT_ORDER .ITEM_TCS) AS ITEM_TCS ,SUM(SO_MAT_ORDER .ITEM_TERMINAL_TAX) AS ITEM_TERMINAL_TAX , MAX(SO_MAT_ORDER .ITEM_FREIGHT_TYPE) AS ITEM_FREIGHT_TYPE ,SUM(SO_MAT_ORDER .ITEM_FREIGHT_PU) AS ITEM_FREIGHT_PU  FROM SO_MAT_ORDER JOIN MATERIAL  ON SO_MAT_ORDER .ITEM_CODE =MATERIAL .MAT_CODE  JOIN CHPTR_HEADING on MATERIAL .CHPTR_HEAD  =CHPTR_HEADING .CHPT_CODE JOIN ORDER_DETAILS ON SO_MAT_ORDER .SO_NO =ORDER_DETAILS .SO_NO  where SO_MAT_ORDER .ITEM_SLNO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and SO_MAT_ORDER .SO_NO='" & TextBox123.Text & "' and SO_MAT_ORDER .ITEM_CODE='" & DropDownList12.Text.Substring(0, DropDownList12.Text.IndexOf(",") - 1) & "' AND AMD_DATE <='" & Today.Year & "-" & Today.Month & "-" & Today.Day & "'"
                 mc.Connection = conn
                 dr = mc.ExecuteReader
                 If dr.HasRows Then
@@ -994,7 +995,7 @@ Public Class mis_sale
                 cmd1.Parameters.AddWithValue("@PARTY_CODE", PARTY_CODE)
                 cmd1.Parameters.AddWithValue("@CONSIGN_CODE", CONSIGN_CODE)
                 cmd1.Parameters.AddWithValue("@MAT_VOCAB", TextBox104.Text)
-                cmd1.Parameters.AddWithValue("@MAT_SLNO", DropDownList11.Text)
+                cmd1.Parameters.AddWithValue("@MAT_SLNO", DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim)
                 cmd1.Parameters.AddWithValue("@INV_NO", TextBox95.Text)
                 cmd1.Parameters.AddWithValue("@INV_DATE", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
                 cmd1.Parameters.AddWithValue("@CHPTR_HEAD", chptr_heading)
@@ -1135,7 +1136,7 @@ Public Class mis_sale
                     ''update so order
                     'conn.Open()
                     QUARY1 = ""
-                    QUARY1 = "update SO_MAT_ORDER set ITEM_QTY_SEND =(ITEM_QTY_SEND + (" & CDec(GridView4.Rows(lp).Cells(4).Text) & ")) where SO_NO ='" & TextBox123.Text & "' and ITEM_SLNO ='" & DropDownList11.SelectedValue & "' and ITEM_CODE ='" & GridView4.Rows(lp).Cells(1).Text & "' AND AMD_NO='" & TextBox105.Text & "'"
+                    QUARY1 = "update SO_MAT_ORDER set ITEM_QTY_SEND =(ITEM_QTY_SEND + (" & CDec(GridView4.Rows(lp).Cells(4).Text) & ")) where SO_NO ='" & TextBox123.Text & "' and ITEM_SLNO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1) & "' and ITEM_CODE ='" & GridView4.Rows(lp).Cells(1).Text & "' AND AMD_NO='" & TextBox105.Text & "'"
                     Dim cmdd As New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmdd.ExecuteReader()
                     cmdd.Dispose()
@@ -1304,7 +1305,7 @@ Public Class mis_sale
                 If DropDownList1.SelectedValue <> "N/A" Then
                     'conn.Open()
                     QUARY1 = ""
-                    QUARY1 = "UPDATE SALE_RCD_VOUCHAR SET BAL_AMT =BAL_AMT- " & CDec(TextBox122.Text) & ",CGST_BAL =CGST_BAL - " & CDec(TextBox116.Text) & ",SGST_BAL =SGST_BAL- " & CDec(TextBox114.Text) & ",IGST_BAL =IGST_BAL- " & CDec(TextBox118.Text) & ",CESS_BAL =CESS_BAL- " & CDec(TextBox120.Text) & ",TT_TAX_BAL=TT_TAX_BAL - " & CDec(TextBox117.Text) & " WHERE VOUCHER_TYPE + VOUCHER_NO ='" & DropDownList1.Text & "' AND SO_NO ='" & TextBox123.Text & "' AND ITEM_SLNO ='" & DropDownList11.Text & "'"
+                    QUARY1 = "UPDATE SALE_RCD_VOUCHAR SET BAL_AMT =BAL_AMT- " & CDec(TextBox122.Text) & ",CGST_BAL =CGST_BAL - " & CDec(TextBox116.Text) & ",SGST_BAL =SGST_BAL- " & CDec(TextBox114.Text) & ",IGST_BAL =IGST_BAL- " & CDec(TextBox118.Text) & ",CESS_BAL =CESS_BAL- " & CDec(TextBox120.Text) & ",TT_TAX_BAL=TT_TAX_BAL - " & CDec(TextBox117.Text) & " WHERE VOUCHER_TYPE + VOUCHER_NO ='" & DropDownList1.Text & "' AND SO_NO ='" & TextBox123.Text & "' AND ITEM_SLNO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
                     Dim cmdd As New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmdd.ExecuteReader()
                     cmdd.Dispose()

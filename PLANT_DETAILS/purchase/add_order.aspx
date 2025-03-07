@@ -814,6 +814,22 @@
                                 </div>
                                 <div class="row align-items-center">
                                     <div class="col-3 text-start">
+                                        <asp:Label ID="Label2" ForeColor="Blue" runat="server" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox57" runat="server"></asp:TextBox>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        
+                                    </div>
+                                    <div class="col-2 text-start g-0">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-3 text-start">
                                         <asp:Label ID="Label442" runat="server" ForeColor="Blue" Text="Material Details"></asp:Label>
                                     </div>
                                     <div class="col-6 text-start">
@@ -1328,6 +1344,16 @@
 
                                 </div>
 
+                                <div class="row align-items-center">
+                                    <div class="col-3 text-start">
+                                        <asp:Label ID="Label14" runat="server" ForeColor="Blue" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox58" runat="server"></asp:TextBox>
+                                    </div>
+
+                                </div>
+
 
                                 <div class="row align-items-center">
                                     <div class="col-3 text-start">
@@ -1513,6 +1539,15 @@
 
                                 </div>
 
+                                <div class="row align-items-center">
+                                    <div class="col-3 text-start">
+                                        <asp:Label ID="Label21" runat="server" ForeColor="Blue" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox61" runat="server"></asp:TextBox>
+                                    </div>
+
+                                </div>
 
                                 <div class="row align-items-center">
                                     <div class="col-3 text-start">
@@ -1698,6 +1733,15 @@
 
                                 </div>
 
+                                <div class="row align-items-center">
+                                    <div class="col-3 text-start">
+                                        <asp:Label ID="Label22" runat="server" ForeColor="Blue" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox66" runat="server"></asp:TextBox>
+                                    </div>
+
+                                </div>
 
                                 <div class="row align-items-center">
                                     <div class="col-3 text-start">
@@ -1872,6 +1916,15 @@
                                     </div>
                                     <div class="col-2 text-start">
                                         <asp:TextBox class="form-control" ID="TextBox671" runat="server"></asp:TextBox>
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center">
+                                    <div class="col-2 text-start">
+                                        <asp:Label ID="Label23" runat="server" ForeColor="Blue" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox67" runat="server"></asp:TextBox>
                                     </div>
                                 </div>
 
@@ -2409,6 +2462,24 @@
                                     </div>
                                 </div>
 
+                                <div class="row align-items-center mt-1">
+                                    <div class="col-2 text-start">
+                                        <asp:Label ID="Label67" runat="server" Font-Bold="True" ForeColor="Blue" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox68" runat="server"></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-2 text-start">
+                                        
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        
+                                    </div>
+                                    <div class="col text-start">
+                                    </div>
+                                </div>
+
                                 <div class="row align-items-center">
                                     <div class="col-2 text-start">
                                     </div>
@@ -2709,6 +2780,24 @@
                                     <div class="col-2 text-start">
                                         <asp:TextBox class="form-control" ID="TextBox44" runat="server"></asp:TextBox>
                                         <cc1:CalendarExtender ID="CalendarExtender3" runat="server" BehaviorID="Delvdate_CalendarExtender" CssClass="red" Enabled="True" Format="dd-MM-yyyy" TargetControlID="Delvdate" />
+                                    </div>
+                                    <div class="col text-start">
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center mt-1">
+                                    <div class="col-2 text-start">
+                                        <asp:Label ID="Label77" runat="server" Font-Bold="True" ForeColor="Blue" Text="HSN Code"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox69" runat="server"></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-2 text-start">
+                                        
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        
                                     </div>
                                     <div class="col text-start">
                                     </div>

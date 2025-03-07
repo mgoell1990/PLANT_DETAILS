@@ -185,30 +185,56 @@ Public Class issue
                 cmd.Dispose()
                 'conn.Close()
 
-                ''save ledger
-                Dim issue_head, con_head As String
-                issue_head = ""
-                con_head = ""
-                'Dim MC5 As New SqlCommand
+                '''save ledger
+                'Dim issue_head, con_head As String
+                'issue_head = ""
+                'con_head = ""
+                ''Dim MC5 As New SqlCommand
 
+                'conn.Open()
+                '''Getting Material Consumption head
+                'MC5.CommandText = "select COST_CODE,ISSUE_CODE from MAT_DETAILS WITH(NOLOCK) where ISSUE_NO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR='" & STR1 & "'"
+                'MC5.Connection = conn
+                'dr = MC5.ExecuteReader
+                'If dr.HasRows Then
+                '    dr.Read()
+                '    issue_head = dr.Item("ISSUE_CODE")
+                '    con_head = dr.Item("COST_CODE")
+                '    dr.Close()
+                '    conn.Close()
+                'Else
+                '    conn.Close()
+                'End If
+
+
+                Dim issueCode, consumptionCode, wipHead As New String("")
                 conn.Open()
-                ''Getting Material Consumption head
-                MC5.CommandText = "select COST_CODE,ISSUE_CODE from MAT_DETAILS WITH(NOLOCK) where ISSUE_NO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR='" & STR1 & "'"
-                MC5.Connection = conn
-                dr = MC5.ExecuteReader
+                Dim MCc As New SqlCommand
+                MCc.CommandText = "select AC_ISSUE,AC_CON,CWIP_HEAD from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
+                MCc.Connection = conn
+                dr = MCc.ExecuteReader
                 If dr.HasRows Then
                     dr.Read()
-                    issue_head = dr.Item("ISSUE_CODE")
-                    con_head = dr.Item("COST_CODE")
+                    issueCode = dr.Item("AC_ISSUE")
+                    consumptionCode = dr.Item("AC_CON")
+
+                    If Not (IsDBNull(dr.Item("CWIP_HEAD"))) Then
+                        wipHead = dr.Item("CWIP_HEAD")
+                    End If
+
                     dr.Close()
                     conn.Close()
                 Else
                     conn.Close()
                 End If
 
-                save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, issue_head, "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
-                save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, con_head, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
-
+                If (CInt(DropDownList3.Text.Substring(0, 3)) < 50) Then
+                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, issueCode, "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
+                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, consumptionCode, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
+                Else
+                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "60614", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital Issue")
+                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, wipHead, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital WIP")
+                End If
 
                 Dim ds5 As New DataSet
                 conn.Open()
@@ -230,8 +256,6 @@ Public Class issue
 
                 DropDownList11.Text = "Select"
                 TextBox3.Text = ""
-
-
 
             Catch ee As Exception
                 ' Roll back the transaction. 

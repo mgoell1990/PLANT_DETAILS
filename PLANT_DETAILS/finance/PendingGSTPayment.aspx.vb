@@ -355,7 +355,7 @@ Public Class PendingGSTPayment
                         cmd.Parameters.AddWithValue("@SEC_DATE", Date.ParseExact(TextBox32.Text, "dd-MM-yyyy", provider))
                         cmd.Parameters.AddWithValue("@VOUCHER_TYPE", "B.P.V")
                         cmd.Parameters.AddWithValue("@PAY_TYPE", "Current")
-                        cmd.Parameters.AddWithValue("@NET_AMT", CDec(txtTotalGST.Text))
+                        cmd.Parameters.AddWithValue("@NET_AMT", CDec(TextBox5.Text))
                         cmd.Parameters.AddWithValue("@PARTICULAR", TextBox34.Text)
                         cmd.Parameters.AddWithValue("@SUPL_ID", TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1))
                         cmd.Parameters.AddWithValue("@SUPL_NAME", strarr(1))
@@ -665,6 +665,15 @@ Public Class PendingGSTPayment
         Dim TAXABLE_AMOUNT, CGST_VALUE, SGST_VALUE, IGST_VALUE As New Decimal(0)
 
         Dim order_type, PO_TYPE, SO_STATUS As New String("")
+
+        'If CInt(TextBox5.Text) <> TextBox5.Text Then
+        '    Label447.Visible = True
+        '    Label447.Text = "Please enter integer value"
+        '    TextBox5.Focus()
+        '    Return
+        'Else
+        '    Label447.Text = ""
+        'End If
 
         conn.Open()
         'Dim mc1 As New SqlCommand

@@ -869,7 +869,7 @@ Public Class ind_garn
                     End If
 
                     'conn.Open()
-                    Dim query1 As String = "update PO_RCD_MAT set TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT,UNIT_RATE=@UNIT_RATE, MAT_RATE=@MAT_RATE,DISC_VAL=@DISC_VAL,PF_VALUE=@PF_VALUE,IGST=@IGST,SGST=@SGST,CGST=@CGST,CESS=@CESS,LD_CHARGE=@LD_CHARGE,PENALITY_CHARGE=@PENALITY_CHARGE,FREIGHT_CHARGE=@FREIGHT_CHARGE,LOCAL_FREIGHT=@LOCAL_FREIGHT,LOSS_TRANSPORT=@LOSS_TRANSPORT,LOSS_ON_ED=@LOSS_ON_ED,PARTY_PAY=@PARTY_PAY,DIFF_VALUE=@DIFF_VALUE,V_IND=@V_IND,INV_NO=@INV_NO,INV_DATE=@INV_DATE, PAY_EMP=@PAY_EMP where MAT_SLNO='" & imp_GridView3.Rows(I).Cells(3).Text & "' and CRR_NO='" & imp_GridView3.Rows(I).Cells(0).Text & "' AND PO_NO='" & po_no & "'"
+                    Dim query1 As String = "update PO_RCD_MAT set TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT,UNIT_RATE=@UNIT_RATE, MAT_RATE=@MAT_RATE,DISC_VAL=@DISC_VAL,PF_VALUE=@PF_VALUE,IGST=@IGST,SGST=@SGST,CGST=@CGST,CESS=@CESS,LD_CHARGE=@LD_CHARGE,PENALITY_CHARGE=@PENALITY_CHARGE,FREIGHT_CHARGE=@FREIGHT_CHARGE,LOCAL_FREIGHT=@LOCAL_FREIGHT,LOSS_TRANSPORT=@LOSS_TRANSPORT,LOSS_ON_ED=@LOSS_ON_ED,PARTY_PAY=@PARTY_PAY,DIFF_VALUE=@DIFF_VALUE,V_IND=@V_IND,INV_NO=@INV_NO,INV_DATE=@INV_DATE, PAY_EMP=@PAY_EMP,GARN_ENTRY_DATE=@GARN_ENTRY_DATE where MAT_SLNO='" & imp_GridView3.Rows(I).Cells(3).Text & "' and CRR_NO='" & imp_GridView3.Rows(I).Cells(0).Text & "' AND PO_NO='" & po_no & "'"
                     Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@UNIT_RATE", CDec(imp_GridView3.Rows(I).Cells(15).Text))
                     cmd1.Parameters.AddWithValue("@MAT_RATE", CDec(imp_GridView3.Rows(I).Cells(17).Text))
@@ -898,6 +898,7 @@ Public Class ind_garn
                     cmd1.Parameters.AddWithValue("@TRANS_SHORT", CDec(imp_GridView3.Rows(I).Cells(20).Text))
                     cmd1.Parameters.AddWithValue("@TRANS_CHARGE", CDec(imp_GridView3.Rows(I).Cells(19).Text))
                     cmd1.Parameters.AddWithValue("@GARN_EMP", Session("userName"))
+                    cmd1.Parameters.AddWithValue("@GARN_ENTRY_DATE", Now)
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
                     'conn.Close()
@@ -2104,7 +2105,7 @@ Public Class ind_garn
 
                     Dim G_DATE As Date = working_date.Date
                     'conn.Open()
-                    Dim query As String = "update PO_RCD_MAT set LOSS_ON_ED=@LOSS_ON_ED, LOSS_TRANSPORT=@LOSS_TRANSPORT, FISCAL_YEAR=@FISCAL_YEAR, TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT where MAT_SLNO='" & GridView2.Rows(I).Cells(3).Text & "' and CRR_NO='" & garn_crrnoDropDownList.SelectedValue & "'"
+                    Dim query As String = "update PO_RCD_MAT set LOSS_ON_ED=@LOSS_ON_ED, LOSS_TRANSPORT=@LOSS_TRANSPORT, FISCAL_YEAR=@FISCAL_YEAR, TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT,GARN_ENTRY_DATE=@GARN_ENTRY_DATE where MAT_SLNO='" & GridView2.Rows(I).Cells(3).Text & "' and CRR_NO='" & garn_crrnoDropDownList.SelectedValue & "'"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@GARN_NO", GARN_NO_TextBox.Text)
                     cmd.Parameters.AddWithValue("@GARN_DATE", Date.ParseExact(G_DATE, "dd-MM-yyyy", provider))
@@ -2116,6 +2117,7 @@ Public Class ind_garn
                     cmd.Parameters.AddWithValue("@LOSS_ON_ED", CDec(GridView2.Rows(I).Cells(28).Text))
                     cmd.Parameters.AddWithValue("@GARN_EMP", Session("userName"))
                     cmd.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
+                    cmd.Parameters.AddWithValue("@GARN_ENTRY_DATE", Now)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()

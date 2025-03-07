@@ -1673,7 +1673,7 @@ Public Class s_report
         Dim from_date As Date = Date.ParseExact(CDate(TextBox5.Text), "dd-MM-yyyy", provider)
         Dim to_date As Date = Date.ParseExact(CDate(TextBox6.Text), "dd-MM-yyyy", provider)
 
-        Dim quary_trans As String = "select ROW_NUMBER() OVER (ORDER BY mat_details.mat_code) AS ROW_NO,MAT_DETAILS .UNIT_PRICE,MAT_DETAILS .TOTAL_PRICE,MAT_DETAILS .LINE_NO,MAT_DETAILS .cost_code ,MAT_DETAILS .LINE_DATE ,MAT_DETAILS .LINE_TYPE ,MAT_DETAILS .ISSUE_NO ,(MAT_DETAILS .MAT_QTY +MAT_DETAILS .ISSUE_QTY ) as mat_qty,mat_details.MAT_BALANCE,mat_details.mat_code,material.mat_name,material.MAT_AU,('" & TextBox5.Text & " To " & TextBox6.Text & "' ) AS REPORT_FROM from mat_details join material on mat_details.mat_code=material.mat_code where LINE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'"
+        Dim quary_trans As String = "select ROW_NUMBER() OVER (ORDER BY mat_details.mat_code) AS ROW_NO,MAT_DETAILS .UNIT_PRICE,MAT_DETAILS .TOTAL_PRICE,MAT_DETAILS .LINE_NO,MAT_DETAILS .cost_code ,MAT_DETAILS .LINE_DATE ,MAT_DETAILS .LINE_TYPE ,MAT_DETAILS .ISSUE_NO ,(MAT_DETAILS .MAT_QTY +MAT_DETAILS .ISSUE_QTY ) as mat_qty,mat_details.MAT_BALANCE,mat_details.mat_code,material.mat_name,material.MAT_AU,('" & TextBox5.Text & " To " & TextBox6.Text & "' ) AS REPORT_FROM,MAT_DETAILS.fiscal_year from mat_details join material on mat_details.mat_code=material.mat_code where LINE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'"
         If DropDownList1.SelectedValue <> "All Group" And DropDownList2.SelectedValue <> "All Material" Then
             quary_trans = quary_trans & " and MAT_DETAILS .MAT_CODE = '" & DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1) & "'"
 
@@ -1695,7 +1695,7 @@ Public Class s_report
             quary_trans = quary_trans & " and (MAT_DETAILS.MAT_CODE like '0%' and MAT_DETAILS.MAT_CODE<>'097000001') "
         End If
 
-        quary_trans = quary_trans & " order by mat_details.mat_code,LINE_NO"
+        quary_trans = quary_trans & " order by mat_details.mat_code,MAT_DETAILS.fiscal_year,LINE_NO"
 
         conn.Open()
         dt.Clear()

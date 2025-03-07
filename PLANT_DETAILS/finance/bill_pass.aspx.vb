@@ -546,10 +546,10 @@ Public Class bill_pass1
                         If CDec(TextBox37.Text) > CDec(TextBox36.Text) Then
                             If payment_type = "Advance Payment" Then
                                 ''PSC AT THE TIME OF BILL PASS
-                                ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), psc_head, "Cr", CDec(TextBox37.Text) - CDec(TextBox36.Text), "PSC", DropDownList15.SelectedValue, 10, "OK", TextBox53.Text)
+                                ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), "71801", "Cr", CDec(TextBox37.Text) - CDec(TextBox36.Text), "PSC", DropDownList15.SelectedValue, 10, "OK", TextBox53.Text)
                             Else
                                 ''PSC AT THE TIME OF BILL PASS
-                                ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), psc_head, "Cr", CDec(TextBox37.Text) - CDec(TextBox36.Text), "PSC", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
+                                ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), "71801", "Cr", CDec(TextBox37.Text) - CDec(TextBox36.Text), "PSC", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
                             End If
 
 
@@ -749,7 +749,7 @@ Public Class bill_pass1
                             End If
                         Else
                             ''PSC AT THE TIME OF BILL PASS
-                            ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), psc_head, "Dr", CDec(TextBox36.Text) - CDec(TextBox37.Text), "PSC", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
+                            ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), "84222", "Dr", CDec(TextBox36.Text) - CDec(TextBox37.Text), "PSC", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
                         End If
 
                         ''UPDATE BILL TRACK ID STATUS

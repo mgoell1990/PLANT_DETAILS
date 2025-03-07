@@ -103,14 +103,14 @@ Public Class order_balance
             
             select PO_NO,MAT_SLNO as W_SLNO,sum((case when TRANS_WO_NO = 'N/A' THEN (case when @tolerance=0 THEN (MAT_RCD_QTY- MAT_REJ_QTY-MAT_EXCE) else (case when (MAT_CHALAN_QTY-MAT_RCD_QTY)<=(MAT_CHALAN_QTY*0.005) THEN (MAT_CHALAN_QTY- MAT_REJ_QTY-MAT_EXCE) else (MAT_RCD_QTY- MAT_REJ_QTY-MAT_EXCE) end) end) else MAT_CHALAN_QTY end)) AS W_COMPLETED from PO_RCD_MAT where PO_NO='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' and GARN_NO<>'PENDING' group by PO_NO,MAT_SLNO
 
-            SELECT T1.PO_NO,T1.W_SLNO,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO order by t1.PO_NO,convert(int,T1.W_SLNO)", conn)
+            SELECT T1.PO_NO,T1.W_SLNO,'' as vocabNo,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO order by t1.PO_NO,convert(int,T1.W_SLNO)", conn)
             da.Fill(dt)
             conn.Close()
             GridView4.DataSource = dt
             GridView4.DataBind()
             Dim i As Integer = 0
             For i = 0 To GridView4.Rows.Count - 1
-                GridView4.Rows(i).Cells(9).Text = CDec(GridView4.Rows(i).Cells(7).Text) - CDec(GridView4.Rows(i).Cells(8).Text)
+                GridView4.Rows(i).Cells(10).Text = CDec(GridView4.Rows(i).Cells(8).Text) - CDec(GridView4.Rows(i).Cells(9).Text)
             Next
             Dim mc1 As New SqlCommand
             conn.Open()
@@ -136,14 +136,14 @@ Public Class order_balance
             INSERT INTO @TT1
             select PO_NO,WO_SLNO,SUM(work_qty) AS W_COMPLETED from mb_book where PO_NO='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' GROUP BY po_no,wo_slno
 
-            SELECT T1.PO_NO,T1.W_SLNO,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO", conn)
+            SELECT T1.PO_NO,T1.W_SLNO,'' as vocabNo,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO", conn)
             da.Fill(dt)
             conn.Close()
             GridView4.DataSource = dt
             GridView4.DataBind()
             Dim i As Integer = 0
             For i = 0 To GridView4.Rows.Count - 1
-                GridView4.Rows(i).Cells(9).Text = CDec(GridView4.Rows(i).Cells(7).Text) - CDec(GridView4.Rows(i).Cells(8).Text)
+                GridView4.Rows(i).Cells(10).Text = CDec(GridView4.Rows(i).Cells(8).Text) - CDec(GridView4.Rows(i).Cells(9).Text)
             Next
             Dim mc1 As New SqlCommand
             conn.Open()
@@ -171,7 +171,7 @@ Public Class order_balance
             INSERT INTO @TT1
             select PO_NO,WO_SLNO,SUM(work_qty) AS W_COMPLETED from mb_book where PO_NO='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' GROUP BY po_no,wo_slno
 
-            SELECT T1.PO_NO,T1.W_SLNO,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO", conn)
+            SELECT T1.PO_NO,T1.W_SLNO,'' as vocabNo,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO", conn)
 
             Else
 
@@ -183,7 +183,7 @@ Public Class order_balance
             INSERT INTO @TT1
             select COST_CODE as PO_NO,MAT_SL_NO as WO_SLNO,SUM(MAT_QTY) AS W_COMPLETED from MAT_DETAILS where COST_CODE='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' GROUP BY COST_CODE,MAT_SL_NO
 
-            SELECT T1.PO_NO,T1.W_SLNO,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO order by t1.PO_NO,convert(int,T1.W_SLNO)", conn)
+            SELECT T1.PO_NO,T1.W_SLNO,'' as vocabNo,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO order by t1.PO_NO,convert(int,T1.W_SLNO)", conn)
 
             End If
 
@@ -193,7 +193,7 @@ Public Class order_balance
             GridView4.DataBind()
             Dim i As Integer = 0
             For i = 0 To GridView4.Rows.Count - 1
-                GridView4.Rows(i).Cells(9).Text = CDec(GridView4.Rows(i).Cells(7).Text) - CDec(GridView4.Rows(i).Cells(8).Text)
+                GridView4.Rows(i).Cells(10).Text = CDec(GridView4.Rows(i).Cells(8).Text) - CDec(GridView4.Rows(i).Cells(9).Text)
             Next
             Dim mc1 As New SqlCommand
             conn.Open()
@@ -212,22 +212,22 @@ Public Class order_balance
             conn.Open()
             dt.Clear()
 
-            da = New SqlDataAdapter("DECLARE @TT TABLE(PO_NO VARCHAR(60),W_SLNO VARCHAR(30),W_NAME VARCHAR(150),W_AU VARCHAR(30),UNIT_PRICE DECIMAL(16,2),W_START_DATE VARCHAR(30),W_END_DATE VARCHAR(30),W_QTY DECIMAL(16,3))
+            da = New SqlDataAdapter("DECLARE @TT TABLE(PO_NO VARCHAR(60),W_SLNO VARCHAR(30),vocabNo VARCHAR(30),W_NAME VARCHAR(150),W_AU VARCHAR(30),UNIT_PRICE DECIMAL(16,2),W_START_DATE VARCHAR(30),W_END_DATE VARCHAR(30),W_QTY DECIMAL(16,3))
             INSERT INTO @TT
-            select SO_NO as PO_NO,ITEM_SLNO as W_SLNO,F_ITEM.ITEM_NAME as W_NAME,MAX(ORD_AU) AS W_AU,SUM(ITEM_UNIT_RATE) AS UNIT_PRICE,MIN(AMD_DATE) AS W_START_DATE,MAX(ITEM_DELIVERY) AS W_END_DATE,SUM(ITEM_QTY) AS W_QTY from SO_MAT_ORDER join F_ITEM on SO_MAT_ORDER.ITEM_CODE=F_ITEM.ITEM_CODE where SO_NO ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' GROUP BY SO_NO,ITEM_SLNO,ITEM_NAME ORDER BY ITEM_SLNO
+            select SO_NO as PO_NO,ITEM_SLNO as W_SLNO,ITEM_VOCAB,F_ITEM.ITEM_NAME as W_NAME,MAX(ORD_AU) AS W_AU,SUM(ITEM_UNIT_RATE) AS UNIT_PRICE,MIN(AMD_DATE) AS W_START_DATE,MAX(ITEM_DELIVERY) AS W_END_DATE,SUM(ITEM_QTY) AS W_QTY from SO_MAT_ORDER join F_ITEM on SO_MAT_ORDER.ITEM_CODE=F_ITEM.ITEM_CODE where SO_NO ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' GROUP BY SO_NO,ITEM_SLNO,ITEM_VOCAB,ITEM_NAME ORDER BY ITEM_SLNO
 
             DECLARE @TT1 TABLE(PO_NO VARCHAR(30),W_SLNO VARCHAR(30),W_COMPLETED VARCHAR(30))
             INSERT INTO @TT1
             select SO_NO as PO_NO,MAT_SLNO as WO_SLNO,SUM(TOTAL_QTY) AS W_COMPLETED from DESPATCH where SO_NO='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "' and INV_STATUS<>'CANCELLED' GROUP BY SO_NO,MAT_SLNO
 
-            SELECT T1.PO_NO,T1.W_SLNO,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO order by t1.PO_NO,convert(int,T1.W_SLNO)", conn)
+            SELECT T1.PO_NO,T1.W_SLNO,t1.vocabNo,T1.W_NAME,T1.W_AU,t1.UNIT_PRICE,T1.W_START_DATE,T1.W_END_DATE,T1.W_QTY,ISNULL(T2.W_COMPLETED, 0.000) As W_COMPLETED FROM @TT T1 LEFT JOIN @TT1 T2 ON T1.PO_NO=T2.PO_NO AND T1.W_SLNO=T2.W_SLNO order by t1.PO_NO,convert(int,T1.W_SLNO)", conn)
             da.Fill(dt)
             conn.Close()
             GridView4.DataSource = dt
             GridView4.DataBind()
             Dim i As Integer = 0
             For i = 0 To GridView4.Rows.Count - 1
-                GridView4.Rows(i).Cells(9).Text = CDec(GridView4.Rows(i).Cells(7).Text) - CDec(GridView4.Rows(i).Cells(8).Text)
+                GridView4.Rows(i).Cells(10).Text = CDec(GridView4.Rows(i).Cells(8).Text) - CDec(GridView4.Rows(i).Cells(9).Text)
             Next
 
             Dim mc1 As New SqlCommand

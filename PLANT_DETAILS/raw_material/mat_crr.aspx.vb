@@ -816,7 +816,7 @@ Public Class mat_crr
                         Dim test_location As String = crr_gridview.Rows(I).Cells(23).Text
 
                         'conn.Open()
-                        Dim query As String = "Insert Into PO_RCD_MAT(SAMPLING_STATUS,INSP_LOCATION,TOTAL_MT,FISCAL_YEAR,TRANS_SLNO,PAY_EMP,CRR_NO,CRR_DATE,PO_NO,SUPL_ID,TRANS_WO_NO,TRUCK_NO,MAT_SLNO,MAT_CODE,CHLN_NO,CHLN_DATE,MAT_CHALAN_QTY,MAT_RCD_QTY,MAT_REJ_QTY,MAT_BAL_QTY,MAT_EXCE,NO_OF_BAG,BAG_WEIGHT,GARN_NO,BE_NO,BE_DATE,BL_NO,BL_DATE,SHIP_NAME,CRR_EMP,AMD_NO)values (@SAMPLING_STATUS,@INSP_LOCATION,@TOTAL_MT,@FISCAL_YEAR,@TRANS_SLNO,@PAY_EMP,@CRR_NO, @CRR_DATE,@PO_NO,@SUPL_ID,@TRANS_WO_NO,@TRUCK_NO,@MAT_SLNO,@MAT_CODE,@CHLN_NO,@CHLN_DATE,@MAT_CHALAN_QTY,@MAT_RCD_QTY,@MAT_REJ_QTY,@MAT_BAL_QTY,@MAT_EXCE,@NO_OF_BAG,@BAG_WEIGHT,@GARN_NO,@BE_NO,@BE_DATE,@BL_NO,@BL_DATE,@SHIP_NAME,@CRR_EMP,@AMD_NO)"
+                        Dim query As String = "Insert Into PO_RCD_MAT(MAT_NAME,CRR_ENTRY_DATE,SAMPLING_STATUS,INSP_LOCATION,TOTAL_MT,FISCAL_YEAR,TRANS_SLNO,PAY_EMP,CRR_NO,CRR_DATE,PO_NO,SUPL_ID,TRANS_WO_NO,TRUCK_NO,MAT_SLNO,MAT_CODE,CHLN_NO,CHLN_DATE,MAT_CHALAN_QTY,MAT_RCD_QTY,MAT_REJ_QTY,MAT_BAL_QTY,MAT_EXCE,NO_OF_BAG,BAG_WEIGHT,GARN_NO,BE_NO,BE_DATE,BL_NO,BL_DATE,SHIP_NAME,CRR_EMP,AMD_NO)values (@MAT_NAME,@CRR_ENTRY_DATE,@SAMPLING_STATUS,@INSP_LOCATION,@TOTAL_MT,@FISCAL_YEAR,@TRANS_SLNO,@PAY_EMP,@CRR_NO, @CRR_DATE,@PO_NO,@SUPL_ID,@TRANS_WO_NO,@TRUCK_NO,@MAT_SLNO,@MAT_CODE,@CHLN_NO,@CHLN_DATE,@MAT_CHALAN_QTY,@MAT_RCD_QTY,@MAT_REJ_QTY,@MAT_BAL_QTY,@MAT_EXCE,@NO_OF_BAG,@BAG_WEIGHT,@GARN_NO,@BE_NO,@BE_DATE,@BL_NO,@BL_DATE,@SHIP_NAME,@CRR_EMP,@AMD_NO)"
                         Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@CRR_NO", CRR_NO)
                         cmd.Parameters.AddWithValue("@CRR_DATE", Date.ParseExact(crr_date, "dd-MM-yyyy", provider))
@@ -853,6 +853,9 @@ Public Class mat_crr
                         ElseIf (test_location = "Outside SRU") Then
                             cmd.Parameters.AddWithValue("@SAMPLING_STATUS", "DONE")
                         End If
+
+                        cmd.Parameters.AddWithValue("@CRR_ENTRY_DATE", Now)
+                        cmd.Parameters.AddWithValue("@MAT_NAME", matnameTextBox.Text)
                         cmd.ExecuteReader()
                         cmd.Dispose()
                         'conn.Close()

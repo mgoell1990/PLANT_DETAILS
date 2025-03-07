@@ -158,6 +158,7 @@
                                                     <Columns>
                                                         <asp:BoundField DataField="PO_NO" HeaderText="Order No" />
                                                         <asp:BoundField DataField="W_SLNO" HeaderText="Order SLNo" />
+                                                        <asp:BoundField DataField="vocabNo" HeaderText="Vocab No" />
                                                         <asp:BoundField DataField="W_NAME" HeaderText="Description" />
                                                         <asp:BoundField DataField="W_AU" HeaderText="Acc.Unit" />
                                                         <asp:BoundField DataField="UNIT_PRICE" HeaderText="Unit Price" />

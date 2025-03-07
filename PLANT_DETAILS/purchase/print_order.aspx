@@ -32,11 +32,11 @@
                         <div class="col">
                             <asp:DropDownList class="form-select" ID="DropDownList51" runat="server">
                                 <asp:ListItem>Select</asp:ListItem>
-                                <asp:ListItem>Full Order</asp:ListItem>
-                                <asp:ListItem>Order Balance</asp:ListItem>
+                                <asp:ListItem>Print Order</asp:ListItem>
+                                <%--<asp:ListItem>Order Balance</asp:ListItem>
                                 <asp:ListItem>Amendment</asp:ListItem>
                                 <asp:ListItem>Short Close</asp:ListItem>
-                                <asp:ListItem>Completed</asp:ListItem>
+                                <asp:ListItem>Completed</asp:ListItem>--%>
                             </asp:DropDownList>
                         </div>
 

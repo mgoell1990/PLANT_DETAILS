@@ -204,7 +204,7 @@ Public Class sale_finished_goods
             ''SEARCH LINE NO DETAILS
             conn.Open()
             dt.Clear()
-            da = New SqlDataAdapter("select distinct convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB AS ITEM_SLNO from SO_MAT_ORDER where item_status='PENDING' and ORD_AU <>'Activity' and ORD_AU <>'Service/Mt' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "'", conn)
+            da = New SqlDataAdapter("select distinct ITEM_SLNO as slNo,convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB AS ITEM_SLNO, Max(ITEM_DELIVERY) as mat_delivery from SO_MAT_ORDER where item_status='PENDING' and ORD_AU <>'Activity' and ORD_AU <>'Service/Mt' and SO_NO='" & DropDownList26.Text.Substring(0, DropDownList26.Text.IndexOf(",") - 1).Trim & "' and DELIVERY_START_DATE<='" & Today.Date.Year & "-" & Today.Date.Month & "-" & Today.Date.Day & "' group by ITEM_SLNO, convert(varchar(15),ITEM_SLNO) + ' , ' + ITEM_VOCAB having Max(ITEM_DELIVERY)>='" & Today.Date.Year & "-" & Today.Date.Month & "-" & Today.Date.Day & "' order by slNo", conn)
             da.Fill(dt)
             conn.Close()
             DropDownList4.Items.Clear()
@@ -980,7 +980,7 @@ Public Class sale_finished_goods
                     qual_name = dr.Item("qual_name")
                     qual_desc = dr.Item("qual_desc")
                     SO_ACTUAL_DATE = dr.Item("SO_ACTUAL_DATE")
-                    PLACE_OF_SUPPLY = dr.Item("DESTINATION")
+                    ''PLACE_OF_SUPPLY = dr.Item("DESTINATION")
                     dr.Close()
                 Else
                     dr.Close()
@@ -1208,6 +1208,7 @@ Public Class sale_finished_goods
                     BILL_PARTY_ADD = dr.Item("party_details")
                     BILL_PARTY_GST = dr.Item("gst_code")
                     BILL_PARTY_state = dr.Item("d_state")
+                    PLACE_OF_SUPPLY = dr.Item("d_state")
                     BILL_PARTY_state_code = dr.Item("d_state_code")
                     dr.Close()
                 End If
@@ -1408,7 +1409,7 @@ Public Class sale_finished_goods
                     End If
                     conn.Close()
                     'conn.Open()
-                    QUARY1 = "Insert Into PROD_CONTROL(QUALITY,ENTRY_DATE,FISCAL_YEAR,INV_NO,ITEM_CODE,PROD_DATE,ITEM_F_QTY,ITEM_B_QTY,ITEM_I_QTY,ITEM_I_SO,ITEM_F_STOCK,ITEM_B_STOCK,ITEM_I_TOTAL)values(@QUALITY,@ENTRY_DATE,@FISCAL_YEAR,@INV_NO,@ITEM_CODE,@PROD_DATE,@ITEM_F_QTY,@ITEM_B_QTY,@ITEM_I_QTY,@ITEM_I_SO,@ITEM_F_STOCK,@ITEM_B_STOCK,@ITEM_I_TOTAL)"
+                    QUARY1 = "Insert Into PROD_CONTROL(ITEM_WEIGHT,QUALITY,ENTRY_DATE,FISCAL_YEAR,INV_NO,ITEM_CODE,PROD_DATE,ITEM_F_QTY,ITEM_B_QTY,ITEM_I_QTY,ITEM_I_SO,ITEM_F_STOCK,ITEM_B_STOCK,ITEM_I_TOTAL)values(@ITEM_WEIGHT,@QUALITY,@ENTRY_DATE,@FISCAL_YEAR,@INV_NO,@ITEM_CODE,@PROD_DATE,@ITEM_F_QTY,@ITEM_B_QTY,@ITEM_I_QTY,@ITEM_I_SO,@ITEM_F_STOCK,@ITEM_B_STOCK,@ITEM_I_TOTAL)"
                     cmd1 = New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@ITEM_CODE", GridView2.Rows(lp).Cells(1).Text)
                     cmd1.Parameters.AddWithValue("@PROD_DATE", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
@@ -1423,6 +1424,7 @@ Public Class sale_finished_goods
                     cmd1.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
                     cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
                     cmd1.Parameters.AddWithValue("@QUALITY", qual_desc)
+                    cmd1.Parameters.AddWithValue("@ITEM_WEIGHT", CDec(GridView2.Rows(lp).Cells(5).Text))
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
                     'conn.Close()
@@ -1503,10 +1505,22 @@ Public Class sale_finished_goods
                         save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
                         save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
 
-                    ElseIf FINANCE_ARRANGE = "BG" Then
+                    ElseIf (FINANCE_ARRANGE = "BG") Then
 
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox41.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox41.Text) - CDec(TextBox37.Text), "SALE OTHERS")
                         save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "62203", "Dr", CDec(TextBox45.Text), "SUND_DEBTOR_OTHER")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
+
+                    ElseIf FINANCE_ARRANGE = "CREDIT" Then
+
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox41.Text) - CDec(TextBox37.Text), "SALE OTHERS")
+                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "62201", "Dr", CDec(TextBox45.Text), "SUND_DEBTOR_PSU")
                         save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
                         save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
                         save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")

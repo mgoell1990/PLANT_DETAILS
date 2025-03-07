@@ -663,7 +663,7 @@ Public Class crr
                     Dim AMD_NO As String = crr_gridview.Rows(I).Cells(21).Text
                     Dim TOTAL_MT As Decimal = crr_gridview.Rows(I).Cells(22).Text
                     'conn.Open()
-                    Dim query As String = "Insert Into PO_RCD_MAT(TOTAL_MT,FISCAL_YEAR,TRANS_SLNO,PAY_EMP,CRR_NO,CRR_DATE,PO_NO,SUPL_ID,TRANS_WO_NO,TRUCK_NO,MAT_SLNO,MAT_CODE,CHLN_NO,CHLN_DATE,MAT_CHALAN_QTY,MAT_RCD_QTY,MAT_REJ_QTY,MAT_BAL_QTY,MAT_EXCE,NO_OF_BAG,BAG_WEIGHT,GARN_NO,BE_NO,BE_DATE,BL_NO,BL_DATE,SHIP_NAME,CRR_EMP,AMD_NO)values (@TOTAL_MT,@FISCAL_YEAR,@TRANS_SLNO,@PAY_EMP,@CRR_NO, @CRR_DATE,@PO_NO,@SUPL_ID,@TRANS_WO_NO,@TRUCK_NO,@MAT_SLNO,@MAT_CODE,@CHLN_NO,@CHLN_DATE,@MAT_CHALAN_QTY,@MAT_RCD_QTY,@MAT_REJ_QTY,@MAT_BAL_QTY,@MAT_EXCE,@NO_OF_BAG,@BAG_WEIGHT,@GARN_NO,@BE_NO,@BE_DATE,@BL_NO,@BL_DATE,@SHIP_NAME,@CRR_EMP,@AMD_NO)"
+                    Dim query As String = "Insert Into PO_RCD_MAT(MAT_NAME,CRR_ENTRY_DATE,TOTAL_MT,FISCAL_YEAR,TRANS_SLNO,PAY_EMP,CRR_NO,CRR_DATE,PO_NO,SUPL_ID,TRANS_WO_NO,TRUCK_NO,MAT_SLNO,MAT_CODE,CHLN_NO,CHLN_DATE,MAT_CHALAN_QTY,MAT_RCD_QTY,MAT_REJ_QTY,MAT_BAL_QTY,MAT_EXCE,NO_OF_BAG,BAG_WEIGHT,GARN_NO,BE_NO,BE_DATE,BL_NO,BL_DATE,SHIP_NAME,CRR_EMP,AMD_NO)values (@MAT_NAME,@CRR_ENTRY_DATE,@TOTAL_MT,@FISCAL_YEAR,@TRANS_SLNO,@PAY_EMP,@CRR_NO, @CRR_DATE,@PO_NO,@SUPL_ID,@TRANS_WO_NO,@TRUCK_NO,@MAT_SLNO,@MAT_CODE,@CHLN_NO,@CHLN_DATE,@MAT_CHALAN_QTY,@MAT_RCD_QTY,@MAT_REJ_QTY,@MAT_BAL_QTY,@MAT_EXCE,@NO_OF_BAG,@BAG_WEIGHT,@GARN_NO,@BE_NO,@BE_DATE,@BL_NO,@BL_DATE,@SHIP_NAME,@CRR_EMP,@AMD_NO)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@CRR_NO", CRR_NO)
                     cmd.Parameters.AddWithValue("@CRR_DATE", crr_date)
@@ -694,6 +694,8 @@ Public Class crr
                     cmd.Parameters.AddWithValue("@PAY_EMP", "")
                     cmd.Parameters.AddWithValue("@FISCAL_YEAR", CInt(STR1))
                     cmd.Parameters.AddWithValue("@TOTAL_MT", TOTAL_MT)
+                    cmd.Parameters.AddWithValue("@CRR_ENTRY_DATE", Now)
+                    cmd.Parameters.AddWithValue("@MAT_NAME", matnameTextBox.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()

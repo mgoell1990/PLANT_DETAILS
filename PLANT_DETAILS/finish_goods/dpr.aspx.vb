@@ -362,6 +362,7 @@ Public Class dpr1
                     cmd1.Parameters.AddWithValue("@fiscal_year", STR1)
                     cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
                     cmd1.Parameters.AddWithValue("@QUALITY", DetailsView1.Rows(10).Cells(1).Text)
+                    cmd1.Parameters.AddWithValue("@ITEM_WEIGHT", DetailsView1.Rows(4).Cells(1).Text)
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
                     'conn.Close()

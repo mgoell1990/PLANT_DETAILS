@@ -187,7 +187,7 @@
                                     <asp:Label ID="Label5" runat="server" ForeColor="Blue" Text="Total GST(Rs.)"></asp:Label>
                                 </div>
                                 <div class="col-2 text-start g-0">
-                                    <asp:TextBox class="form-control" ID="TextBox5" runat="server">0</asp:TextBox>
+                                    <asp:TextBox class="form-control" ID="TextBox5" runat="server" ReadOnly="True">0</asp:TextBox>
                                 </div>
                             </div>
 

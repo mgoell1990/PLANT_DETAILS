@@ -830,7 +830,7 @@ Public Class mat_garn
                 For I = 0 To GridView2.Rows.Count - 1
                     Dim G_DATE As Date = working_date.Date
                     'conn.Open()
-                    Dim query As String = "update PO_RCD_MAT set UNIT_RATE=@UNIT_RATE,FISCAL_YEAR=@FISCAL_YEAR, TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT where MAT_SLNO='" & GridView2.Rows(I).Cells(3).Text & "' and CRR_NO='" & garn_crrnoDropDownList.SelectedValue & "'"
+                    Dim query As String = "update PO_RCD_MAT set UNIT_RATE=@UNIT_RATE,FISCAL_YEAR=@FISCAL_YEAR, TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT,GARN_ENTRY_DATE=@GARN_ENTRY_DATE where MAT_SLNO='" & GridView2.Rows(I).Cells(3).Text & "' and CRR_NO='" & garn_crrnoDropDownList.SelectedValue & "'"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@GARN_NO", GARN_NO_TextBox.Text)
                     cmd.Parameters.AddWithValue("@GARN_DATE", Date.ParseExact(G_DATE, "dd-MM-yyyy", provider))
@@ -841,6 +841,7 @@ Public Class mat_garn
                     cmd.Parameters.AddWithValue("@GARN_EMP", Session("userName"))
                     cmd.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
                     cmd.Parameters.AddWithValue("@UNIT_RATE", CDec(GridView2.Rows(I).Cells(15).Text))
+                    cmd.Parameters.AddWithValue("@GARN_ENTRY_DATE", Now)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()
@@ -909,27 +910,32 @@ Public Class mat_garn
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()
-                    ''LEDGER POSTING PURCHASE
-                    Dim PURCHASE As String = ""
-                    Dim cons As String = ""
-                    conn.Open()
-                    Dim MCc As New SqlCommand
-                    MCc.CommandText = "select AC_PUR,AC_CON from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & GridView2.Rows(I).Cells(4).Text & "'"
-                    MCc.Connection = conn
-                    dr = MCc.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        PURCHASE = dr.Item("AC_PUR")
-                        cons = dr.Item("AC_CON")
-                        dr.Close()
-                        conn.Close()
+
+
+                    Dim PURCHASE, cons As New String("")
+                    If (CInt(GridView2.Rows(I).Cells(4).Text.Substring(0, 3)) < 50) Then
+                        ''LEDGER POSTING PURCHASE
+                        conn.Open()
+                        Dim MCc As New SqlCommand
+                        MCc.CommandText = "select AC_PUR,AC_CON from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & GridView2.Rows(I).Cells(4).Text & "'"
+                        MCc.Connection = conn
+                        dr = MCc.ExecuteReader
+                        If dr.HasRows Then
+                            dr.Read()
+                            PURCHASE = dr.Item("AC_PUR")
+                            cons = dr.Item("AC_CON")
+                            dr.Close()
+                            conn.Close()
+                        Else
+                            conn.Close()
+                        End If
                     Else
-                        conn.Close()
+                        PURCHASE = "60615"
                     End If
+
+
                     ''SAVE LEDGER PURCHASE
-                    'conn.Open()
                     query = "Insert Into LEDGER(Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
-                    'cmd = New SqlCommand(query, conn_trans, myTrans)
                     Dim cmd5 As New SqlCommand(query, conn_trans, myTrans)
                     cmd5.Parameters.AddWithValue("@PO_NO", Label398.Text)
                     cmd5.Parameters.AddWithValue("@Journal_ID", GridView2.Rows(I).Cells(3).Text)
@@ -942,12 +948,16 @@ Public Class mat_garn
                     cmd5.Parameters.AddWithValue("@AC_NO", PURCHASE)
                     cmd5.Parameters.AddWithValue("@AMOUNT_DR", CDec(GridView2.Rows(I).Cells(27).Text))
                     cmd5.Parameters.AddWithValue("@AMOUNT_CR", 0)
-                    cmd5.Parameters.AddWithValue("@POST_INDICATION", "PUR")
+                    If (CInt(GridView2.Rows(I).Cells(4).Text.Substring(0, 3)) < 50) Then
+                        cmd5.Parameters.AddWithValue("@POST_INDICATION", "PUR")
+                    Else
+                        cmd5.Parameters.AddWithValue("@POST_INDICATION", "CAPITAL PURCHASE")
+                    End If
+
                     cmd5.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                     cmd5.Parameters.AddWithValue("@JURNAL_LINE_NO", 1)
                     cmd5.ExecuteReader()
                     cmd5.Dispose()
-                    'conn.Close()
                 Next
                 ''ledger posting PROV for party
                 Dim PROV As String = ""
@@ -1892,7 +1902,7 @@ Public Class mat_garn
                     PROV_MAT_VALUE = CDec(imp_GridView3.Rows(I).Cells(17).Text)
                     Dim G_DATE As Date = CDate(TextBox2.Text)
                     'conn.Open()
-                    Dim query1 As String = "update PO_RCD_MAT set TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT,UNIT_RATE=@UNIT_RATE, MAT_RATE=@MAT_RATE,DISC_VAL=@DISC_VAL,PF_VALUE=@PF_VALUE,IGST=@IGST,SGST=@SGST,CGST=@CGST,CESS=@CESS,LD_CHARGE=@LD_CHARGE,PENALITY_CHARGE=@PENALITY_CHARGE,FREIGHT_CHARGE=@FREIGHT_CHARGE,LOCAL_FREIGHT=@LOCAL_FREIGHT,LOSS_TRANSPORT=@LOSS_TRANSPORT,LOSS_ON_ED=@LOSS_ON_ED,PARTY_PAY=@PARTY_PAY,DIFF_VALUE=@DIFF_VALUE,V_IND=@V_IND,INV_NO=@INV_NO,INV_DATE=@INV_DATE, PAY_EMP=@PAY_EMP where MAT_SLNO='" & imp_GridView3.Rows(I).Cells(3).Text & "' and CRR_NO='" & imp_GridView3.Rows(I).Cells(0).Text & "' AND PO_NO='" & po_no & "'"
+                    Dim query1 As String = "update PO_RCD_MAT set TRANS_CHARGE=@TRANS_CHARGE, GARN_NO=@GARN_NO,GARN_NOTE=@GARN_NOTE,PROV_VALUE=@PROV_VALUE,GARN_DATE=@GARN_DATE,GARN_EMP=@GARN_EMP,TRANS_SHORT=@TRANS_SHORT,UNIT_RATE=@UNIT_RATE, MAT_RATE=@MAT_RATE,DISC_VAL=@DISC_VAL,PF_VALUE=@PF_VALUE,IGST=@IGST,SGST=@SGST,CGST=@CGST,CESS=@CESS,LD_CHARGE=@LD_CHARGE,PENALITY_CHARGE=@PENALITY_CHARGE,FREIGHT_CHARGE=@FREIGHT_CHARGE,LOCAL_FREIGHT=@LOCAL_FREIGHT,LOSS_TRANSPORT=@LOSS_TRANSPORT,LOSS_ON_ED=@LOSS_ON_ED,PARTY_PAY=@PARTY_PAY,DIFF_VALUE=@DIFF_VALUE,V_IND=@V_IND,INV_NO=@INV_NO,INV_DATE=@INV_DATE, PAY_EMP=@PAY_EMP,GARN_ENTRY_DATE=@GARN_ENTRY_DATE where MAT_SLNO='" & imp_GridView3.Rows(I).Cells(3).Text & "' and CRR_NO='" & imp_GridView3.Rows(I).Cells(0).Text & "' AND PO_NO='" & po_no & "'"
                     Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@UNIT_RATE", CDec(imp_GridView3.Rows(I).Cells(15).Text))
                     cmd1.Parameters.AddWithValue("@MAT_RATE", CDec(imp_GridView3.Rows(I).Cells(17).Text))
@@ -1921,6 +1931,7 @@ Public Class mat_garn
                     cmd1.Parameters.AddWithValue("@TRANS_SHORT", CDec(imp_GridView3.Rows(I).Cells(20).Text))
                     cmd1.Parameters.AddWithValue("@TRANS_CHARGE", CDec(imp_GridView3.Rows(I).Cells(19).Text))
                     cmd1.Parameters.AddWithValue("@GARN_EMP", Session("userName"))
+                    cmd1.Parameters.AddWithValue("@GARN_ENTRY_DATE", Now)
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
                     'conn.Close()

@@ -43,7 +43,7 @@ Public Class inv_entry
             conn.Open()
             DropDownList10.Items.Clear()
             dt.Clear()
-            da = New SqlDataAdapter("SELECT distinct PO_RCD_MAT.PO_NO + ' , ' + ORDER_DETAILS .SO_ACTUAL  as SEARCH_PO FROM PO_RCD_MAT JOIN ORDER_DETAILS ON PO_RCD_MAT .PO_NO =ORDER_DETAILS .SO_NO   where PO_RCD_MAT.GARN_NO<>'Pending' AND PO_RCD_MAT.v_ind is null ORDER BY SEARCH_PO", conn)
+            da = New SqlDataAdapter("SELECT distinct PO_RCD_MAT.PO_NO + ' , ' + ORDER_DETAILS .SO_ACTUAL  as SEARCH_PO FROM PO_RCD_MAT JOIN ORDER_DETAILS ON PO_RCD_MAT .PO_NO =ORDER_DETAILS .SO_NO where PO_RCD_MAT.GARN_NO<>'Pending' and (SO_STATUS='RC' OR SO_STATUS='DRAFT' OR SO_STATUS='RCW' OR SO_STATUS='RCM' or SO_STATUS='ACTIVE') AND PO_RCD_MAT.v_ind is null ORDER BY SEARCH_PO", conn)
             da.Fill(dt)
             DropDownList10.DataSource = dt
             DropDownList10.DataValueField = "SEARCH_PO"
@@ -55,7 +55,7 @@ Public Class inv_entry
             conn.Open()
             DropDownList10.Items.Clear()
             dt.Clear()
-            da = New SqlDataAdapter("SELECT distinct MB_BOOK.PO_NO + ' , ' + ORDER_DETAILS .SO_ACTUAL  as SEARCH_PO FROM mb_book JOIN ORDER_DETAILS ON mb_book .po_no =ORDER_DETAILS .SO_NO WHERE mb_book.v_ind is null ORDER BY SEARCH_PO", conn)
+            da = New SqlDataAdapter("SELECT distinct MB_BOOK.PO_NO + ' , ' + ORDER_DETAILS .SO_ACTUAL as SEARCH_PO FROM mb_book JOIN ORDER_DETAILS ON mb_book .po_no =ORDER_DETAILS .SO_NO WHERE mb_book.v_ind is null and (SO_STATUS='RCW' OR SO_STATUS='ACTIVE') ORDER BY SEARCH_PO", conn)
             da.Fill(dt)
             DropDownList10.DataSource = dt
             DropDownList10.DataValueField = "SEARCH_PO"

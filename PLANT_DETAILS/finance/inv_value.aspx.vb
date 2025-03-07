@@ -933,7 +933,7 @@ Public Class inv_value
 
 
                         ''SEARCH AC HEAD
-                        Dim PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, OTHER_DEDUCTION_HEAD, OTHER_PAYMENT_HEAD As New String("")
+                        Dim EXPENSE_HEAD, PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, OTHER_DEDUCTION_HEAD, OTHER_PAYMENT_HEAD As New String("")
                         Dim SGST_LIAB_LD_PENALTY_HEAD, CGST_LIAB_LD_PENALTY_HEAD, IGST_LIAB_LD_PENALTY_HEAD, CESS_LIAB_LD_PENALTY_HEAD, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
                         conn.Open()
                         Dim MC6 As New SqlCommand
@@ -943,6 +943,7 @@ Public Class inv_value
                         dr = MC6.ExecuteReader
                         If dr.HasRows Then
                             dr.Read()
+                            EXPENSE_HEAD = dr.Item("pur_head")
                             PROV_HEAD = dr.Item("prov_head")
                             SUND_HEAD = dr.Item("sund_head")
                             If (DropDownList3.SelectedValue = "Yes") Then
@@ -1044,6 +1045,18 @@ Public Class inv_value
 
                         Next
 
+
+                        For L = 0 To GridView6.Rows.Count - 1
+
+                            ''update ledger
+                            Dim cmd12 As New SqlCommand
+                            Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                            cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                            cmd12.ExecuteReader()
+                            cmd12.Dispose()
+                        Next
+
+
                         If (DropDownList4.SelectedValue = "Yes") Then
                             SUND_PRICE = (SUND_PRICE + sgst_price + cgst_price + igst_price + cess_price + other_payment) - (LD_PRICE + PEN_PRICE + SD_PRICE + TDS_PRICE + sgst_liab + cgst_liab + igst_liab + cess_liab + other_deduction + TDS_SGST + TDS_CGST + TDS_IGST)
                         Else
@@ -1120,9 +1133,9 @@ Public Class inv_value
 
                         ''psc entry in Ledger
                         If PSC_AMOUNT < 0 Then
-                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), PSC_HEAD, "Cr", (PSC_AMOUNT * (-1)), "PSC", DropDownList40.Text, 8, "")
+                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Cr", (PSC_AMOUNT * (-1)), "PSC", DropDownList40.Text, 8, "")
                         Else
-                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), PSC_HEAD, "Dr", PSC_AMOUNT, "PSC", DropDownList40.Text, 8, "")
+                            save_ledger("0", Label398.Text, garn_crrnoDropDownList.SelectedValue, TextBox160.Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Dr", PSC_AMOUNT, "PSC", DropDownList40.Text, 8, "")
                         End If
 
                         For L = 0 To GridView6.Rows.Count - 1
@@ -1145,7 +1158,6 @@ Public Class inv_value
 
 
                         ''update ledger
-
                         Dim cmd11 As New SqlCommand
                         Dim Query11 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & Label398.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "'"
                         cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
@@ -2073,7 +2085,7 @@ Public Class inv_value
 
                     If password = TextBox173.Text Then
 
-                        Dim TDS_HEAD, TCS_HEAD, RCM_SGST_HEAD, RCM_CGST_HEAD, RCM_IGST_HEAD, RCM_CESS_HEAD, prov_head, sund_head, ld_head, short_head, diff_head, cgst_head, sgst_head, igst_head, cess_head, penality_head, sd_head, OTHER_DEDUCTION_HEAD, IUCA_HEAD As New String("")
+                        Dim PURCHASE_HEAD, TDS_HEAD, TCS_HEAD, RCM_SGST_HEAD, RCM_CGST_HEAD, RCM_IGST_HEAD, RCM_CESS_HEAD, prov_head, sund_head, ld_head, short_head, diff_head, cgst_head, sgst_head, igst_head, cess_head, penality_head, sd_head, OTHER_DEDUCTION_HEAD, IUCA_HEAD As New String("")
                         Dim SGST_LIAB_LD_PENALTY, CGST_LIAB_LD_PENALTY, IGST_LIAB_LD_PENALTY, CESS_LIAB_LD_PENALTY, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
 
                         conn.Open()
@@ -2104,6 +2116,7 @@ Public Class inv_value
                         dr = MC6.ExecuteReader
                         If dr.HasRows Then
                             dr.Read()
+                            PURCHASE_HEAD = dr.Item("pur_head")
                             prov_head = dr.Item("prov_head")
                             sund_head = dr.Item("sund_head")
                             ld_head = dr.Item("ld_head")
@@ -2281,12 +2294,20 @@ Public Class inv_value
 
                                 ''psc calculatation
                                 If CDec(GridView210.Rows(I).Cells(31).Text > 0) Then
-                                    save_ledger(GridView210.Rows(I).Cells(3).Text, M_Label398.Text, M_garn_crrnoDropDownList.SelectedValue, TextBox160.Text, M_Label396.Text.Substring(0, M_Label396.Text.IndexOf(",") - 1), diff_head, "Dr", CDec(GridView210.Rows(I).Cells(31).Text), "PSC", DropDownList40.Text, 7, "")
+                                    save_ledger(GridView210.Rows(I).Cells(3).Text, M_Label398.Text, M_garn_crrnoDropDownList.SelectedValue, TextBox160.Text, M_Label396.Text.Substring(0, M_Label396.Text.IndexOf(",") - 1), PURCHASE_HEAD, "Dr", CDec(GridView210.Rows(I).Cells(31).Text), "PSC", DropDownList40.Text, 7, "")
                                 ElseIf CDec(GridView210.Rows(I).Cells(31).Text < 0) Then
                                     Dim DIFF As Decimal = 0.0
                                     DIFF = CDec(GridView210.Rows(I).Cells(31).Text) * (-1)
-                                    save_ledger(GridView210.Rows(I).Cells(3).Text, M_Label398.Text, M_garn_crrnoDropDownList.SelectedValue, TextBox160.Text, M_Label396.Text.Substring(0, M_Label396.Text.IndexOf(",") - 1), diff_head, "Cr", DIFF, "PSC", DropDownList40.Text, 7, "")
+                                    save_ledger(GridView210.Rows(I).Cells(3).Text, M_Label398.Text, M_garn_crrnoDropDownList.SelectedValue, TextBox160.Text, M_Label396.Text.Substring(0, M_Label396.Text.IndexOf(",") - 1), PURCHASE_HEAD, "Cr", DIFF, "PSC", DropDownList40.Text, 7, "")
                                 End If
+
+                                ''update ledger
+                                Dim cmd12 As New SqlCommand
+                                Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                                cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                cmd12.ExecuteReader()
+                                cmd12.Dispose()
+
 
                             End If
                         Next
@@ -3177,7 +3198,7 @@ Public Class inv_value
 
 
                                     ''SEARCH AC HEAD
-                                    Dim PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
+                                    Dim EXPENSE_HEAD, PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
                                     Dim SGST_LIAB_LD_PENALTY, CGST_LIAB_LD_PENALTY, IGST_LIAB_LD_PENALTY, CESS_LIAB_LD_PENALTY, IGST_WITHOUT_RCM, SGST_WITHOUT_RCM, CGST_WITHOUT_RCM, CESS_WITHOUT_RCM As New String("")
 
                                     conn.Open()
@@ -3219,9 +3240,41 @@ Public Class inv_value
                                     Else
                                         conn.Close()
                                     End If
+
+
+                                    If (Left(row.Cells(1).Text, 2) = "DC" Or Left(row.Cells(1).Text, 2) = "OS") Then
+                                        EXPENSE_HEAD = "84001"
+                                    ElseIf (Left(row.Cells(1).Text, 2) = "SC") Then
+                                        EXPENSE_HEAD = "61601"
+                                    ElseIf (Left(row.Cells(1).Text, 2) = "RC") Then
+                                        ''Getting PUR HEAD for RAW MATERIAL TRANSPORT CASES
+                                        conn.Open()
+                                        Dim MCc As New SqlCommand
+                                        MCc.CommandText = "select AC_PUR from MATERIAL where MAT_CODE IN (SELECT MAT_CODE FROM PO_RCD_MAT WHERE CRR_NO='" & row.Cells(1).Text & "')"
+                                        MCc.Connection = conn
+                                        dr = MCc.ExecuteReader
+                                        If dr.HasRows Then
+                                            dr.Read()
+                                            EXPENSE_HEAD = dr.Item("AC_PUR")
+                                            dr.Close()
+                                            conn.Close()
+                                        Else
+                                            conn.Close()
+                                        End If
+                                    End If
+
+
+
+                                    ''update ledger
+                                    Dim cmd12 As New SqlCommand
+                                    Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label12.Text & "' and GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
+                                    cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                    cmd12.ExecuteReader()
+                                    cmd12.Dispose()
+
+
+
                                     save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), PROV_HEAD, "Dr", PROV_PRICE, "PROV", DropDownList40.Text, 1, "")
-
-
 
                                     If DropDownList2.SelectedValue = "Yes" Then
 
@@ -3263,11 +3316,11 @@ Public Class inv_value
 
                                     ''psc calculation
                                     If PSC_PRICE > 0 Then
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), PSC_HEAD, "Cr", PSC_PRICE, "PSC", DropDownList40.Text, 8, "")
+                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Cr", PSC_PRICE, "PSC", DropDownList40.Text, 8, "")
                                     ElseIf PSC_PRICE < 0 Then
                                         Dim DIFF As Decimal = 0.0
                                         DIFF = PSC_PRICE * (-1)
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), PSC_HEAD, "Dr", DIFF, "PSC", DropDownList40.Text, 8, "")
+                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Dr", DIFF, "PSC", DropDownList40.Text, 8, "")
                                     End If
                                     ''update ledger
 
@@ -3372,6 +3425,12 @@ Public Class inv_value
                                             cmd.Parameters.AddWithValue("@RCM_CGST_AMT", CDec(row.Cells(20).Text))
                                             cmd.Parameters.AddWithValue("@RCM_IGST_AMT", CDec(row.Cells(21).Text))
                                             cmd.Parameters.AddWithValue("@RCM_CESS_AMT", CDec(row.Cells(22).Text))
+
+
+                                            cmd.Parameters.AddWithValue("@GST_STATUS", "RCM")
+                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", DBNull.Value)
+                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", DBNull.Value)
+
                                         Else
                                             cmd.Parameters.AddWithValue("@SGST_AMT", CDec(row.Cells(15).Text))
                                             cmd.Parameters.AddWithValue("@CGST_AMT", CDec(row.Cells(16).Text))
@@ -3381,6 +3440,17 @@ Public Class inv_value
                                             cmd.Parameters.AddWithValue("@RCM_CGST_AMT", 0)
                                             cmd.Parameters.AddWithValue("@RCM_IGST_AMT", 0)
                                             cmd.Parameters.AddWithValue("@RCM_CESS_AMT", 0)
+
+                                            If (DropDownList7.SelectedValue = "Yes") Then
+                                                cmd.Parameters.AddWithValue("@GST_STATUS", "PAID")
+                                                cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", CDate(DateTime.Now.ToString("dd-MM-yyyy")))
+                                                cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", "")
+                                            Else
+                                                cmd.Parameters.AddWithValue("@GST_STATUS", "PENDING")
+                                                cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", DBNull.Value)
+                                                cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", DBNull.Value)
+                                            End If
+
                                         End If
 
                                         cmd.Parameters.AddWithValue("@TAXABLE_LD_PENALTY", CDec(row.Cells(14).Text) + CDec(row.Cells(27).Text))
@@ -3393,15 +3463,7 @@ Public Class inv_value
                                         cmd.Parameters.AddWithValue("@IGST_TDS", CDec(row.Cells(40).Text))
                                         cmd.Parameters.AddWithValue("@CESS_TDS", 0)
                                         cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                                        If (DropDownList7.SelectedValue = "Yes") Then
-                                            cmd.Parameters.AddWithValue("@GST_STATUS", "PAID")
-                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", CDate(DateTime.Now.ToString("dd-MM-yyyy")))
-                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", "")
-                                        Else
-                                            cmd.Parameters.AddWithValue("@GST_STATUS", "PENDING")
-                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_DATE", DBNull.Value)
-                                            cmd.Parameters.AddWithValue("@GST_PAYMENT_VOUCHER_NO", DBNull.Value)
-                                        End If
+
                                         cmd.ExecuteReader()
                                         cmd.Dispose()
 

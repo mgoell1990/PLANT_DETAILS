@@ -28,7 +28,7 @@ Public Class jur_voucher
         If Not IsPostBack Then
 
             Dim DT4 As New DataTable
-            DT4.Columns.AddRange(New DataColumn(5) {New DataColumn("AC HEAD"), New DataColumn("A/C DESCRIPTION"), New DataColumn("SUPL CODE"), New DataColumn("DEBIT AMOUNT"), New DataColumn("CREDIT AMOUNT"), New DataColumn("BE/BL NO")})
+            DT4.Columns.AddRange(New DataColumn(6) {New DataColumn("AC HEAD"), New DataColumn("A/C DESCRIPTION"), New DataColumn("SUPL CODE"), New DataColumn("DEBIT AMOUNT"), New DataColumn("CREDIT AMOUNT"), New DataColumn("BE/BL NO"), New DataColumn("INVOICE NO")})
             ViewState("EXTERNAL_JV") = DT4
             Me.BINDGRID4()
 
@@ -121,9 +121,9 @@ Public Class jur_voucher
 
         Dim m As Match = Regex.Match(DropDownList29.Text, ",")
         If (m.Success) Then
-            dt1.Rows.Add(DropDownList26.Text.Substring(0, (DropDownList26.Text.IndexOf(",") - 1)), DropDownList26.Text.Substring((DropDownList26.Text.IndexOf(",") + 1)), supl_name, amount_dr, amount_cr, DropDownList29.Text.Substring(0, (DropDownList29.Text.IndexOf(",") - 1)))
+            dt1.Rows.Add(DropDownList26.Text.Substring(0, (DropDownList26.Text.IndexOf(",") - 1)), DropDownList26.Text.Substring((DropDownList26.Text.IndexOf(",") + 1)), supl_name, amount_dr, amount_cr, DropDownList29.Text.Substring(0, (DropDownList29.Text.IndexOf(",") - 1)), TextBox177.Text)
         Else
-            dt1.Rows.Add(DropDownList26.Text.Substring(0, (DropDownList26.Text.IndexOf(",") - 1)), DropDownList26.Text.Substring((DropDownList26.Text.IndexOf(",") + 1)), supl_name, amount_dr, amount_cr, DropDownList29.Text)
+            dt1.Rows.Add(DropDownList26.Text.Substring(0, (DropDownList26.Text.IndexOf(",") - 1)), DropDownList26.Text.Substring((DropDownList26.Text.IndexOf(",") + 1)), supl_name, amount_dr, amount_cr, DropDownList29.Text, TextBox177.Text)
         End If
 
         ViewState("EXTERNAL_JV") = dt1
@@ -352,7 +352,7 @@ Public Class jur_voucher
                         Else
                             cmd.Parameters.AddWithValue("@BE_NO", "")
                         End If
-                        cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox177.Text)
+                        cmd.Parameters.AddWithValue("@INVOICE_NO", GridView2.Rows(i).Cells(6).Text)
                         cmd.ExecuteReader()
                         cmd.Dispose()
 
@@ -383,7 +383,7 @@ Public Class jur_voucher
 
     Protected Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
         Dim DT4 As New DataTable
-        DT4.Columns.AddRange(New DataColumn(5) {New DataColumn("AC HEAD"), New DataColumn("A/C DESCRIPTION"), New DataColumn("SUPL CODE"), New DataColumn("DEBIT AMOUNT"), New DataColumn("CREDIT AMOUNT"), New DataColumn("BE/BL NO")})
+        DT4.Columns.AddRange(New DataColumn(6) {New DataColumn("AC HEAD"), New DataColumn("A/C DESCRIPTION"), New DataColumn("SUPL CODE"), New DataColumn("DEBIT AMOUNT"), New DataColumn("CREDIT AMOUNT"), New DataColumn("BE/BL NO"), New DataColumn("INVOICE NO")})
         ViewState("EXTERNAL_JV") = DT4
         Me.BINDGRID4()
         TextBox62.Text = ""

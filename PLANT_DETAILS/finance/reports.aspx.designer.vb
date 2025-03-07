@@ -2073,4 +2073,220 @@ Partial Public Class report3
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents GridView13 As Global.System.Web.UI.WebControls.GridView
+    
+    '''<summary>
+    '''View23 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View23 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Label45 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label45 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''Label47 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label47 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList5 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList5 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''MultiView3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents MultiView3 As Global.System.Web.UI.WebControls.MultiView
+    
+    '''<summary>
+    '''View24 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View24 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Panel11 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Panel11 As Global.System.Web.UI.WebControls.Panel
+    
+    '''<summary>
+    '''GridView15 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents GridView15 As Global.System.Web.UI.WebControls.GridView
+    
+    '''<summary>
+    '''View25 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View25 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Label62 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label62 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList6 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList6 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''Button49 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button49 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Button50 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button50 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Button51 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button51 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Panel9 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Panel9 As Global.System.Web.UI.WebControls.Panel
+    
+    '''<summary>
+    '''GridView14 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents GridView14 As Global.System.Web.UI.WebControls.GridView
+    
+    '''<summary>
+    '''View26 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View26 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Label48 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label48 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''Label52 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label52 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''Button46 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button46 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Button47 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button47 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Button48 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button48 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Panel12 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Panel12 As Global.System.Web.UI.WebControls.Panel
+    
+    '''<summary>
+    '''GridView16 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents GridView16 As Global.System.Web.UI.WebControls.GridView
 End Class

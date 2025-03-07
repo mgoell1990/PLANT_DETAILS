@@ -1211,7 +1211,7 @@ Public Class add_order
                         dr.Close()
                     End If
                     conn.Close()
-                    If ((ORD_AMT - UPTO_AMT) >= CDec(TextBox22.Text)) Then
+                    If ((ORD_AMT - UPTO_AMT) >= CDec(TextBox18.Text)) Then
 
                         mycommand = New SqlCommand("update ORDER_DETAILS set SO_STATUS='RCM' where SO_NO ='" & TextBox102.Text & "'", conn_trans, myTrans)
                         mycommand.ExecuteReader()
@@ -1263,7 +1263,7 @@ Public Class add_order
                             End If
 
                             'conn.Open()
-                            Dim query As String = "Insert Into PO_ORD_MAT(PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                            Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                             Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                             cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                             cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -1292,6 +1292,7 @@ Public Class add_order
                             cmd.Parameters.AddWithValue("@TDS_SGST", TDS_SGST)
                             cmd.Parameters.AddWithValue("@TDS_CGST", TDS_CGST)
                             cmd.Parameters.AddWithValue("@TDS_IGST", TDS_IGST)
+                            cmd.Parameters.AddWithValue("@HSN_CODE", TextBox57.Text)
 
                             cmd.ExecuteReader()
                             cmd.Dispose()
@@ -1316,7 +1317,7 @@ Public Class add_order
                     Else
 
                         'Button59.Enabled = False
-                        Label439.Text = "Total amount is exceeding the rate contract balance amount Rs " & (ORD_AMT - UPTO_AMT)
+                        Label439.Text = "Total amount is exceeding the rate contract balance amount Rs " & CDec(TextBox18.Text) - (ORD_AMT - UPTO_AMT)
                         Label439.ForeColor = Drawing.Color.Red
 
                     End If
@@ -2137,7 +2138,7 @@ Public Class add_order
 
 
 
-                    Dim query As String = "Insert Into PO_ORD_MAT(MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                    Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                     cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -2166,6 +2167,7 @@ Public Class add_order
                     cmd.Parameters.AddWithValue("@TDS_SGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_CGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_IGST", 0.00)
+                    cmd.Parameters.AddWithValue("@HSN_CODE", TextBox58.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
 
@@ -2576,7 +2578,7 @@ Public Class add_order
                                 End If
                             End If
 
-                            Dim query As String = "Insert Into WO_ORDER(sgst,cgst,igst,cess,t_value,WO_FOR,AMD_DATE,WO_TYPE,PO_NO, SUPL_ID, W_SLNO,W_NAME,W_AU,W_UNIT_PRICE,W_QTY,W_DISCOUNT,W_MATERIAL_COST,W_TOLERANCE,W_AREA,W_START_DATE,W_END_DATE,W_COMPLITED,W_STATUS,WO_AMD,TDS_SGST,TDS_CGST,TDS_IGST) values (@sgst,@cgst,@igst,@cess,@t_value,@WO_FOR,@AMD_DATE,@WO_TYPE,@PO_NO, @SUPL_ID,@W_SLNO,@W_NAME,@W_AU,@W_UNIT_PRICE,@W_QTY,@W_DISCOUNT,@W_MATERIAL_COST,@W_TOLERANCE,@W_AREA,@W_START_DATE,@W_END_DATE,@W_COMPLITED,@W_STATUS,@WO_AMD,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                            Dim query As String = "Insert Into WO_ORDER(HSN_CODE,sgst,cgst,igst,cess,t_value,WO_FOR,AMD_DATE,WO_TYPE,PO_NO, SUPL_ID, W_SLNO,W_NAME,W_AU,W_UNIT_PRICE,W_QTY,W_DISCOUNT,W_MATERIAL_COST,W_TOLERANCE,W_AREA,W_START_DATE,W_END_DATE,W_COMPLITED,W_STATUS,WO_AMD,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@sgst,@cgst,@igst,@cess,@t_value,@WO_FOR,@AMD_DATE,@WO_TYPE,@PO_NO, @SUPL_ID,@W_SLNO,@W_NAME,@W_AU,@W_UNIT_PRICE,@W_QTY,@W_DISCOUNT,@W_MATERIAL_COST,@W_TOLERANCE,@W_AREA,@W_START_DATE,@W_END_DATE,@W_COMPLITED,@W_STATUS,@WO_AMD,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                             Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                             cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                             cmd.Parameters.AddWithValue("@WO_TYPE", wo_type)
@@ -2605,6 +2607,7 @@ Public Class add_order
                             cmd.Parameters.AddWithValue("@TDS_SGST", TDS_SGST)
                             cmd.Parameters.AddWithValue("@TDS_CGST", TDS_CGST)
                             cmd.Parameters.AddWithValue("@TDS_IGST", TDS_IGST)
+                            cmd.Parameters.AddWithValue("@HSN_CODE", TextBox67.Text)
                             cmd.ExecuteReader()
                             cmd.Dispose()
 
@@ -3217,7 +3220,7 @@ Public Class add_order
                     End If
                     'conn.Open()
                     Dim QUARY1 As String = ""
-                    QUARY1 = "Insert Into SO_MAT_ORDER(SO_NO ,ITEM_VOCAB ,ITEM_SLNO ,ITEM_CODE ,ORD_AU ,ITEM_QTY ,ITEM_MT ,ITEM_UNIT_RATE ,ITEM_PACK ,PACK_TYPE ,ITEM_DISCOUNT ,DISC_TYPE ,ITEM_CGST ,ITEM_SGST ,ITEM_IGST ,ITEM_TERMINAL_TAX ,ITEM_TCS ,ITEM_FREIGHT_PU ,ITEM_FREIGHT_TYPE ,ITEM_DELIVERY,ITEM_QTY_SEND,ITEM_S_TAX,ITEM_STATUS,AMD_NO,AMD_DATE,ITEM_DETAILS,ITEM_WEIGHT,SALE_TYPE,ITEM_CESS)values(@SO_NO ,@ITEM_VOCAB ,@ITEM_SLNO ,@ITEM_CODE ,@ORD_AU ,@ITEM_QTY ,@ITEM_MT ,@ITEM_UNIT_RATE ,@ITEM_PACK ,@PACK_TYPE ,@ITEM_DISCOUNT ,@DISC_TYPE ,@ITEM_CGST ,@ITEM_SGST ,@ITEM_IGST ,@ITEM_TERMINAL_TAX ,@ITEM_TCS ,@ITEM_FREIGHT_PU ,@ITEM_FREIGHT_TYPE ,@ITEM_DELIVERY,@ITEM_QTY_SEND,@ITEM_S_TAX,@ITEM_STATUS,@AMD_NO,@AMD_DATE,@ITEM_DETAILS,@ITEM_WEIGHT,@SALE_TYPE,@ITEM_CESS)"
+                    QUARY1 = "Insert Into SO_MAT_ORDER(HSN_CODE,SO_NO ,ITEM_VOCAB ,ITEM_SLNO ,ITEM_CODE ,ORD_AU ,ITEM_QTY ,ITEM_MT ,ITEM_UNIT_RATE ,ITEM_PACK ,PACK_TYPE ,ITEM_DISCOUNT ,DISC_TYPE ,ITEM_CGST ,ITEM_SGST ,ITEM_IGST ,ITEM_TERMINAL_TAX ,ITEM_TCS ,ITEM_FREIGHT_PU ,ITEM_FREIGHT_TYPE ,ITEM_DELIVERY,ITEM_QTY_SEND,ITEM_S_TAX,ITEM_STATUS,AMD_NO,AMD_DATE,ITEM_DETAILS,ITEM_WEIGHT,SALE_TYPE,ITEM_CESS)values(@HSN_CODE,@SO_NO ,@ITEM_VOCAB ,@ITEM_SLNO ,@ITEM_CODE ,@ORD_AU ,@ITEM_QTY ,@ITEM_MT ,@ITEM_UNIT_RATE ,@ITEM_PACK ,@PACK_TYPE ,@ITEM_DISCOUNT ,@DISC_TYPE ,@ITEM_CGST ,@ITEM_SGST ,@ITEM_IGST ,@ITEM_TERMINAL_TAX ,@ITEM_TCS ,@ITEM_FREIGHT_PU ,@ITEM_FREIGHT_TYPE ,@ITEM_DELIVERY,@ITEM_QTY_SEND,@ITEM_S_TAX,@ITEM_STATUS,@AMD_NO,@AMD_DATE,@ITEM_DETAILS,@ITEM_WEIGHT,@SALE_TYPE,@ITEM_CESS)"
                     Dim cmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@SO_NO", TextBox86.Text)
                     cmd1.Parameters.AddWithValue("@ITEM_VOCAB", TextBox59.Text)
@@ -3248,6 +3251,7 @@ Public Class add_order
                     cmd1.Parameters.AddWithValue("@ITEM_DETAILS", DETAIL)
                     cmd1.Parameters.AddWithValue("@SALE_TYPE", SALE_TYPE)
                     cmd1.Parameters.AddWithValue("@ITEM_CESS", CDec(TextBox9.Text))
+                    cmd1.Parameters.AddWithValue("@HSN_CODE", TextBox68.Text)
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
 
@@ -3640,7 +3644,7 @@ Public Class add_order
                         mat_details = ""
                     End If
 
-                    Dim query As String = "Insert Into PO_ORD_MAT(MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                    Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                     cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -3669,6 +3673,7 @@ Public Class add_order
                     cmd.Parameters.AddWithValue("@TDS_SGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_CGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_IGST", 0.00)
+                    cmd.Parameters.AddWithValue("@HSN_CODE", TextBox66.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
 
@@ -3916,7 +3921,7 @@ Public Class add_order
 
                                 'conn.Open()
                                 Dim QUARY1 As String = ""
-                                QUARY1 = "Insert Into SO_MAT_ORDER(SO_NO ,ITEM_VOCAB ,ITEM_SLNO ,ITEM_CODE ,ORD_AU ,ITEM_QTY ,ITEM_MT ,ITEM_UNIT_RATE ,ITEM_PACK ,PACK_TYPE ,ITEM_DISCOUNT ,DISC_TYPE ,ITEM_CGST ,ITEM_SGST ,ITEM_IGST ,ITEM_TERMINAL_TAX ,ITEM_TCS ,ITEM_FREIGHT_PU ,ITEM_FREIGHT_TYPE ,ITEM_DELIVERY,ITEM_QTY_SEND,ITEM_S_TAX,ITEM_STATUS,AMD_NO,AMD_DATE,ITEM_DETAILS,ITEM_WEIGHT,SALE_TYPE,ITEM_CESS)values(@SO_NO ,@ITEM_VOCAB ,@ITEM_SLNO ,@ITEM_CODE ,@ORD_AU ,@ITEM_QTY ,@ITEM_MT ,@ITEM_UNIT_RATE ,@ITEM_PACK ,@PACK_TYPE ,@ITEM_DISCOUNT ,@DISC_TYPE ,@ITEM_CGST ,@ITEM_SGST ,@ITEM_IGST ,@ITEM_TERMINAL_TAX ,@ITEM_TCS ,@ITEM_FREIGHT_PU ,@ITEM_FREIGHT_TYPE ,@ITEM_DELIVERY,@ITEM_QTY_SEND,@ITEM_S_TAX,@ITEM_STATUS,@AMD_NO,@AMD_DATE,@ITEM_DETAILS,@ITEM_WEIGHT,@SALE_TYPE,@ITEM_CESS)"
+                                QUARY1 = "Insert Into SO_MAT_ORDER(HSN_CODE,SO_NO ,ITEM_VOCAB ,ITEM_SLNO ,ITEM_CODE ,ORD_AU ,ITEM_QTY ,ITEM_MT ,ITEM_UNIT_RATE ,ITEM_PACK ,PACK_TYPE ,ITEM_DISCOUNT ,DISC_TYPE ,ITEM_CGST ,ITEM_SGST ,ITEM_IGST ,ITEM_TERMINAL_TAX ,ITEM_TCS ,ITEM_FREIGHT_PU ,ITEM_FREIGHT_TYPE ,ITEM_DELIVERY,ITEM_QTY_SEND,ITEM_S_TAX,ITEM_STATUS,AMD_NO,AMD_DATE,ITEM_DETAILS,ITEM_WEIGHT,SALE_TYPE,ITEM_CESS)values(@HSN_CODE,@SO_NO ,@ITEM_VOCAB ,@ITEM_SLNO ,@ITEM_CODE ,@ORD_AU ,@ITEM_QTY ,@ITEM_MT ,@ITEM_UNIT_RATE ,@ITEM_PACK ,@PACK_TYPE ,@ITEM_DISCOUNT ,@DISC_TYPE ,@ITEM_CGST ,@ITEM_SGST ,@ITEM_IGST ,@ITEM_TERMINAL_TAX ,@ITEM_TCS ,@ITEM_FREIGHT_PU ,@ITEM_FREIGHT_TYPE ,@ITEM_DELIVERY,@ITEM_QTY_SEND,@ITEM_S_TAX,@ITEM_STATUS,@AMD_NO,@AMD_DATE,@ITEM_DETAILS,@ITEM_WEIGHT,@SALE_TYPE,@ITEM_CESS)"
                                 Dim cmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
                                 cmd1.Parameters.AddWithValue("@SO_NO", soNoOutsourced.Text)
                                 cmd1.Parameters.AddWithValue("@ITEM_VOCAB", TextBox8.Text)
@@ -3947,6 +3952,7 @@ Public Class add_order
                                 cmd1.Parameters.AddWithValue("@ITEM_DETAILS", TextBox51.Text)
                                 cmd1.Parameters.AddWithValue("@SALE_TYPE", SALE_TYPE)
                                 cmd1.Parameters.AddWithValue("@ITEM_CESS", CDec(TextBox42.Text))
+                                cmd1.Parameters.AddWithValue("@HSN_CODE", TextBox68.Text)
                                 cmd1.ExecuteReader()
                                 cmd1.Dispose()
 
@@ -4230,7 +4236,7 @@ Public Class add_order
                     End If
 
 
-                    Dim query As String = "Insert Into PO_ORD_MAT(MAT_AU,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@MAT_AU,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                    Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,MAT_AU,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@MAT_AU,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                     cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -4266,6 +4272,7 @@ Public Class add_order
                     cmd.Parameters.AddWithValue("@TDS_SGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_CGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_IGST", 0.00)
+                    cmd.Parameters.AddWithValue("@HSN_CODE", TextBox61.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
 

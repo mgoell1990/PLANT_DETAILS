@@ -13,6 +13,8 @@ Imports ClosedXML.Excel
 Public Class psc_settlement
     Inherits System.Web.UI.Page
     Dim conn As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
+    Dim conn_trans As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
+    Dim myTrans As SqlTransaction
     Dim count As Integer
     Dim dr As SqlDataReader
     Dim mycommand As New SqlCommand
@@ -156,7 +158,7 @@ Public Class psc_settlement
             ElseIf (DropDownList2.Text = "Contracts") Then
                 da = New SqlDataAdapter("SELECT LEDGER.AC_NO, ACDIC .ac_description, LEDGER.PO_NO, LEDGER.GARN_NO_MB_NO AS GARN, LEDGER.VOUCHER_NO, LEDGER.EFECTIVE_DATE As Efective_Date, LEDGER.SUPL_ID AS SUPL_ID, LEDGER.AMOUNT_DR AS DR, LEDGER.AMOUNT_CR  AS CR FROM LEDGER join ACDIC on LEDGER.AC_NO =ACDIC.ac_code WHERE AC_NO ='" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1) & "' AND EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION <>'X' and PAYMENT_INDICATION <>'S') and GARN_NO_MB_NO LIKE 'MB%' and POST_INDICATION NOT LIKE '%PSC_Adj%' ORDER BY LEDGER.Efective_Date, LEDGER.SUPL_ID", conn)
             ElseIf (DropDownList2.Text = "Transport") Then
-                da = New SqlDataAdapter("SELECT LEDGER.AC_NO, ACDIC .ac_description, LEDGER.PO_NO, LEDGER.GARN_NO_MB_NO AS GARN, LEDGER.VOUCHER_NO, LEDGER.EFECTIVE_DATE As Efective_Date, LEDGER.SUPL_ID AS SUPL_ID, LEDGER.AMOUNT_DR AS DR, LEDGER.AMOUNT_CR  AS CR FROM LEDGER join ACDIC on LEDGER.AC_NO =ACDIC.ac_code WHERE AC_NO ='" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1) & "' AND EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION <>'X' and PAYMENT_INDICATION <>'S') and GARN_NO_MB_NO LIKE 'MB%' and POST_INDICATION NOT LIKE '%PSC_Adj%' ORDER BY LEDGER.Efective_Date, LEDGER.SUPL_ID", conn)
+                da = New SqlDataAdapter("SELECT LEDGER.AC_NO, ACDIC .ac_description, LEDGER.PO_NO, LEDGER.GARN_NO_MB_NO AS GARN, LEDGER.VOUCHER_NO, LEDGER.EFECTIVE_DATE As Efective_Date, LEDGER.SUPL_ID AS SUPL_ID, LEDGER.AMOUNT_DR AS DR, LEDGER.AMOUNT_CR  AS CR FROM LEDGER join ACDIC on LEDGER.AC_NO =ACDIC.ac_code WHERE AC_NO ='" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1) & "' AND EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION <>'X' and PAYMENT_INDICATION <>'S') and (GARN_NO_MB_NO LIKE 'RCRR%' OR GARN_NO_MB_NO LIKE 'SCRR%' OR GARN_NO_MB_NO LIKE 'OS%' OR GARN_NO_MB_NO LIKE 'DC%') and POST_INDICATION NOT LIKE '%PSC_Adj%' ORDER BY LEDGER.Efective_Date, LEDGER.SUPL_ID", conn)
             End If
 
         ElseIf (DropDownList1.Text = "All" And DropDownList3.Text <> "All") Then
@@ -232,308 +234,359 @@ Public Class psc_settlement
             Label33.Text = ""
         End If
 
-        If (GridView6.Rows.Count = 0) Then
-            Label33.Text = "Please select data first."
-        Else
-            Dim flag As New Boolean
-            flag = False
-            Dim amount_dr, amount_cr, MAT_STOCK, MAT_CODE, MAT_AVG, MAT_VALUE, NEW_MAT_AVG_PRICE, MAT_AVG_FROM_MATERIAL, MAT_STOCK_FROM_MATERIAL As New Decimal(0)
-            Dim garn_no_mb_no, garn_date As New String("")
-            Dim AC_PUR, AVG_PRICE As New String("")
-            Dim I As Integer = 0
-            For I = 0 To GridView6.Rows.Count - 2
-                amount_dr = 0
-                amount_cr = 0
+        Using conn_trans
+            conn_trans.Open()
+            myTrans = conn_trans.BeginTransaction()
 
-                ''Getting PSC values
-                garn_no_mb_no = GridView6.Rows(I).Cells(3).Text
-                garn_date = GridView6.Rows(I).Cells(6).Text
-                amount_dr = CDec(GridView6.Rows(I).Cells(7).Text)
-                amount_cr = CDec(GridView6.Rows(I).Cells(8).Text)
+            Try
 
-                Dim PSC_SETTLEMENT_DATE As New Date
-                PSC_SETTLEMENT_DATE = CDate(TextBox2.Text)
-                Dim STR1 As String = ""
-                If PSC_SETTLEMENT_DATE.Month > 3 Then
-                    STR1 = PSC_SETTLEMENT_DATE.Year
-                    STR1 = STR1.Trim.Substring(2)
-                    STR1 = STR1 & (STR1 + 1)
-                ElseIf PSC_SETTLEMENT_DATE.Month <= 3 Then
-                    STR1 = PSC_SETTLEMENT_DATE.Year
-                    STR1 = STR1.Trim.Substring(2)
-                    STR1 = (STR1 - 1) & STR1
-                End If
+                If (GridView6.Rows.Count = 0) Then
+                    Label33.Text = "Please select data first."
+                Else
+                    Dim flag As New Boolean
+                    flag = False
+                    Dim amount_dr, amount_cr, MAT_STOCK, MAT_CODE, MAT_AVG, MAT_VALUE, NEW_MAT_AVG_PRICE, MAT_AVG_FROM_MATERIAL, MAT_STOCK_FROM_MATERIAL As New Decimal(0)
+                    Dim garn_no_mb_no, garn_date As New String("")
+                    Dim AC_PUR, AVG_PRICE As New String("")
+                    Dim I As Integer = 0
+                    For I = 0 To GridView6.Rows.Count - 2
+                        amount_dr = 0
+                        amount_cr = 0
 
-                If (DropDownList2.Text = "Raw Material") Then
+                        ''Getting PSC values
+                        garn_no_mb_no = GridView6.Rows(I).Cells(3).Text
+                        garn_date = GridView6.Rows(I).Cells(6).Text
+                        amount_dr = CDec(GridView6.Rows(I).Cells(7).Text)
+                        amount_cr = CDec(GridView6.Rows(I).Cells(8).Text)
 
-                    ''Getting PUR HEAD for raw material
-                    Dim MC As New SqlCommand
-                    conn.Open()
-                    MC.CommandText = "select distinct(AC_PUR), m1.MAT_AVG, m1.MAT_STOCK, m1.MAT_CODE from ledger l1 join PO_RCD_MAT p1 on l1.GARN_NO_MB_NO=p1.GARN_NO JOIN MATERIAL m1 ON p1.MAT_CODE=m1.MAT_CODE where p1.GARN_NO='" & garn_no_mb_no & "' and l1.POST_INDICATION='PSC'"
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        AC_PUR = dr.Item("AC_PUR")
-                        MAT_AVG_FROM_MATERIAL = dr.Item("MAT_AVG")
-                        MAT_STOCK_FROM_MATERIAL = dr.Item("MAT_STOCK")
-                        MAT_CODE = dr.Item("MAT_CODE")
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
-
-
-                    ''''''''''''''''''''''''''''''
-
-                    ''GETTING AVG PRICE AS PER LAST LINE NUMBER
-                    conn.Open()
-                    MC.CommandText = "SELECT LINE_NO, AVG_PRICE, MAT_BALANCE FROM MAT_DETAILS WHERE MAT_CODE='" & MAT_CODE & "' AND FISCAL_YEAR='" & STR1 & "' AND LINE_NO IN (SELECT MAX(LINE_NO) FROM MAT_DETAILS WHERE MAT_CODE='" & MAT_CODE & "' AND FISCAL_YEAR='" & STR1 & "' AND (LINE_TYPE like 'R' OR LINE_TYPE like 'I' OR LINE_TYPE like 'A' OR LINE_TYPE like 'PA'))"
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-
-                        If IsDBNull(dr.Item("LINE_NO")) Then
-                            MAT_AVG = MAT_AVG_FROM_MATERIAL
-                            'MAT_STOCK = MAT_STOCK_FROM_MATERIAL
-                        Else
-                            MAT_AVG = dr.Item("AVG_PRICE")
-                            'MAT_STOCK = dr.Item("MAT_BALANCE")
+                        Dim PSC_SETTLEMENT_DATE As New Date
+                        PSC_SETTLEMENT_DATE = CDate(TextBox2.Text)
+                        Dim STR1 As String = ""
+                        If PSC_SETTLEMENT_DATE.Month > 3 Then
+                            STR1 = PSC_SETTLEMENT_DATE.Year
+                            STR1 = STR1.Trim.Substring(2)
+                            STR1 = STR1 & (STR1 + 1)
+                        ElseIf PSC_SETTLEMENT_DATE.Month <= 3 Then
+                            STR1 = PSC_SETTLEMENT_DATE.Year
+                            STR1 = STR1.Trim.Substring(2)
+                            STR1 = (STR1 - 1) & STR1
                         End If
 
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
+                        If (DropDownList2.Text = "Raw Material") Then
 
-                    ''GETTING MAT BALANCE AS PER LAST LINE NUMBER
-                    conn.Open()
-                    MC.CommandText = "SELECT sum(MAT_QTY) as MAT_RCD_QTY FROM MAT_DETAILS WHERE MAT_CODE='" & MAT_CODE & "' AND FISCAL_YEAR='" & STR1 & "' AND ISSUE_TYPE='PURCHASE'"
+                            ''Getting PUR HEAD for raw material
+                            Dim MC As New SqlCommand
+                            conn.Open()
+                            MC.CommandText = "select distinct(AC_PUR), m1.MAT_AVG, m1.MAT_STOCK, m1.MAT_CODE from ledger l1 join PO_RCD_MAT p1 on l1.GARN_NO_MB_NO=p1.GARN_NO JOIN MATERIAL m1 ON p1.MAT_CODE=m1.MAT_CODE where p1.GARN_NO='" & garn_no_mb_no & "' and l1.POST_INDICATION='PSC'"
+                            MC.Connection = conn
+                            dr = MC.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                AC_PUR = dr.Item("AC_PUR")
+                                MAT_AVG_FROM_MATERIAL = dr.Item("MAT_AVG")
+                                MAT_STOCK_FROM_MATERIAL = dr.Item("MAT_STOCK")
+                                MAT_CODE = dr.Item("MAT_CODE")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
 
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
 
-                        If IsDBNull(dr.Item("MAT_RCD_QTY")) Then
-                            'MAT_AVG = MAT_AVG_FROM_MATERIAL
-                            MAT_STOCK = MAT_STOCK_FROM_MATERIAL
-                        Else
-                            'MAT_AVG = dr.Item("AVG_PRICE")
-                            MAT_STOCK = dr.Item("MAT_RCD_QTY")
+                            ''''''''''''''''''''''''''''''
+
+                            ''GETTING AVG PRICE AS PER LAST LINE NUMBER
+                            conn.Open()
+                            MC.CommandText = "SELECT LINE_NO, AVG_PRICE, MAT_BALANCE FROM MAT_DETAILS WHERE MAT_CODE='" & MAT_CODE & "' AND FISCAL_YEAR='" & STR1 & "' AND LINE_NO IN (SELECT MAX(LINE_NO) FROM MAT_DETAILS WHERE MAT_CODE='" & MAT_CODE & "' AND FISCAL_YEAR='" & STR1 & "' AND (LINE_TYPE like 'R' OR LINE_TYPE like 'I' OR LINE_TYPE like 'A' OR LINE_TYPE like 'PA'))"
+                            MC.Connection = conn
+                            dr = MC.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+
+                                If IsDBNull(dr.Item("LINE_NO")) Then
+                                    MAT_AVG = MAT_AVG_FROM_MATERIAL
+                                    'MAT_STOCK = MAT_STOCK_FROM_MATERIAL
+                                Else
+                                    MAT_AVG = dr.Item("AVG_PRICE")
+                                    'MAT_STOCK = dr.Item("MAT_BALANCE")
+                                End If
+
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            ''GETTING MAT BALANCE AS PER LAST LINE NUMBER
+                            conn.Open()
+                            MC.CommandText = "SELECT sum(MAT_QTY) as MAT_RCD_QTY FROM MAT_DETAILS WHERE MAT_CODE='" & MAT_CODE & "' AND FISCAL_YEAR='" & STR1 & "' AND ISSUE_TYPE='PURCHASE'"
+
+                            MC.Connection = conn
+                            dr = MC.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+
+                                If IsDBNull(dr.Item("MAT_RCD_QTY")) Then
+                                    'MAT_AVG = MAT_AVG_FROM_MATERIAL
+                                    MAT_STOCK = MAT_STOCK_FROM_MATERIAL
+                                Else
+                                    'MAT_AVG = dr.Item("AVG_PRICE")
+                                    MAT_STOCK = dr.Item("MAT_RCD_QTY")
+                                End If
+
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            ''''''''''''''''''''''''''''''
+                            MAT_VALUE = MAT_AVG * MAT_STOCK
+
+                        ElseIf (DropDownList2.Text = "Store") Then
+
+                            ''Getting PUR HEAD for stores
+                            Dim MC As New SqlCommand
+                            conn.Open()
+                            MC.CommandText = "select distinct(AC_CON) from ledger l1 join PO_RCD_MAT p1 on l1.GARN_NO_MB_NO=p1.GARN_NO JOIN MATERIAL m1 ON p1.MAT_CODE=m1.MAT_CODE where p1.GARN_NO='" & garn_no_mb_no & "' and l1.POST_INDICATION='PSC'"
+                            MC.Connection = conn
+                            dr = MC.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                AC_PUR = dr.Item("AC_CON")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                        ElseIf (DropDownList2.Text = "Contracts") Then
+
+                            ''Getting PUR HEAD for contracts
+                            Dim MC As New SqlCommand
+                            conn.Open()
+                            MC.CommandText = "select distinct(pur_head) from work_group where work_name = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & GridView6.Rows(I).Cells(2).Text & "') and work_type=(select MAX(wo_type) from wo_order where po_no='" & GridView6.Rows(I).Cells(2).Text & "')"
+                            MC.Connection = conn
+                            dr = MC.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                AC_PUR = dr.Item("pur_head")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                        ElseIf (DropDownList2.Text = "Transport") Then
+
+                            If (Left(GridView6.Rows(I).Cells(3).Text, 2) = "DC" Or Left(GridView6.Rows(I).Cells(3).Text, 2) = "OS") Then
+                                AC_PUR = "84001"
+                            ElseIf (Left(GridView6.Rows(I).Cells(3).Text, 2) = "SC") Then
+                                AC_PUR = "61601"
+                            ElseIf (Left(GridView6.Rows(I).Cells(3).Text, 2) = "RC") Then
+                                ''Getting PUR HEAD for RAW MATERIAL TRANSPORT CASES
+                                conn.Open()
+                                Dim MCc As New SqlCommand
+                                MCc.CommandText = "select AC_PUR from MATERIAL where MAT_CODE IN (SELECT MAT_CODE FROM PO_RCD_MAT WHERE CRR_NO='" & GridView6.Rows(I).Cells(3).Text & "')"
+                                MCc.Connection = conn
+                                dr = MCc.ExecuteReader
+                                If dr.HasRows Then
+                                    dr.Read()
+                                    AC_PUR = dr.Item("AC_PUR")
+                                    dr.Close()
+                                    conn.Close()
+                                Else
+                                    conn.Close()
+                                End If
+                            End If
+
+
+
                         End If
 
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
 
-                    ''''''''''''''''''''''''''''''
-                    MAT_VALUE = MAT_AVG * MAT_STOCK
+                        If (flag = False) Then
 
-                ElseIf (DropDownList2.Text = "Store") Then
+                            ''Generating PSC settlement number
+                            conn.Open()
+                            ds.Clear()
+                            'da = New SqlDataAdapter("SELECT distinct(ISSUE_NO) FROM MAT_DETAILS WHERE ISSUE_NO LIKE '%PSC%' and FISCAL_YEAR=" & STR1, conn)
+                            da = New SqlDataAdapter("SELECT distinct(PO_NO) FROM LEDGER WHERE PO_NO LIKE 'PSC%' and FISCAL_YEAR=" & STR1, conn)
+                            count = da.Fill(dt)
+                            conn.Close()
 
-                    ''Getting PUR HEAD for stores
-                    Dim MC As New SqlCommand
-                    conn.Open()
-                    MC.CommandText = "select distinct(AC_CON) from ledger l1 join PO_RCD_MAT p1 on l1.GARN_NO_MB_NO=p1.GARN_NO JOIN MATERIAL m1 ON p1.MAT_CODE=m1.MAT_CODE where p1.GARN_NO='" & garn_no_mb_no & "' and l1.POST_INDICATION='PSC'"
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        AC_PUR = dr.Item("AC_CON")
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
+                            If count = 0 Then
+                                TextBox1.Text = "PSC" & STR1 & "000001"
+                            Else
+                                str = count + 1
+                                If str.Length = 1 Then
+                                    str = "00000" & (count + 1)
+                                ElseIf str.Length = 2 Then
+                                    str = "0000" & (count + 1)
+                                ElseIf str.Length = 3 Then
+                                    str = "000" & (count + 1)
+                                ElseIf str.Length = 4 Then
+                                    str = "00" & (count + 1)
+                                ElseIf str.Length = 5 Then
+                                    str = "0" & (count + 1)
+                                End If
+                                TextBox1.Text = "PSC" & STR1 & str
+                            End If
+                            flag = True
 
-                ElseIf (DropDownList2.Text = "Contracts") Then
-
-                    ''Getting PUR HEAD for contracts
-                    Dim MC As New SqlCommand
-                    conn.Open()
-                    MC.CommandText = "select distinct(pur_head) from work_group where work_name = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & GridView6.Rows(I).Cells(2).Text & "') and work_type=(select MAX(wo_type) from wo_order where po_no='" & GridView6.Rows(I).Cells(2).Text & "')"
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        AC_PUR = dr.Item("pur_head")
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
-                End If
-
-
-                If (flag = False) Then
-
-                    ''Generating PSC settlement number
-                    conn.Open()
-                    ds.Clear()
-                    'da = New SqlDataAdapter("SELECT distinct(ISSUE_NO) FROM MAT_DETAILS WHERE ISSUE_NO LIKE '%PSC%' and FISCAL_YEAR=" & STR1, conn)
-                    da = New SqlDataAdapter("SELECT distinct(PO_NO) FROM LEDGER WHERE PO_NO LIKE 'PSC%' and FISCAL_YEAR=" & STR1, conn)
-                    count = da.Fill(dt)
-                    conn.Close()
-
-                    If count = 0 Then
-                        TextBox1.Text = "PSC" & STR1 & "000001"
-                    Else
-                        str = count + 1
-                        If str.Length = 1 Then
-                            str = "00000" & (count + 1)
-                        ElseIf str.Length = 2 Then
-                            str = "0000" & (count + 1)
-                        ElseIf str.Length = 3 Then
-                            str = "000" & (count + 1)
-                        ElseIf str.Length = 4 Then
-                            str = "00" & (count + 1)
-                        ElseIf str.Length = 5 Then
-                            str = "0" & (count + 1)
                         End If
-                        TextBox1.Text = "PSC" & STR1 & str
-                    End If
-                    flag = True
 
-                End If
 
-                ''Save ledger
-                If (amount_dr > 0 And amount_cr = 0) Then
 
-                    ''''Updating the average price of the material only in case of raw materials
-                    If (DropDownList2.Text = "Raw Material") Then
+                        ''Save ledger
+                        If (amount_dr > 0 And amount_cr = 0) Then
 
-                        If (MAT_VALUE = 0) Then
-                            NEW_MAT_AVG_PRICE = Decimal.Round((MAT_AVG + amount_dr), 3, MidpointRounding.AwayFromZero)
-                        Else
-                            NEW_MAT_AVG_PRICE = Decimal.Round(((MAT_VALUE + amount_dr) / MAT_STOCK), 3, MidpointRounding.AwayFromZero)
+                            ''''Updating the average price of the material only in case of raw materials
+                            If (DropDownList2.Text = "Raw Material") Then
+
+                                If (MAT_VALUE = 0) Then
+                                    NEW_MAT_AVG_PRICE = Decimal.Round((MAT_AVG + amount_dr), 3, MidpointRounding.AwayFromZero)
+                                Else
+                                    NEW_MAT_AVG_PRICE = Decimal.Round(((MAT_VALUE + amount_dr) / MAT_STOCK), 3, MidpointRounding.AwayFromZero)
+                                End If
+                                ''UPDATING MATERIAL AVG PRICE
+                                conn.Open()
+                                mycommand = New SqlCommand("UPDATE MATERIAL SET MAT_AVG='" & NEW_MAT_AVG_PRICE & "' WHERE MAT_CODE='" & MAT_CODE & "'", conn)
+                                mycommand.ExecuteNonQuery()
+                                conn.Close()
+
+                            End If
+
+                            save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, AC_PUR, "Dr", amount_dr, "PSC_Adj", "", 1, "")
+                            save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1).Trim, "Cr", amount_dr, "PSC_Adj", "", 2, "")
+
+                        ElseIf (amount_dr = 0 And amount_cr > 0) Then
+
+                            ''''Updating the average price of the material only in case of raw materials
+                            If (DropDownList2.Text = "Raw Material") Then
+
+                                If (MAT_VALUE = 0) Then
+                                    NEW_MAT_AVG_PRICE = Decimal.Round((MAT_AVG - amount_cr), 3, MidpointRounding.AwayFromZero)
+                                Else
+                                    NEW_MAT_AVG_PRICE = Decimal.Round(((MAT_VALUE - amount_cr) / MAT_STOCK), 3, MidpointRounding.AwayFromZero)
+                                End If
+                                ''UPDATING MATERIAL AVG PRICE
+                                conn.Open()
+                                mycommand = New SqlCommand("UPDATE MATERIAL SET MAT_AVG='" & NEW_MAT_AVG_PRICE & "' WHERE MAT_CODE='" & MAT_CODE & "'", conn)
+                                mycommand.ExecuteNonQuery()
+                                conn.Close()
+                            End If
+
+                            save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1).Trim, "Dr", amount_cr, "PSC_Adj", "", 1, "")
+                            save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, AC_PUR, "Cr", amount_cr, "PSC_Adj", "", 2, "")
+
                         End If
-                        ''UPDATING MATERIAL AVG PRICE
+
+
+
+
+
+
+                        If (DropDownList2.Text = "Raw Material") Then
+
+                            ''''''''''''''''''''''''''''=========================='''''''''''''''''''''''''''''''''
+
+                            ''ADJUSTMENT LINE NO
+                            Dim LINE_NO As Integer
+                            conn.Open()
+                            Dim MC As New SqlCommand
+                            MC.CommandText = "select max(LINE_NO) AS LINE_NO from MAT_DETAILS where MAT_CODE= '" & MAT_CODE & "' and FISCAL_YEAR= " & STR1
+                            MC.Connection = conn
+                            dr = MC.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+
+                                If IsDBNull(dr.Item("LINE_NO")) Then
+                                    LINE_NO = 0
+                                Else
+                                    LINE_NO = dr.Item("LINE_NO")
+                                End If
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            Dim month1 As Integer = 0
+                            month1 = PSC_SETTLEMENT_DATE.Month
+                            Dim qtr1 As String = ""
+                            If month1 = 4 Or month1 = 5 Or month1 = 6 Then
+                                qtr1 = "Q1"
+                            ElseIf month1 = 7 Or month1 = 8 Or month1 = 9 Then
+                                qtr1 = "Q2"
+                            ElseIf month1 = 10 Or month1 = 11 Or month1 = 12 Then
+                                qtr1 = "Q3"
+                            ElseIf month1 = 1 Or month1 = 2 Or month1 = 3 Then
+                                qtr1 = "Q4"
+                            End If
+
+                            conn.Open()
+                            Dim QUARY1 As String = ""
+                            QUARY1 = "Insert Into MAT_DETAILS(ENTRY_DATE,DEPT_CODE,PURPOSE,AUTH_BY,POST_TYPE,REMARKS,RQD_DATE,RQD_QTY,AVG_PRICE,ISSUE_NO,LINE_NO,LINE_DATE,FISCAL_YEAR,LINE_TYPE,MAT_CODE,MAT_QTY,MAT_BALANCE,UNIT_PRICE,TOTAL_PRICE,QTR,ISSUE_TYPE,COST_CODE,ISSUE_QTY)VALUES(@ENTRY_DATE,@DEPT_CODE,@PURPOSE,@AUTH_BY,@POST_TYPE,@REMARKS,@RQD_DATE,@RQD_QTY,@AVG_PRICE,@ISSUE_NO,@LINE_NO,@LINE_DATE,@FISCAL_YEAR,@LINE_TYPE,@MAT_CODE,@MAT_QTY,@MAT_BALANCE,@UNIT_PRICE,@TOTAL_PRICE,@QTR,@ISSUE_TYPE,@COST_CODE,@ISSUE_QTY)"
+                            Dim cmd1 As New SqlCommand(QUARY1, conn)
+
+                            cmd1.Parameters.AddWithValue("@ISSUE_NO", TextBox1.Text)
+                            cmd1.Parameters.AddWithValue("@LINE_NO", LINE_NO + 1)
+                            cmd1.Parameters.AddWithValue("@ISSUE_TYPE", "PSC ADJUSTMENT")
+                            cmd1.Parameters.AddWithValue("@LINE_DATE", PSC_SETTLEMENT_DATE)
+                            cmd1.Parameters.AddWithValue("@FISCAL_YEAR", CInt(STR1))
+                            cmd1.Parameters.AddWithValue("@LINE_TYPE", "PA")
+                            cmd1.Parameters.AddWithValue("@MAT_CODE", MAT_CODE)
+                            cmd1.Parameters.AddWithValue("@MAT_QTY", 0)
+                            cmd1.Parameters.AddWithValue("@RQD_QTY", 0)
+                            cmd1.Parameters.AddWithValue("@ISSUE_QTY", 0)
+                            cmd1.Parameters.AddWithValue("@MAT_BALANCE", MAT_STOCK_FROM_MATERIAL)
+                            cmd1.Parameters.AddWithValue("@UNIT_PRICE", NEW_MAT_AVG_PRICE)
+                            cmd1.Parameters.AddWithValue("@TOTAL_PRICE", 0)
+                            cmd1.Parameters.AddWithValue("@DEPT_CODE", "RM")
+                            cmd1.Parameters.AddWithValue("@PURPOSE", "FOR PSC ADJ.")
+                            cmd1.Parameters.AddWithValue("@COST_CODE", "070000")
+                            cmd1.Parameters.AddWithValue("@AUTH_BY", Session("userName"))
+                            cmd1.Parameters.AddWithValue("@POST_TYPE", "AUTH")
+                            cmd1.Parameters.AddWithValue("@REMARKS", garn_no_mb_no)
+                            cmd1.Parameters.AddWithValue("@RQD_DATE", PSC_SETTLEMENT_DATE)
+                            cmd1.Parameters.AddWithValue("@QTR", qtr1)
+                            cmd1.Parameters.AddWithValue("@AVG_PRICE", NEW_MAT_AVG_PRICE)
+                            cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
+                            cmd1.ExecuteReader()
+                            cmd1.Dispose()
+                            conn.Close()
+
+                            ''''''''''''''''''''''''''''=========================='''''''''''''''''''''''''''''''''
+                        End If
+
+                        ''UPDATING LEDGER
                         conn.Open()
-                        mycommand = New SqlCommand("UPDATE MATERIAL SET MAT_AVG='" & NEW_MAT_AVG_PRICE & "' WHERE MAT_CODE='" & MAT_CODE & "'", conn)
+                        mycommand = New SqlCommand("UPDATE LEDGER SET PAYMENT_INDICATION='S' WHERE GARN_NO_MB_NO='" & garn_no_mb_no & "' AND AC_NO='" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1).Trim & "' AND POST_INDICATION='PSC'", conn)
                         mycommand.ExecuteNonQuery()
                         conn.Close()
 
-                    End If
+                    Next
 
-                    save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, AC_PUR, "Dr", amount_dr, "PSC_Adj", "", 1, "")
-                    save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1).Trim, "Cr", amount_dr, "PSC_Adj", "", 2, "")
-
-                ElseIf (amount_dr = 0 And amount_cr > 0) Then
-
-                    ''''Updating the average price of the material only in case of raw materials
-                    If (DropDownList2.Text = "Raw Material") Then
-
-                        If (MAT_VALUE = 0) Then
-                            NEW_MAT_AVG_PRICE = Decimal.Round((MAT_AVG - amount_cr), 3, MidpointRounding.AwayFromZero)
-                        Else
-                            NEW_MAT_AVG_PRICE = Decimal.Round(((MAT_VALUE - amount_cr) / MAT_STOCK), 3, MidpointRounding.AwayFromZero)
-                        End If
-                        ''UPDATING MATERIAL AVG PRICE
-                        conn.Open()
-                        mycommand = New SqlCommand("UPDATE MATERIAL SET MAT_AVG='" & NEW_MAT_AVG_PRICE & "' WHERE MAT_CODE='" & MAT_CODE & "'", conn)
-                        mycommand.ExecuteNonQuery()
-                        conn.Close()
-                    End If
-
-                    save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1).Trim, "Dr", amount_cr, "PSC_Adj", "", 1, "")
-                    save_ledger(TextBox1.Text, garn_no_mb_no, "", garn_date, TextBox2.Text, AC_PUR, "Cr", amount_cr, "PSC_Adj", "", 2, "")
-
+                    Dim dt2 As New DataTable()
+                    dt2.Columns.AddRange(New DataColumn(8) {New DataColumn("A/c No"), New DataColumn("A/c Name"), New DataColumn("PO NO"), New DataColumn("GARN NO"), New DataColumn("Voucher No"), New DataColumn("Supplier"), New DataColumn("Date"), New DataColumn("DR"), New DataColumn("CR")})
+                    'ViewState("mat2") = dt2
+                    GridView6.DataSource = dt2
+                    GridView6.DataBind()
                 End If
 
-
-                If (DropDownList2.Text = "Raw Material") Then
-
-                    ''''''''''''''''''''''''''''=========================='''''''''''''''''''''''''''''''''
-
-                    ''ADJUSTMENT LINE NO
-                    Dim LINE_NO As Integer
-                    conn.Open()
-                    Dim MC As New SqlCommand
-                    MC.CommandText = "select max(LINE_NO) AS LINE_NO from MAT_DETAILS where MAT_CODE= '" & MAT_CODE & "' and FISCAL_YEAR= " & STR1
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-
-                        If IsDBNull(dr.Item("LINE_NO")) Then
-                            LINE_NO = 0
-                        Else
-                            LINE_NO = dr.Item("LINE_NO")
-                        End If
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
-
-                    Dim month1 As Integer = 0
-                    month1 = PSC_SETTLEMENT_DATE.Month
-                    Dim qtr1 As String = ""
-                    If month1 = 4 Or month1 = 5 Or month1 = 6 Then
-                        qtr1 = "Q1"
-                    ElseIf month1 = 7 Or month1 = 8 Or month1 = 9 Then
-                        qtr1 = "Q2"
-                    ElseIf month1 = 10 Or month1 = 11 Or month1 = 12 Then
-                        qtr1 = "Q3"
-                    ElseIf month1 = 1 Or month1 = 2 Or month1 = 3 Then
-                        qtr1 = "Q4"
-                    End If
-
-                    conn.Open()
-                    Dim QUARY1 As String = ""
-                    QUARY1 = "Insert Into MAT_DETAILS(ENTRY_DATE,DEPT_CODE,PURPOSE,AUTH_BY,POST_TYPE,REMARKS,RQD_DATE,RQD_QTY,AVG_PRICE,ISSUE_NO,LINE_NO,LINE_DATE,FISCAL_YEAR,LINE_TYPE,MAT_CODE,MAT_QTY,MAT_BALANCE,UNIT_PRICE,TOTAL_PRICE,QTR,ISSUE_TYPE,COST_CODE,ISSUE_QTY)VALUES(@ENTRY_DATE,@DEPT_CODE,@PURPOSE,@AUTH_BY,@POST_TYPE,@REMARKS,@RQD_DATE,@RQD_QTY,@AVG_PRICE,@ISSUE_NO,@LINE_NO,@LINE_DATE,@FISCAL_YEAR,@LINE_TYPE,@MAT_CODE,@MAT_QTY,@MAT_BALANCE,@UNIT_PRICE,@TOTAL_PRICE,@QTR,@ISSUE_TYPE,@COST_CODE,@ISSUE_QTY)"
-                    Dim cmd1 As New SqlCommand(QUARY1, conn)
-
-                    cmd1.Parameters.AddWithValue("@ISSUE_NO", TextBox1.Text)
-                    cmd1.Parameters.AddWithValue("@LINE_NO", LINE_NO + 1)
-                    cmd1.Parameters.AddWithValue("@ISSUE_TYPE", "PSC ADJUSTMENT")
-                    cmd1.Parameters.AddWithValue("@LINE_DATE", PSC_SETTLEMENT_DATE)
-                    cmd1.Parameters.AddWithValue("@FISCAL_YEAR", CInt(STR1))
-                    cmd1.Parameters.AddWithValue("@LINE_TYPE", "PA")
-                    cmd1.Parameters.AddWithValue("@MAT_CODE", MAT_CODE)
-                    cmd1.Parameters.AddWithValue("@MAT_QTY", 0)
-                    cmd1.Parameters.AddWithValue("@RQD_QTY", 0)
-                    cmd1.Parameters.AddWithValue("@ISSUE_QTY", 0)
-                    cmd1.Parameters.AddWithValue("@MAT_BALANCE", MAT_STOCK_FROM_MATERIAL)
-                    cmd1.Parameters.AddWithValue("@UNIT_PRICE", NEW_MAT_AVG_PRICE)
-                    cmd1.Parameters.AddWithValue("@TOTAL_PRICE", 0)
-                    cmd1.Parameters.AddWithValue("@DEPT_CODE", "RM")
-                    cmd1.Parameters.AddWithValue("@PURPOSE", "FOR PSC ADJ.")
-                    cmd1.Parameters.AddWithValue("@COST_CODE", "070000")
-                    cmd1.Parameters.AddWithValue("@AUTH_BY", Session("userName"))
-                    cmd1.Parameters.AddWithValue("@POST_TYPE", "AUTH")
-                    cmd1.Parameters.AddWithValue("@REMARKS", garn_no_mb_no)
-                    cmd1.Parameters.AddWithValue("@RQD_DATE", PSC_SETTLEMENT_DATE)
-                    cmd1.Parameters.AddWithValue("@QTR", qtr1)
-                    cmd1.Parameters.AddWithValue("@AVG_PRICE", NEW_MAT_AVG_PRICE)
-                    cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                    cmd1.ExecuteReader()
-                    cmd1.Dispose()
-                    conn.Close()
-
-                    ''''''''''''''''''''''''''''=========================='''''''''''''''''''''''''''''''''
-                End If
-
-                ''UPDATING LEDGER
-                conn.Open()
-                mycommand = New SqlCommand("UPDATE LEDGER SET PAYMENT_INDICATION='S' WHERE GARN_NO_MB_NO='" & garn_no_mb_no & "' AND AC_NO='" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1).Trim & "' AND POST_INDICATION='PSC'", conn)
-                mycommand.ExecuteNonQuery()
+            Catch ee As Exception
+                ' Roll back the transaction. 
+                myTrans.Rollback()
                 conn.Close()
-
-            Next
-
-            Dim dt2 As New DataTable()
-            dt2.Columns.AddRange(New DataColumn(8) {New DataColumn("A/c No"), New DataColumn("A/c Name"), New DataColumn("PO NO"), New DataColumn("GARN NO"), New DataColumn("Voucher No"), New DataColumn("Supplier"), New DataColumn("Date"), New DataColumn("DR"), New DataColumn("CR")})
-            'ViewState("mat2") = dt2
-            GridView6.DataSource = dt2
-            GridView6.DataBind()
-        End If
+                conn_trans.Close()
+                Label33.Visible = True
+                Label33.Text = "There was some Error, please contact EDP."
+            Finally
+                conn.Close()
+                conn_trans.Close()
+            End Try
+        End Using
 
     End Sub
 
@@ -1226,7 +1279,7 @@ Public Class psc_settlement
             cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", garn_mb)
             cmd.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
             cmd.Parameters.AddWithValue("@PERIOD", qtr1)
-            cmd.Parameters.AddWithValue("@EFECTIVE_DATE", garn_date)
+            cmd.Parameters.AddWithValue("@EFECTIVE_DATE", working_date)
             cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
             cmd.Parameters.AddWithValue("@AC_NO", ac_head)
             cmd.Parameters.AddWithValue("@AMOUNT_DR", dr_value)

@@ -212,11 +212,20 @@ Public Class mat_issue
                 End If
 
                 ''Deciding Material Issue Code
-                Dim issue_code As New String("")
-                If (CInt(DropDownList3.Text.Substring(0, 3)) > 50) Then
-                    issue_code = "60614"
+                Dim issueCode, consumptionCode As New String("")
+                conn.Open()
+                Dim MCc As New SqlCommand
+                MCc.CommandText = "select AC_PUR,AC_CON from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
+                MCc.Connection = conn
+                dr = MCc.ExecuteReader
+                If dr.HasRows Then
+                    dr.Read()
+                    issueCode = dr.Item("AC_ISSUE")
+                    consumptionCode = dr.Item("AC_CON")
+                    dr.Close()
+                    conn.Close()
                 Else
-                    issue_code = "61602"
+                    conn.Close()
                 End If
                 'conn.Open()
                 Dim Query As String = "Insert Into MAT_DETAILS(ISSUE_CODE,ENTRY_DATE,DEPT_CODE,RQD_BY,ISSUE_NO,LINE_NO,FISCAL_YEAR,LINE_TYPE,MAT_CODE,RQD_QTY,ISSUE_QTY,MAT_BALANCE,UNIT_PRICE,TOTAL_PRICE,PURPOSE,COST_CODE,ISSUE_TYPE,RQD_DATE)VALUES(@ISSUE_CODE,@ENTRY_DATE,@DEPT_CODE,@RQD_BY,@ISSUE_NO,@LINE_NO,@FISCAL_YEAR,@LINE_TYPE,@MAT_CODE,@RQD_QTY,@ISSUE_QTY,@MAT_BALANCE,@UNIT_PRICE,@TOTAL_PRICE,@PURPOSE,@COST_CODE,@ISSUE_TYPE,@RQD_DATE)"
@@ -238,7 +247,7 @@ Public Class mat_issue
                 cmd.Parameters.AddWithValue("@RQD_BY", Session("userName"))
                 cmd.Parameters.AddWithValue("@DEPT_CODE", "STORE")
                 cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                cmd.Parameters.AddWithValue("@ISSUE_CODE", issue_code)
+                cmd.Parameters.AddWithValue("@ISSUE_CODE", issueCode)
                 cmd.ExecuteReader()
                 cmd.Dispose()
                 'conn.Close()
