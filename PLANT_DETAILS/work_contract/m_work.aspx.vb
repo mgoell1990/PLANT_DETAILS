@@ -441,11 +441,24 @@ Public Class m_work
                             cmd.ExecuteReader()
                             cmd.Dispose()
 
-                            ''serach ac head
-                            Dim PROV_HEAD As String = ""
-                            Dim EXPND_HEAD As String = ""
+
+                            ''search PARTY TYPE
+                            Dim PROV_HEAD, EXPND_HEAD, PARTY_TYPE As New String("")
                             conn.Open()
                             Dim MC5 As New SqlCommand
+                            MC5.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & TextBox13.Text.Substring(0, TextBox13.Text.IndexOf(",") - 1) & "'"
+                            MC5.Connection = conn
+                            dr = MC5.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                PARTY_TYPE = dr.Item("PARTY_TYPE")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            conn.Open()
                             MC5.CommandText = "select * from work_group where work_name = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & DropDownList4.SelectedValue & "') and work_type=(select MAX(wo_type) from wo_order where po_no='" & DropDownList4.SelectedValue & "' and w_slno='" & GridView2.Rows(i).Cells(0).Text & "')"
                             MC5.Connection = conn
                             dr = MC5.ExecuteReader
@@ -458,6 +471,13 @@ Public Class m_work
                             Else
                                 conn.Close()
                             End If
+
+
+                            If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                                PROV_HEAD = "5110C"
+                            End If
+
+
                             ''add ledger EXPND
                             save_ledger(DropDownList4.SelectedValue, TextBox28.Text, TextBox13.Text.Substring(0, TextBox13.Text.IndexOf(",") - 1), EXPND_HEAD, "Dr", (base_value - discount_value) + mat_rate, "PUR")
                             ''add ledger PROV

@@ -1131,7 +1131,7 @@ Public Class mat_crr
                     ''CALCULATING CHA PROVISION VALUE
                     If (be_TextBox.Text <> "N/A") Then
                         Dim CHA_WO, CHA_SLNO, BE_NO_NEW As String
-                        Dim CHA_HEAD As New String("")
+                        Dim PARTY_TYPE, CHA_HEAD As New String("")
                         Dim BE_QTY, CHA_RCD_QTY, CHA_QTY As New Decimal(0)
                         CHA_WO = ""
                         CHA_SLNO = ""
@@ -1233,6 +1233,7 @@ Public Class mat_crr
                                 conn.Close()
                             End If
 
+
                             Dim CHA_SUPL_ID As String = ""
                             conn.Open()
                             MC4.CommandText = "SELECT PARTY_CODE FROM ORDER_DETAILS WHERE SO_NO ='" & CHA_WO & "'"
@@ -1247,6 +1248,25 @@ Public Class mat_crr
                                 conn.Close()
                             End If
                             conn.Close()
+
+
+                            conn.Open()
+                            MC4.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & CHA_SUPL_ID & "'"
+                            MC4.Connection = conn
+                            dr = MC4.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                PARTY_TYPE = dr.Item("PARTY_TYPE")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                                CHA_HEAD = "5110C"
+                            End If
+
 
                             ''GETTING MATERIAL PURCHASE HEAD
                             ''LEDGER POSTING PURCHASE
@@ -1267,7 +1287,7 @@ Public Class mat_crr
                             End If
 
                             ''INSERT LEDGER prov for CHA
-                            LEDGER_SAVE_PUR(po_no, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, PURCHASE_HEAD, "Dr", CHA_PROV_VALUE, "PUR", 1, "", BE_NO_NEW)
+                            LEDGER_SAVE_PUR(CHA_WO, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, PURCHASE_HEAD, "Dr", CHA_PROV_VALUE, "PUR", 1, "", BE_NO_NEW)
                             LEDGER_SAVE_PUR(CHA_WO, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, CHA_HEAD, "Cr", CHA_PROV_VALUE, "PROV. FOR CHA", 7, "", BE_NO_NEW)
 
                             ''INSERT MB BOOK

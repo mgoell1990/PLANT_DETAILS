@@ -215,7 +215,7 @@ Public Class mat_issue
                 Dim issueCode, consumptionCode As New String("")
                 conn.Open()
                 Dim MCc As New SqlCommand
-                MCc.CommandText = "select AC_PUR,AC_CON from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
+                MCc.CommandText = "select AC_ISSUE,AC_CON from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
                 MCc.Connection = conn
                 dr = MCc.ExecuteReader
                 If dr.HasRows Then

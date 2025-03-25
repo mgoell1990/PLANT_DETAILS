@@ -1618,6 +1618,7 @@
     <Content Include="finance\cpv_entry.aspx" />
     <Content Include="finance\Credit_Debit_note.aspx" />
     <Content Include="finance\c_entry.aspx" />
+    <Content Include="finance\DepreciationEntry.aspx" />
     <Content Include="finance\Email.aspx" />
     <Content Include="finance\E_Invoice_Cancellation.aspx" />
     <Content Include="finance\FCM_Service.aspx" />
@@ -2373,6 +2374,13 @@
     </Compile>
     <Compile Include="finance\c_entry.aspx.vb">
       <DependentUpon>c_entry.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="finance\DepreciationEntry.aspx.designer.vb">
+      <DependentUpon>DepreciationEntry.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="finance\DepreciationEntry.aspx.vb">
+      <DependentUpon>DepreciationEntry.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="finance\Email.aspx.designer.vb">

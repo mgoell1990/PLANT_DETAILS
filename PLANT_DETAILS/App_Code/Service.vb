@@ -1278,7 +1278,7 @@ Public Class Service
                 conn.Open()
                 Using sdr As SqlDataReader = cmd.ExecuteReader()
                     While sdr.Read()
-                        customers.Add(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}", sdr("SUPL_ID"), sdr("SUPL_NAME"), sdr("SUPL_CONTACT_PERSON"), sdr("SUPL_AT"), sdr("SUPL_PO"), sdr("SUPL_DIST"), sdr("SUPL_PIN"), sdr("SUPL_STATE"), sdr("SUPL_COUNTRY"), sdr("SUPL_MOB1"), sdr("SUPL_MOB2"), sdr("SUPL_LAND"), sdr("SUPL_FAX"), sdr("SUPL_EMAIL"), sdr("SUPL_WEB"), sdr("SUPL_PAN"), sdr("SUPL_TIN"), sdr("SUPL_ST_NO"), sdr("SUPL_BANK"), sdr("SUPL_ACOUNT_NO"), sdr("SUPL_IFSC"), sdr("SUPL_TYPE"), sdr("SUPL_TAX"), sdr("SUPL_LOC"), sdr("SUPL_GST_NO"), sdr("SUPL_STATE_CODE"), sdr("PARTY_TYPE")))
+                        customers.Add(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}^{27}", sdr("SUPL_ID"), sdr("SUPL_NAME"), sdr("SUPL_CONTACT_PERSON"), sdr("SUPL_AT"), sdr("SUPL_PO"), sdr("SUPL_DIST"), sdr("SUPL_PIN"), sdr("SUPL_STATE"), sdr("SUPL_COUNTRY"), sdr("SUPL_MOB1"), sdr("SUPL_MOB2"), sdr("SUPL_LAND"), sdr("SUPL_FAX"), sdr("SUPL_EMAIL"), sdr("SUPL_WEB"), sdr("SUPL_PAN"), sdr("SUPL_TIN"), sdr("SUPL_ST_NO"), sdr("SUPL_BANK"), sdr("SUPL_ACOUNT_NO"), sdr("SUPL_IFSC"), sdr("SUPL_TYPE"), sdr("SUPL_TAX"), sdr("SUPL_LOC"), sdr("SUPL_GST_NO"), sdr("SUPL_STATE_CODE"), sdr("PARTY_TYPE"), sdr("MSME_NO")))
                     End While
                 End Using
                 conn.Close()

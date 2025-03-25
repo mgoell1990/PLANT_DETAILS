@@ -1144,43 +1144,6 @@ Public Class ind_garn
                 If PROV_PRICE_FOR_TRANSPORTER > 0 Then
 
                     ''''''''''''''''''''''''''''''''''''''''''''''
-                    Dim CHLN_DATE As String = ""
-                    conn.Open()
-                    Dim MC1 As New SqlCommand
-                    MC1.CommandText = "SELECT DISTINCT CHLN_DATE FROM PO_RCD_MAT WITH(NOLOCK) WHERE CRR_NO='" & imp_crr_no_DropDownList1.SelectedValue & "'"
-                    MC1.Connection = conn
-                    dr = MC1.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        CHLN_DATE = dr.Item("CHLN_DATE")
-                        dr.Close()
-                    End If
-                    conn.Close()
-
-                    conn.Open()
-                    Dim w_qty, w_complite, w_unit_price, W_discount, mat_price As Decimal
-                    Dim WO_NAME As String = ""
-                    Dim WO_AU As String = ""
-                    Dim WO_SUPL_ID, WO_AMD, AMD_DATE As New String("")
-                    Dim MC As New SqlCommand
-                    MC.CommandText = "select MAX(WO_AMD) AS WO_AMD ,MAX(AMD_DATE) AS AMD_DATE,MAX(SUPL_ID) as SUPL_ID, sum(W_QTY) as W_QTY,sum(W_COMPLITED) as W_COMPLITED,sum(W_MATERIAL_COST) as W_MATERIAL_COST,sum(W_TOLERANCE) as W_TOLERANCE,sum(W_UNIT_PRICE) as W_UNIT_PRICE,sum(W_DISCOUNT) as W_DISCOUNT,max(W_NAME) as W_NAME,max(W_AU) as W_AU from WO_ORDER where PO_NO = '" & Label13.Text & "' AND W_SLNO='" & Label14.Text & "' and AMD_DATE < =(SELECT DISTINCT CHLN_DATE FROM PO_RCD_MAT WITH(NOLOCK) WHERE CRR_NO='" & imp_crr_no_DropDownList1.SelectedValue & "')"
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        w_qty = dr.Item("W_QTY")
-                        w_complite = dr.Item("W_COMPLITED")
-                        w_unit_price = dr.Item("W_UNIT_PRICE")
-                        W_discount = dr.Item("W_DISCOUNT")
-                        mat_price = dr.Item("W_MATERIAL_COST")
-                        WO_NAME = dr.Item("W_NAME")
-                        WO_AU = dr.Item("W_AU")
-                        WO_SUPL_ID = dr.Item("SUPL_ID")
-                        WO_AMD = dr.Item("WO_AMD")
-                        AMD_DATE = dr.Item("AMD_DATE")
-                        dr.Close()
-                    End If
-                    conn.Close()
 
                     'Checking if valuation is done or not
                     conn.Open()
@@ -2187,9 +2150,15 @@ Public Class ind_garn
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()
+
+
+
+
+
+
                     ''LEDGER POSTING PURCHASE
                     Dim PURCHASE As String = ""
-                    Dim cons As String = ""
+                    ''Dim cons As String = ""
                     conn.Open()
                     Dim MCc As New SqlCommand
                     MCc.CommandText = "select AC_PUR,AC_CON from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & GridView2.Rows(I).Cells(4).Text & "'"
@@ -2198,7 +2167,7 @@ Public Class ind_garn
                     If dr.HasRows Then
                         dr.Read()
                         PURCHASE = dr.Item("AC_PUR")
-                        cons = dr.Item("AC_CON")
+                        ''cons = dr.Item("AC_CON")
                         dr.Close()
                         conn.Close()
                     Else
@@ -2226,22 +2195,45 @@ Public Class ind_garn
                     cmd.Dispose()
                     'conn.Close()
                 Next
-                ''ledger posting PROV for party
-                Dim PROV As String = ""
+
+                Dim PROV_HEAD, PARTY_TYPE As New String("")
                 conn.Open()
-                Dim MC5 As New SqlCommand
-                MC5.CommandText = "select * from work_group where work_type = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & Label398.Text & "')  AND work_name =(SELECT ORDER_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & Label398.Text & "')"
-                MC5.Connection = conn
-                dr = MC5.ExecuteReader
+                Dim MC6 As New SqlCommand
+                MC6.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1) & "'"
+                MC6.Connection = conn
+                dr = MC6.ExecuteReader
                 If dr.HasRows Then
                     dr.Read()
-                    PROV = dr.Item("PROV_HEAD")
+                    PARTY_TYPE = dr.Item("PARTY_TYPE")
                     dr.Close()
                     conn.Close()
                 Else
                     conn.Close()
                 End If
-                conn.Close()
+
+
+                ''ledger posting PROV for party
+                Dim MC5 As New SqlCommand
+                If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                    PROV_HEAD = "5110B"
+                Else
+                    conn.Open()
+                    MC5.CommandText = "select * from work_group where work_type = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & Label398.Text & "')  AND work_name =(SELECT ORDER_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & Label398.Text & "')"
+                    MC5.Connection = conn
+                    dr = MC5.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        PROV_HEAD = dr.Item("PROV_HEAD")
+                        dr.Close()
+                        conn.Close()
+                    Else
+                        conn.Close()
+                    End If
+                    conn.Close()
+                End If
+
+
+
                 Dim C As Integer
                 Dim PROV_PRICE_FOR_PARTY As Decimal = 0.0
                 For C = 0 To GridView2.Rows.Count - 1
@@ -2259,7 +2251,7 @@ Public Class ind_garn
                 cmd1.Parameters.AddWithValue("@PERIOD", qtr1)
                 cmd1.Parameters.AddWithValue("@EFECTIVE_DATE", working_date.Date)
                 cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                cmd1.Parameters.AddWithValue("@AC_NO", PROV)
+                cmd1.Parameters.AddWithValue("@AC_NO", PROV_HEAD)
                 cmd1.Parameters.AddWithValue("@AMOUNT_DR", 0)
                 cmd1.Parameters.AddWithValue("@AMOUNT_CR", PROV_PRICE_FOR_PARTY)
                 cmd1.Parameters.AddWithValue("@POST_INDICATION", "PROV")
@@ -2298,72 +2290,8 @@ Public Class ind_garn
                     RCVD_QTY_TRANSPORTER = RCVD_QTY_TRANSPORTER + CDec(GridView2.Rows(C).Cells(10).Text) + ((NO_OF_BAG * BAG_WEIGHT) / 1000)
                     SHORT_AMT = SHORT_AMT + CDec(GridView2.Rows(C).Cells(31).Text)
                 Next
-                PROV = ""
+
                 If PROV_PRICE_FOR_TRANSPORTER > 0 Then
-                    conn.Open()
-                    MC5.CommandText = "select * from work_group where work_name = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & Label424.Text & "') and work_type=(select DISTINCT wo_type from wo_order where po_no='" & Label424.Text & "' and w_slno='" & Label462.Text & "')"
-                    MC5.Connection = conn
-                    dr = MC5.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        PROV = dr.Item("PROV_HEAD")
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
-                    Dim trans_name As String = ""
-                    conn.Open()
-                    MC5.CommandText = "select * from ORDER_DETAILS where so_no ='" & Label424.Text & "'"
-                    MC5.Connection = conn
-                    dr = MC5.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        trans_name = dr.Item("PARTY_CODE")
-                        dr.Close()
-                        conn.Close()
-                    Else
-                        conn.Close()
-                    End If
-
-                    ''INSERT MB BOOK
-                    Dim CHLN_DATE As String = ""
-                    conn.Open()
-                    Dim MC1 As New SqlCommand
-                    MC1.CommandText = "SELECT DISTINCT CHLN_DATE FROM PO_RCD_MAT WITH(NOLOCK) WHERE CRR_NO='" & garn_crrnoDropDownList.SelectedValue & "'"
-                    MC1.Connection = conn
-                    dr = MC1.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        CHLN_DATE = dr.Item("CHLN_DATE")
-                        dr.Close()
-                    End If
-                    conn.Close()
-
-                    conn.Open()
-                    Dim w_qty, w_complite, w_unit_price, W_discount, mat_price As Decimal
-                    Dim WO_NAME As String = ""
-                    Dim WO_AU As String = ""
-                    Dim WO_SUPL_ID, WO_AMD, AMD_DATE As New String("")
-                    'Dim MC As New SqlCommand
-                    MC.CommandText = "select MAX(WO_AMD) AS WO_AMD ,MAX(AMD_DATE) AS AMD_DATE,MAX(SUPL_ID) as SUPL_ID, sum(W_QTY) as W_QTY,sum(W_COMPLITED) as W_COMPLITED,sum(W_MATERIAL_COST) as W_MATERIAL_COST,sum(W_TOLERANCE) as W_TOLERANCE,sum(W_UNIT_PRICE) as W_UNIT_PRICE,sum(W_DISCOUNT) as W_DISCOUNT,max(W_NAME) as W_NAME,max(W_AU) as W_AU from WO_ORDER where PO_NO = '" & Label424.Text & "' AND W_SLNO='" & Label462.Text & "' and AMD_DATE < =(SELECT DISTINCT CHLN_DATE FROM PO_RCD_MAT WITH(NOLOCK) WHERE CRR_NO='" & garn_crrnoDropDownList.SelectedValue & "')"
-                    MC.Connection = conn
-                    dr = MC.ExecuteReader
-                    If dr.HasRows Then
-                        dr.Read()
-                        w_qty = dr.Item("W_QTY")
-                        w_complite = dr.Item("W_COMPLITED")
-                        w_unit_price = dr.Item("W_UNIT_PRICE")
-                        W_discount = dr.Item("W_DISCOUNT")
-                        mat_price = dr.Item("W_MATERIAL_COST")
-                        WO_NAME = dr.Item("W_NAME")
-                        WO_AU = dr.Item("W_AU")
-                        WO_SUPL_ID = dr.Item("SUPL_ID")
-                        WO_AMD = dr.Item("WO_AMD")
-                        AMD_DATE = dr.Item("AMD_DATE")
-                        dr.Close()
-                    End If
-                    conn.Close()
 
                     'Checking if valuation is done or not
                     conn.Open()

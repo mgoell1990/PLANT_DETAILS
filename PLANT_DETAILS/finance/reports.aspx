@@ -1424,6 +1424,11 @@
                                                     <asp:ListItem>Depreciation Entry</asp:ListItem>
                                                 </asp:DropDownList>
                                             </div>
+                                            <div class="col text-start">
+                                                <%--<asp:Button ID="Button52" runat="server" CssClass="btn btn-primary" Text="Go" />--%>
+                                                <asp:Button ID="Button53" runat="server" Text="Download" CssClass="btn btn-primary" />
+                                                <%--<asp:Button ID="Button54" runat="server" CssClass="btn btn-success" Text="Print" />--%>
+                                            </div>
                                         </div>
 
                                         <asp:MultiView ID="MultiView3" runat="server">
@@ -1466,11 +1471,11 @@
                                                             <asp:ListItem>2425</asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
-                                                    
+
                                                     <div class="col text-start">
                                                         <asp:Button ID="Button49" runat="server" CssClass="btn btn-primary" Text="Go" />
                                                         <asp:Button ID="Button50" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                                        <asp:Button ID="Button51" runat="server" CssClass="btn btn-success" Text="Print" />
+                                                        <%--<asp:Button ID="Button51" runat="server" CssClass="btn btn-success" Text="Print" />--%>
                                                     </div>
                                                 </div>
 
@@ -1488,23 +1493,23 @@
                                                                     <asp:BoundField DataField="DepreciationPercentage" HeaderText="Depreciation Percentage" />
                                                                     <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
                                                                     <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
-                                                                    <asp:BoundField DataField="FiscalYear" HeaderText="Fiscal Year"/>
-                                                                    <asp:BoundField DataField="Quarter1" HeaderText="Quarter"/>
-                                                                    <asp:BoundField DataField="CummDeprBeforeQ1" HeaderText="Cumm. Dep. before Q1"/>
-                                                                    <asp:BoundField DataField="DeprValueQ1" HeaderText="Dep. for Q1"/>
-                                                                    
-                                                                    
-                                                                    <asp:BoundField DataField="Quarter2" HeaderText="Quarter"/>
-                                                                    <asp:BoundField DataField="CummDeprBeforeQ2" HeaderText="Cumm. Dep. before Q2"/>
-                                                                    <asp:BoundField DataField="DeprValueQ2" HeaderText="Dep. for Q2"/>
-                                                                    
-                                                                    <asp:BoundField DataField="Quarter3" HeaderText="Quarter"/>
-                                                                    <asp:BoundField DataField="CummDeprBeforeQ3" HeaderText="Cumm. Dep. before Q3"/>
-                                                                    <asp:BoundField DataField="DeprValueQ3" HeaderText="Dep. for Q3"/>
-                                                                    
-                                                                    <asp:BoundField DataField="Quarter4" HeaderText="Quarter"/>
-                                                                    <asp:BoundField DataField="CummDeprBeforeQ4" HeaderText="Cumm. Dep. before Q4"/>
-                                                                    <asp:BoundField DataField="DeprValueQ4" HeaderText="Dep. for Q4"/>
+                                                                    <asp:BoundField DataField="FiscalYear" HeaderText="Fiscal Year" />
+                                                                    <asp:BoundField DataField="Quarter1" HeaderText="Quarter" />
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ1" HeaderText="Cumm. Dep. before Q1" />
+                                                                    <asp:BoundField DataField="DeprValueQ1" HeaderText="Dep. for Q1" />
+
+
+                                                                    <asp:BoundField DataField="Quarter2" HeaderText="Quarter" />
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ2" HeaderText="Cumm. Dep. before Q2" />
+                                                                    <asp:BoundField DataField="DeprValueQ2" HeaderText="Dep. for Q2" />
+
+                                                                    <asp:BoundField DataField="Quarter3" HeaderText="Quarter" />
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ3" HeaderText="Cumm. Dep. before Q3" />
+                                                                    <asp:BoundField DataField="DeprValueQ3" HeaderText="Dep. for Q3" />
+
+                                                                    <asp:BoundField DataField="Quarter4" HeaderText="Quarter" />
+                                                                    <asp:BoundField DataField="CummDeprBeforeQ4" HeaderText="Cumm. Dep. before Q4" />
+                                                                    <asp:BoundField DataField="DeprValueQ4" HeaderText="Dep. for Q4" />
                                                                     <asp:BoundField DataField="Remarks" HeaderText="Remarks" />
 
                                                                 </Columns>
@@ -1520,13 +1525,13 @@
 
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </asp:View>
 
 
-                     <%--=====VIEW 24 BILL TRACK START=====--%>
+                    <%--=====VIEW 24 BILL TRACK START=====--%>
                     <asp:View ID="View26" runat="server">
                         <div class="row justify-content-center align-items-center">
                             <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
@@ -1542,7 +1547,7 @@
                                             <div class="col-3 text-end">
                                                 <asp:Label ID="Label52" runat="server" ForeColor="Blue" Style="text-align: left" Text="Date Between"></asp:Label>
                                             </div>
-                                            
+
                                             <div class="col text-start">
                                                 <asp:Button ID="Button46" runat="server" CssClass="btn btn-primary" Text="Go" />
                                                 <asp:Button ID="Button47" runat="server" Text="Download" CssClass="btn btn-primary" />

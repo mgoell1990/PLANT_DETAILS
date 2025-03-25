@@ -2373,7 +2373,7 @@ Public Class report3
         If DropDownList5.SelectedValue = "Asset Register" Then
 
             MultiView3.ActiveViewIndex = 0
-
+            Button53.Visible = True
             conn.Open()
             dt.Clear()
             da = New SqlDataAdapter("select * from AssetMaster", conn)
@@ -2384,6 +2384,7 @@ Public Class report3
         ElseIf DropDownList5.SelectedValue = "Depreciation Entry" Then
 
             MultiView3.ActiveViewIndex = 1
+            Button53.Visible = False
 
         End If
     End Sub
@@ -2468,6 +2469,50 @@ Public Class report3
 
 
 
+    End Sub
+
+    Protected Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
+        If GridView15.Rows.Count > 0 Then
+            Try
+                ''GridView15.Columns(0).Visible = False
+                Response.ClearContent()
+                Response.Buffer = True
+                Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", "AssetRegister.xlsx"))
+                Response.ContentEncoding = Encoding.UTF8
+                Response.ContentType = "application/ms-excel"
+                Dim sw As New StringWriter()
+                Dim htw As New HtmlTextWriter(sw)
+                GridView15.RenderControl(htw)
+                Response.Write(sw.ToString())
+                Response.[End]()
+
+            Catch ex As Exception
+            Finally
+
+            End Try
+        End If
+    End Sub
+
+    Protected Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
+        If GridView14.Rows.Count > 0 Then
+            Try
+                ''GridView14.Columns(0).Visible = False
+                Response.ClearContent()
+                Response.Buffer = True
+                Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", "AssetDepreciation_" + DropDownList6.Text + ".xlsx"))
+                Response.ContentEncoding = Encoding.UTF8
+                Response.ContentType = "application/ms-excel"
+                Dim sw As New StringWriter()
+                Dim htw As New HtmlTextWriter(sw)
+                GridView14.RenderControl(htw)
+                Response.Write(sw.ToString())
+                Response.[End]()
+
+            Catch ex As Exception
+            Finally
+
+            End Try
+        End If
     End Sub
 
     Protected Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click

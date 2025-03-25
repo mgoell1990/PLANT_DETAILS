@@ -932,8 +932,11 @@ Public Class inv_value
                         Next
 
 
+
+
+
                         ''SEARCH AC HEAD
-                        Dim EXPENSE_HEAD, PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, OTHER_DEDUCTION_HEAD, OTHER_PAYMENT_HEAD As New String("")
+                        Dim PARTY_TYPE, EXPENSE_HEAD, PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, OTHER_DEDUCTION_HEAD, OTHER_PAYMENT_HEAD As New String("")
                         Dim SGST_LIAB_LD_PENALTY_HEAD, CGST_LIAB_LD_PENALTY_HEAD, IGST_LIAB_LD_PENALTY_HEAD, CESS_LIAB_LD_PENALTY_HEAD, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
                         conn.Open()
                         Dim MC6 As New SqlCommand
@@ -1007,6 +1010,26 @@ Public Class inv_value
                             conn.Close()
                         Else
                             conn.Close()
+                        End If
+
+
+                        ''search PARTY TYPE
+                        conn.Open()
+                        Dim MC5 As New SqlCommand
+                        MC5.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1) & "'"
+                        MC5.Connection = conn
+                        dr = MC5.ExecuteReader
+                        If dr.HasRows Then
+                            dr.Read()
+                            PARTY_TYPE = dr.Item("PARTY_TYPE")
+                            dr.Close()
+                            conn.Close()
+                        Else
+                            conn.Close()
+                        End If
+
+                        If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                            PROV_HEAD = "5110C"
                         End If
 
 
@@ -2085,7 +2108,7 @@ Public Class inv_value
 
                     If password = TextBox173.Text Then
 
-                        Dim PURCHASE_HEAD, TDS_HEAD, TCS_HEAD, RCM_SGST_HEAD, RCM_CGST_HEAD, RCM_IGST_HEAD, RCM_CESS_HEAD, prov_head, sund_head, ld_head, short_head, diff_head, cgst_head, sgst_head, igst_head, cess_head, penality_head, sd_head, OTHER_DEDUCTION_HEAD, IUCA_HEAD As New String("")
+                        Dim ORDER_TYPE, PARTY_TYPE, PURCHASE_HEAD, TDS_HEAD, TCS_HEAD, RCM_SGST_HEAD, RCM_CGST_HEAD, RCM_IGST_HEAD, RCM_CESS_HEAD, prov_head, sund_head, ld_head, short_head, diff_head, cgst_head, sgst_head, igst_head, cess_head, penality_head, sd_head, OTHER_DEDUCTION_HEAD, IUCA_HEAD As New String("")
                         Dim SGST_LIAB_LD_PENALTY, CGST_LIAB_LD_PENALTY, IGST_LIAB_LD_PENALTY, CESS_LIAB_LD_PENALTY, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
 
                         conn.Open()
@@ -2116,7 +2139,6 @@ Public Class inv_value
                         dr = MC6.ExecuteReader
                         If dr.HasRows Then
                             dr.Read()
-                            PURCHASE_HEAD = dr.Item("pur_head")
                             prov_head = dr.Item("prov_head")
                             sund_head = dr.Item("sund_head")
                             ld_head = dr.Item("ld_head")
@@ -2151,6 +2173,59 @@ Public Class inv_value
                             conn.Close()
                         Else
                             conn.Close()
+                        End If
+
+
+                        ''search PARTY TYPE
+                        conn.Open()
+                        Dim MC5 As New SqlCommand
+                        MC5.CommandText = "select PO_TYPE from ORDER_DETAILS where SO_NO='" & M_Label398.Text & "'"
+                        MC5.Connection = conn
+                        dr = MC5.ExecuteReader
+                        If dr.HasRows Then
+                            dr.Read()
+                            ORDER_TYPE = dr.Item("PO_TYPE")
+                            dr.Close()
+                            conn.Close()
+                        Else
+                            conn.Close()
+                        End If
+
+                        Dim MC7 As New SqlCommand
+                        If (ORDER_TYPE = "STORE MATERIAL") Then
+                            conn.Open()
+                            MC7.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1) & "'"
+                            MC7.Connection = conn
+                            dr = MC7.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                PARTY_TYPE = dr.Item("PARTY_TYPE")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                                prov_head = "5110A"
+                            End If
+                        ElseIf (ORDER_TYPE = "RAW MATERIAL") Then
+                            conn.Open()
+                            MC7.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1) & "'"
+                            MC7.Connection = conn
+                            dr = MC7.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                PARTY_TYPE = dr.Item("PARTY_TYPE")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+
+                            If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                                prov_head = "5110B"
+                            End If
                         End If
 
 
@@ -2290,6 +2365,21 @@ Public Class inv_value
                                 TCS_AMOUNT = TCS_AMOUNT + CDec(GridView210.Rows(I).Cells(44).Text)
                                 TDS_AMOUNT = TDS_AMOUNT + CDec(GridView210.Rows(I).Cells(50).Text)
                                 TAXABLE_AMOUNT = TAXABLE_AMOUNT + CDec(GridView210.Rows(I).Cells(45).Text)
+
+
+                                conn.Open()
+                                Dim MCc As New SqlCommand
+                                MCc.CommandText = "select AC_PUR from MATERIAL with(nolock) where MAT_CODE IN (SELECT MAT_CODE FROM PO_RCD_MAT with(nolock) WHERE CRR_NO='" & GridView210.Rows(I).Cells(0).Text & "')"
+                                MCc.Connection = conn
+                                dr = MCc.ExecuteReader
+                                If dr.HasRows Then
+                                    dr.Read()
+                                    PURCHASE_HEAD = dr.Item("AC_PUR")
+                                    dr.Close()
+                                    conn.Close()
+                                Else
+                                    conn.Close()
+                                End If
 
 
                                 ''psc calculatation
@@ -3198,7 +3288,7 @@ Public Class inv_value
 
 
                                     ''SEARCH AC HEAD
-                                    Dim EXPENSE_HEAD, PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
+                                    Dim PARTY_TYPE, EXPENSE_HEAD, PROV_HEAD, SUND_HEAD, SGST_HEAD, CGST_HEAD, IGST_HEAD, CESS_HEAD, SGST_LIAB_HEAD, CGST_LIAB_HEAD, IGST_LIAB_HEAD, CESS_LIAB_HEAD, LD_HEAD, TDS_HEAD, SD_HEAD, PSC_HEAD, TDS_SGST_HEAD, TDS_CGST_HEAD, TDS_IGST_HEAD As New String("")
                                     Dim SGST_LIAB_LD_PENALTY, CGST_LIAB_LD_PENALTY, IGST_LIAB_LD_PENALTY, CESS_LIAB_LD_PENALTY, IGST_WITHOUT_RCM, SGST_WITHOUT_RCM, CGST_WITHOUT_RCM, CESS_WITHOUT_RCM As New String("")
 
                                     conn.Open()
@@ -3239,6 +3329,25 @@ Public Class inv_value
                                         conn.Close()
                                     Else
                                         conn.Close()
+                                    End If
+
+                                    ''search PARTY TYPE
+                                    conn.Open()
+                                    Dim MC5 As New SqlCommand
+                                    MC5.CommandText = "select PARTY_TYPE from SUPL where SUPL_ID='" & TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1) & "'"
+                                    MC5.Connection = conn
+                                    dr = MC5.ExecuteReader
+                                    If dr.HasRows Then
+                                        dr.Read()
+                                        PARTY_TYPE = dr.Item("PARTY_TYPE")
+                                        dr.Close()
+                                        conn.Close()
+                                    Else
+                                        conn.Close()
+                                    End If
+
+                                    If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                                        PROV_HEAD = "5110B"
                                     End If
 
 

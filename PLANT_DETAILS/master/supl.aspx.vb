@@ -239,7 +239,7 @@ Public Class supl
                             s_tax = "Foreign"
                         End If
                         'conn_trans.Open()
-                        Dim query1 As String = "UPDATE SUPL SET PARTY_TYPE=@PARTY_TYPE,SUPL_NAME=@SUPL_NAME , SUPL_CONTACT_PERSON =@SUPL_CONTACT_PERSON , SUPL_AT=@SUPL_AT , SUPL_PO =@SUPL_PO , SUPL_DIST=@SUPL_DIST , SUPL_PIN =@SUPL_PIN, SUPL_STATE=@SUPL_STATE , SUPL_COUNTRY=@SUPL_COUNTRY , SUPL_MOB1=@SUPL_MOB1 , SUPL_MOB2 =@SUPL_MOB2, SUPL_LAND=@SUPL_LAND , SUPL_FAX =@SUPL_FAX, SUPL_EMAIL=@SUPL_EMAIL , SUPL_WEB=@SUPL_WEB , SUPL_PAN=@SUPL_PAN , SUPL_GST_NO= @SUPL_GST_NO , SUPL_STATE_CODE=@SUPL_STATE_CODE , SUPL_BANK=@SUPL_BANK , SUPL_ACOUNT_NO=@SUPL_ACOUNT_NO , SUPL_IFSC=@SUPL_IFSC , SUPL_TYPE=@SUPL_TYPE , SUPL_TAX=@SUPL_TAX where SUPL_ID='" & TextBox84.Text & "'"
+                        Dim query1 As String = "UPDATE SUPL SET MSME_NO=@MSME_NO,PARTY_TYPE=@PARTY_TYPE,SUPL_NAME=@SUPL_NAME , SUPL_CONTACT_PERSON =@SUPL_CONTACT_PERSON , SUPL_AT=@SUPL_AT , SUPL_PO =@SUPL_PO , SUPL_DIST=@SUPL_DIST , SUPL_PIN =@SUPL_PIN, SUPL_STATE=@SUPL_STATE , SUPL_COUNTRY=@SUPL_COUNTRY , SUPL_MOB1=@SUPL_MOB1 , SUPL_MOB2 =@SUPL_MOB2, SUPL_LAND=@SUPL_LAND , SUPL_FAX =@SUPL_FAX, SUPL_EMAIL=@SUPL_EMAIL , SUPL_WEB=@SUPL_WEB , SUPL_PAN=@SUPL_PAN , SUPL_GST_NO= @SUPL_GST_NO , SUPL_STATE_CODE=@SUPL_STATE_CODE , SUPL_BANK=@SUPL_BANK , SUPL_ACOUNT_NO=@SUPL_ACOUNT_NO , SUPL_IFSC=@SUPL_IFSC , SUPL_TYPE=@SUPL_TYPE , SUPL_TAX=@SUPL_TAX where SUPL_ID='" & TextBox84.Text & "'"
                         Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
                         cmd1.Parameters.AddWithValue("@SUPL_NAME", TextBox85.Text)
                         cmd1.Parameters.AddWithValue("@SUPL_CONTACT_PERSON", TextBox86.Text)
@@ -264,6 +264,7 @@ Public Class supl
                         cmd1.Parameters.AddWithValue("@SUPL_TYPE", SUPLDropDownList17.Text)
                         cmd1.Parameters.AddWithValue("@SUPL_TAX", s_tax)
                         cmd1.Parameters.AddWithValue("@PARTY_TYPE", DropDownList2.Text)
+                        cmd1.Parameters.AddWithValue("@MSME_NO", TextBox1.Text)
                         cmd1.ExecuteReader()
                         cmd1.Dispose()
 
