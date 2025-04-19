@@ -22,6 +22,7 @@ Public Class inv_value
     Dim result As Integer
     Dim provider As CultureInfo = CultureInfo.InvariantCulture
     Dim working_date As Date = Today.Date
+    Dim tokenField As HiddenField
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
@@ -1069,15 +1070,15 @@ Public Class inv_value
                         Next
 
 
-                        For L = 0 To GridView6.Rows.Count - 1
+                        'For L = 0 To GridView6.Rows.Count - 1
 
-                            ''update ledger
-                            Dim cmd12 As New SqlCommand
-                            Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                            cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                            cmd12.ExecuteReader()
-                            cmd12.Dispose()
-                        Next
+                        '    ''update ledger
+                        '    Dim cmd12 As New SqlCommand
+                        '    Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                        '    cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                        '    cmd12.ExecuteReader()
+                        '    cmd12.Dispose()
+                        'Next
 
 
                         If (DropDownList4.SelectedValue = "Yes") Then
@@ -1277,6 +1278,37 @@ Public Class inv_value
         End Using
 
     End Sub
+
+
+    Private Sub CreateToken()
+        Dim token As String = Guid.NewGuid().ToString()
+        Session("miscSaleToken") = token
+        tokenField.Value = token
+        Throw New NotImplementedException()
+    End Sub
+
+    Private Function TokenIsValid() As Boolean
+        Dim expectedToken As String = Session("miscSaleToken").ToString()
+        If (IsDBNull(expectedToken)) Then
+            Return False
+        End If
+
+        Dim actualToken As String = tokenField.Value
+        If (expectedToken = actualToken) Then
+            Return True
+        Else
+            Return False
+        End If
+        Throw New NotImplementedException()
+    End Function
+
+    Private Sub ConsumeToken()
+
+        Session.Remove("miscSaleToken")
+        Throw New NotImplementedException()
+    End Sub
+
+
     Protected Sub save_ledger(ItemSlNo As String, so_no As String, garn_mb As String, inv_no As String, dt_id As String, ac_head As String, ac_term As String, price As Decimal, post_ind As String, token_no As String, line_no As Integer, PAY_IND As String)
 
         Dim working_date As Date
@@ -1357,13 +1389,26 @@ Public Class inv_value
             Dim Query11 As New String("")
             If (TextBox57.Text = "N/A") Then
 
-                Query11 = "update LEDGER set AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_CR >0 and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "'"
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_CR ='" & dr_value & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
 
             Else
-                Query11 = "update LEDGER set AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_CR >0 and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "'"
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_CR ='" & dr_value & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
             End If
 
             Dim cmd11 As New SqlCommand
+            cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
+            cmd11.ExecuteReader()
+            cmd11.Dispose()
+
+            If (TextBox57.Text = "N/A") Then
+
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_DR ='" & dr_value & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
+
+            Else
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_DR ='" & dr_value & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
+            End If
+
+            'Dim cmd11 As New SqlCommand
             cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
             cmd11.ExecuteReader()
             cmd11.Dispose()
@@ -2392,11 +2437,11 @@ Public Class inv_value
                                 End If
 
                                 ''update ledger
-                                Dim cmd12 As New SqlCommand
-                                Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                                cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                                cmd12.ExecuteReader()
-                                cmd12.Dispose()
+                                'Dim cmd12 As New SqlCommand
+                                'Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                                'cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                'cmd12.ExecuteReader()
+                                'cmd12.Dispose()
 
 
                             End If
@@ -3375,11 +3420,11 @@ Public Class inv_value
 
 
                                     ''update ledger
-                                    Dim cmd12 As New SqlCommand
-                                    Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label12.Text & "' and GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
-                                    cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                                    cmd12.ExecuteReader()
-                                    cmd12.Dispose()
+                                    'Dim cmd12 As New SqlCommand
+                                    'Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label12.Text & "' and GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
+                                    'cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                    'cmd12.ExecuteReader()
+                                    'cmd12.Dispose()
 
 
 
@@ -3652,5 +3697,7 @@ Public Class inv_value
 
     End Sub
 
+    Protected Sub TextBox147_TextChanged(sender As Object, e As EventArgs) Handles TextBox147.TextChanged
 
+    End Sub
 End Class

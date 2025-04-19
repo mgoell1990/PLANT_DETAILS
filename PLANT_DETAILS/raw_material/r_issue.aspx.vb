@@ -159,6 +159,8 @@ Public Class r_issue
                             conn.Close()
                         End If
 
+                        TextBox169.Text = max_line + 1
+
                         Dim month As Integer
                         month = working_date.Date.Month
                         Dim qtr As String = ""
@@ -175,7 +177,7 @@ Public Class r_issue
                         'conn.Open()
                         Dim Query As String = "UPDATE MAT_DETAILS SET ENTRY_DATE=@ENTRY_DATE, AVG_PRICE=@AVG_PRICE, LINE_NO=@LINE_NO,LINE_DATE=@LINE_DATE,ISSUE_QTY=@ISSUE_QTY,MAT_BALANCE=@MAT_BALANCE,UNIT_PRICE=@UNIT_PRICE,TOTAL_PRICE=@TOTAL_PRICE,ISSUE_BY=@ISSUE_BY ,REMARKS=@REMARKS,QTR=@QTR , MAT_QTY=@MAT_QTY WHERE ISSUE_NO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
                         Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
-                        cmd.Parameters.AddWithValue("@LINE_NO", max_line)
+                        cmd.Parameters.AddWithValue("@LINE_NO", max_line + 1)
                         cmd.Parameters.AddWithValue("@REMARKS", TextBox2.Text)
                         cmd.Parameters.AddWithValue("@LINE_DATE", working_date.Date.Date)
                         cmd.Parameters.AddWithValue("@MAT_QTY", 0)

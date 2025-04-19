@@ -944,7 +944,8 @@ Public Class mat_garn
                     cmd5.Parameters.AddWithValue("@PERIOD", qtr1)
                     cmd5.Parameters.AddWithValue("@EFECTIVE_DATE", working_date.Date)
                     cmd5.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                    cmd5.Parameters.AddWithValue("@AC_NO", PURCHASE)
+                    'cmd5.Parameters.AddWithValue("@AC_NO", PURCHASE)
+                    cmd5.Parameters.AddWithValue("@AC_NO", "61601")
                     cmd5.Parameters.AddWithValue("@AMOUNT_DR", CDec(GridView2.Rows(I).Cells(27).Text))
                     cmd5.Parameters.AddWithValue("@AMOUNT_CR", 0)
                     If (CInt(GridView2.Rows(I).Cells(4).Text.Substring(0, 3)) < 50) Then
@@ -2019,7 +2020,8 @@ Public Class mat_garn
                     conn.Close()
 
                     ''SAVE LEDGER PURCHASE
-                    LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, PURCHASE, "Dr", FormatNumber(PURCHASE_VALUE, 2), "PUR", 1, "", imp_GridView3.Rows(0).Cells(24).Text)
+                    ''LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, PURCHASE, "Dr", FormatNumber(PURCHASE_VALUE, 2), "PUR", 1, "", imp_GridView3.Rows(0).Cells(24).Text)
+                    LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, "61601", "Dr", FormatNumber(PURCHASE_VALUE, 2), "PUR", 1, "", imp_GridView3.Rows(0).Cells(24).Text)
                     'sit credit
                     LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, SIT_HEAD, "Cr", FormatNumber(PARTY_VALUE, 2), "PROV. CRED. FOR RM(FOR.)", 3, "", imp_GridView3.Rows(0).Cells(24).Text)
                     'CUSTOM DUTY credit

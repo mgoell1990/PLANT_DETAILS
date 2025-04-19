@@ -74,8 +74,6 @@ Public Class issue
             Return
         ElseIf TextBox167.Text = "" Then
             Return
-        ElseIf TextBox169.Text = "" Then
-            Return
         ElseIf IsNumeric(TextBox163.Text) = False Then
             ISSUE_ERR_LABEL.Text = "Please Enter Numeric Value"
             ISSUE_ERR_LABEL.Visible = True
@@ -139,6 +137,9 @@ Public Class issue
                 Else
                     conn.Close()
                 End If
+
+                TextBox169.Text = max_line + 1
+
 
 
                 Dim month As Integer
@@ -228,13 +229,16 @@ Public Class issue
                     conn.Close()
                 End If
 
-                If (CInt(DropDownList3.Text.Substring(0, 3)) < 50) Then
-                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, issueCode, "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
-                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, consumptionCode, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
-                Else
-                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "60614", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital Issue")
-                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, wipHead, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital WIP")
-                End If
+                'If (CInt(DropDownList3.Text.Substring(0, 3)) < 50) Then
+                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, issueCode, "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
+                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, consumptionCode, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
+                'Else
+                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "60614", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital Issue")
+                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, wipHead, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital WIP")
+                'End If
+
+                save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "61602", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
+                save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "80901", "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
 
                 Dim ds5 As New DataSet
                 conn.Open()
@@ -249,6 +253,7 @@ Public Class issue
                 DropDownList11.DataBind()
                 DropDownList11.Items.Insert(0, "Select")
                 DropDownList11.SelectedValue = "Select"
+                ''DropDownList11.DataBind()
 
                 myTrans.Commit()
                 ISSUE_ERR_LABEL.Visible = True
@@ -394,24 +399,6 @@ Public Class issue
                 STR1 = (STR1 - 1) & STR1
             End If
 
-
-            'Dim dr As SqlDataReader
-            conn.Open()
-            Dim max_line As Integer
-            max_line = 0
-            Dim MC5 As New SqlCommand
-            MC5.CommandText = "select (CASE WHEN count(line_no) IS NULL THEN '0' ELSE count(line_no) END) AS line_no from MAT_DETAILS where MAT_CODE ='" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR =" & CInt(STR1) & " and LINE_NO <> 0"
-            MC5.Connection = conn
-            dr = MC5.ExecuteReader
-            If dr.HasRows Then
-                dr.Read()
-                max_line = dr.Item("line_no")
-                dr.Close()
-                conn.Close()
-            Else
-                conn.Close()
-            End If
-            TextBox169.Text = max_line + 1
 
         End If
     End Sub

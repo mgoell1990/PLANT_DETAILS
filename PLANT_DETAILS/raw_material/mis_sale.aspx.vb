@@ -25,8 +25,13 @@ Public Class mis_sale
     Dim working_date As Date = Today.Date
     Dim goAheadFlag As Boolean = True
     Dim partialSuccess As Boolean = False
+
+    Dim tokenField As HiddenField
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
+
+            CreateToken()
             MultiView1.ActiveViewIndex = 0
 
             TextBox123.Attributes.Add("readonly", "readonly")
@@ -69,6 +74,35 @@ Public Class mis_sale
         End If
 
     End Sub
+
+    Private Sub CreateToken()
+        Dim token As String = Guid.NewGuid().ToString()
+        Session("miscSaleToken") = token
+        tokenField.Value = token
+        Throw New NotImplementedException()
+    End Sub
+
+    Private Function TokenIsValid() As Boolean
+        Dim expectedToken As String = Session("miscSaleToken").ToString()
+        If (IsDBNull(expectedToken)) Then
+            Return False
+        End If
+
+        Dim actualToken As String = tokenField.Value
+        If (expectedToken = actualToken) Then
+            Return True
+        Else
+            Return False
+        End If
+        Throw New NotImplementedException()
+    End Function
+
+    Private Sub ConsumeToken()
+
+        Session.Remove("miscSaleToken")
+        Throw New NotImplementedException()
+    End Sub
+
     Protected Sub BINDGRID_RAW()
         GridView4.DataSource = DirectCast(ViewState("despatch_raw"), DataTable)
         GridView4.DataBind()
@@ -734,7 +768,7 @@ Public Class mis_sale
                     STR1 = (STR1 - 1) & STR1
                 End If
 
-                Dim prefixFY = fiscalYearSum(STR1)
+                Dim prefixFY = Left(STR1, 2)
 
                 conn.Open()
                 Dim inv_no As String = ""
@@ -754,26 +788,22 @@ Public Class mis_sale
 
                 If (Left(inv_for, 2) = "DC") Then
                     If CInt(inv_no) = 0 Then
-                        TextBox95.Text = prefixFY & "000001"
+                        TextBox95.Text = prefixFY & "00001"
                         TextBox177.Text = inv_for
                         TextBox177.ReadOnly = True
                         TextBox95.ReadOnly = True
                     Else
                         str = CInt(inv_no) + 1
                         If str.Length = 1 Then
-                            str = prefixFY & "00000" & CInt(inv_no) + 1
-                        ElseIf str.Length = 2 Then
                             str = prefixFY & "0000" & CInt(inv_no) + 1
-                        ElseIf str.Length = 3 Then
+                        ElseIf str.Length = 2 Then
                             str = prefixFY & "000" & CInt(inv_no) + 1
-                        ElseIf str.Length = 4 Then
+                        ElseIf str.Length = 3 Then
                             str = prefixFY & "00" & CInt(inv_no) + 1
-                        ElseIf str.Length = 5 Then
+                        ElseIf str.Length = 4 Then
                             str = prefixFY & "0" & CInt(inv_no) + 1
-                        ElseIf str.Length = 6 Then
+                        ElseIf str.Length = 5 Then
                             str = prefixFY & CInt(inv_no) + 1
-                        ElseIf str.Length = 7 Then
-                            str = CInt(inv_no) + 1
                         End If
                         TextBox95.Text = str
                         TextBox177.Text = inv_for
@@ -782,26 +812,22 @@ Public Class mis_sale
                     End If
                 Else
                     If CInt(inv_no) = 0 Then
-                        TextBox95.Text = "0000001"
+                        TextBox95.Text = prefixFY & "00001"
                         TextBox177.Text = inv_for
                         TextBox177.ReadOnly = True
                         TextBox95.ReadOnly = True
                     Else
                         str = CInt(inv_no) + 1
                         If str.Length = 1 Then
-                            str = "000000" & CInt(inv_no) + 1
+                            str = prefixFY & "0000" & CInt(inv_no) + 1
                         ElseIf str.Length = 2 Then
-                            str = "00000" & CInt(inv_no) + 1
+                            str = prefixFY & "000" & CInt(inv_no) + 1
                         ElseIf str.Length = 3 Then
-                            str = "0000" & CInt(inv_no) + 1
+                            str = prefixFY & "00" & CInt(inv_no) + 1
                         ElseIf str.Length = 4 Then
-                            str = "000" & CInt(inv_no) + 1
+                            str = prefixFY & "0" & CInt(inv_no) + 1
                         ElseIf str.Length = 5 Then
-                            str = "00" & CInt(inv_no) + 1
-                        ElseIf str.Length = 6 Then
-                            str = "0" & CInt(inv_no) + 1
-                        ElseIf str.Length = 7 Then
-                            str = CInt(inv_no) + 1
+                            str = prefixFY & CInt(inv_no) + 1
                         End If
                         TextBox95.Text = str
                         TextBox177.Text = inv_for

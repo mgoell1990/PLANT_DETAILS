@@ -836,7 +836,8 @@ Public Class crr
                     cmd.Parameters.AddWithValue("@PERIOD", qtr1)
                     cmd.Parameters.AddWithValue("@EFECTIVE_DATE", working_date.Date)
                     cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                    cmd.Parameters.AddWithValue("@AC_NO", PURCHASE)
+                    ''cmd.Parameters.AddWithValue("@AC_NO", PURCHASE)
+                    cmd.Parameters.AddWithValue("@AC_NO", "61601")
                     cmd.Parameters.AddWithValue("@AMOUNT_DR", Math.Round(prov_price_for_transporter, 2))
                     cmd.Parameters.AddWithValue("@AMOUNT_CR", 0)
                     cmd.Parameters.AddWithValue("@POST_INDICATION", "PUR")
@@ -1091,7 +1092,8 @@ Public Class crr
                         End If
 
                         ''INSERT LEDGER prov for CHA
-                        LEDGER_SAVE_PUR(CHA_WO, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, PURCHASE_HEAD, "Dr", CHA_PROV_VALUE, "PUR", 1, "", BE_NO_NEW)
+                        ''LEDGER_SAVE_PUR(CHA_WO, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, PURCHASE_HEAD, "Dr", CHA_PROV_VALUE, "PUR", 1, "", BE_NO_NEW)
+                        LEDGER_SAVE_PUR(CHA_WO, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, "61601", "Dr", CHA_PROV_VALUE, "PUR", 1, "", BE_NO_NEW)
                         LEDGER_SAVE_PUR(CHA_WO, CHA_SLNO, CHA_SUPL_ID, "CHA" & crr_TextBox.Text, CHA_HEAD, "Cr", CHA_PROV_VALUE, "PROV. FOR CHA", 7, "", BE_NO_NEW)
                         ''INSERT MB BOOK
                         conn.Open()

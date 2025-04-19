@@ -3362,6 +3362,24 @@ Partial Public Class add_order
     Protected WithEvents TextBox64 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
+    '''Label78 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label78 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox70 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox70 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
     '''Label289 control.
     '''</summary>
     '''<remarks>
@@ -3540,6 +3558,24 @@ Partial Public Class add_order
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents po_taxTextBox As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''Label79 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label79 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox71 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox71 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
     '''Label295 control.

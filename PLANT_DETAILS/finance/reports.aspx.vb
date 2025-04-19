@@ -9,8 +9,7 @@ Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.Web
 Imports System.IO
 Imports ClosedXML.Excel
-
-
+Imports System.Drawing
 
 Public Class report3
     Inherits System.Web.UI.Page
@@ -639,51 +638,17 @@ Public Class report3
             STR1 = (STR1 - 1) & STR1
         End If
 
-        'conn.Open()
-        'dt.Clear()
-
-        'Dim quary As String = "DECLARE @TT TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),AC_NAME VARCHAR(250),AMOUNT_DR DECIMAL(16,2),AMOUNT_CR DECIMAL(16,2))
-        '    INSERT INTO @TT
-        '    SELECT LEDGER .AC_NO,LEDGER.SUPL_ID,MAX(SUPL.SUPL_NAME) AS SUPL_NAME  ,MAX(ACDIC .ac_description) AS AC_NAME , 
-        '    SUM(LEDGER .AMOUNT_DR) AS AMOUNT_DR, SUM(LEDGER.AMOUNT_CR) AS AMOUNT_CR
-        '    FROM LEDGER JOIN ACDIC ON LEDGER .AC_NO =ACDIC .ac_code JOIN SUPL ON LEDGER.SUPL_ID =SUPL.SUPL_ID 
-        '    WHERE LEDGER .AC_NO in (select distinct ac_code  from ACDIC where ac_ledg <> 0 ) and (LEDGER .SUPL_ID <>'' or LEDGER .SUPL_ID is null) AND LEDGER .EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
-        '    AND (PAYMENT_INDICATION  <>'X') GROUP BY  LEDGER .AC_NO,LEDGER .SUPL_ID 
-        '    UNION 
-        '    SELECT LEDGER .AC_NO,LEDGER.SUPL_ID,MAX(dater.d_name) AS SUPL_NAME  ,MAX(ACDIC .ac_description) AS AC_NAME , 
-        '    SUM(LEDGER .AMOUNT_DR) AS AMOUNT_DR, SUM(LEDGER.AMOUNT_CR) AS AMOUNT_CR
-        '    FROM LEDGER JOIN ACDIC ON LEDGER .AC_NO =ACDIC .ac_code JOIN dater ON LEDGER.SUPL_ID =dater.d_code 
-        '    WHERE LEDGER .AC_NO in (select distinct ac_code  from ACDIC where ac_ledg <> 0 ) and (LEDGER .SUPL_ID <>'' or LEDGER .SUPL_ID is null) AND LEDGER .EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
-        '    AND (PAYMENT_INDICATION  <>'X') GROUP BY  LEDGER .AC_NO,LEDGER .SUPL_ID ORDER BY LEDGER .AC_NO	
-
-        '    INSERT INTO @TT
-        '    select o1.ac_no as AC_NO,o1.supl_id,(CASE WHEN o1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME,ac_description AS AC_NAME,debit AS AMOUNT_DR, credit AS AMOUNT_CR
-        '    from ob_party_ledger o1 join ACDIC a1 on o1.ac_no=a1.ac_code left join SUPL s1 on o1.supl_id=s1.SUPL_ID left join dater d1 on o1.supl_id=d1.d_code where fiscal_year= " & STR1 & "
-
-        '    DECLARE @TT1 TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),AC_NAME VARCHAR(250),AMOUNT DECIMAL(16,2),AMOUNT_TYPE VARCHAR(5))
-        '    INSERT INTO @TT1
-        '    SELECT AC_NO,SUPL_ID,SUPL_NAME,AC_NAME,(CASE WHEN( SUM(AMOUNT_DR) - SUM(AMOUNT_CR)) > 0 THEN (SUM(AMOUNT_DR) -SUM(AMOUNT_CR)) ELSE (SUM(AMOUNT_CR) -SUM(AMOUNT_DR)) END) AS AMOUNT, (CASE WHEN( SUM(AMOUNT_DR) -SUM(AMOUNT_CR)) > 0 THEN 'DR' ELSE 'CR' END) AS AMOUNT_TYPE FROM @TT WHERE AMOUNT_DR <> 0 or AMOUNT_CR <> 0 group by AC_NO,SUPL_ID,SUPL_NAME,AC_NAME ORDER BY AC_NO
-        '    SELECT * FROM @TT1 WHERE AMOUNT > 0 ORDER BY AC_NO"
-
-
-        'da = New SqlDataAdapter(quary, conn)
-        'da.SelectCommand.CommandTimeout = 100
-        'da.Fill(dt)
-        'conn.Close()
-        'GridView3.DataSource = dt
-        'GridView3.DataBind()
 
         '''''''''''''''''''''''''''''
 
         Dim spName As String = "GetScheduleReport"
-        'Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
-        Dim conn As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
-        Using conn
-            Using cmd As New SqlCommand(spName, conn)
+        Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
+        Using con As New SqlConnection(constr)
+            Using cmd As New SqlCommand(spName, con)
                 cmd.CommandType = CommandType.StoredProcedure
-                cmd.Parameters.AddWithValue("@from_date", from_date)
-                cmd.Parameters.AddWithValue("@to_date", to_date)
-                cmd.Parameters.AddWithValue("@fiscal_year", STR1)
+                cmd.Parameters.AddWithValue("@fromDate", from_date)
+                cmd.Parameters.AddWithValue("@toDate", to_date)
+                cmd.Parameters.AddWithValue("@fiscalYear", STR1)
                 Using sda As New SqlDataAdapter(cmd)
                     Using dt As New DataTable()
                         sda.Fill(dt)
@@ -743,51 +708,73 @@ Public Class report3
 
 
         ''''''''''''''''''''''''''''''''''
-        conn.Open()
-        dt.Clear()
-        'Dim quary As String = "SELECT L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, V1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description, L1.AMOUNT_DR, L1.AMOUNT_CR" &
-        '    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
-        '    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.EFECTIVE_DATE"
-        'Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, (CASE WHEN L1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME, L1.AC_NO, A1.ac_description" &
+        'conn.Open()
+        'dt.Clear()
+        ''Dim quary As String = "SELECT L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, V1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description, L1.AMOUNT_DR, L1.AMOUNT_CR" &
+        ''    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
+        ''    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.EFECTIVE_DATE"
+        ''Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, (CASE WHEN L1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME, L1.AC_NO, A1.ac_description" &
+        ''    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code left join supl s1 on s1.SUPL_ID=L1.SUPL_ID left join dater d1 on d1.d_code=L1.SUPL_ID WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
+        ''    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.VOUCHER_NO"
+        'Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description" &
         '    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code left join supl s1 on s1.SUPL_ID=L1.SUPL_ID left join dater d1 on d1.d_code=L1.SUPL_ID WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
         '    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.VOUCHER_NO"
-        Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description" &
-            " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code left join supl s1 on s1.SUPL_ID=L1.SUPL_ID left join dater d1 on d1.d_code=L1.SUPL_ID WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
-            " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.VOUCHER_NO"
 
-        da = New SqlDataAdapter(quary, conn)
-        da.Fill(dt)
-        conn.Close()
-        ''''''''''''''''''''''''''''''''''
-        GridView2.DataSource = dt
-        GridView2.DataBind()
-
-        calculateBankBookAmount(GridView2.Rows.Count)
+        'da = New SqlDataAdapter(quary, conn)
+        'da.Fill(dt)
+        'conn.Close()
+        '''''''''''''''''''''''''''''''''''
+        'GridView2.DataSource = dt
+        'GridView2.DataBind()
 
 
-        'METHOD TO CALCULATE DEBIT AND CREDIT AMOUNT OF DIFFERENT HEADS
-        Dim total_dr, total_cr As New Decimal(0)
-        Dim I As Integer = 0
-        For I = 0 To GridView2.Rows.Count - 1
-            ''Calculating total Debit and Credit amount
-            total_dr = total_dr + CDec(GridView2.Rows(I).Cells(8).Text)
-            total_cr = total_cr + CDec(GridView2.Rows(I).Cells(9).Text)
-        Next
-        Dim dRow As DataRow
-        dRow = dt.NewRow
-        dRow.Item(7) = "Total"
-        dt.Rows.Add(dRow)
+        Dim spName As String = "GetBankBookReport"
+        Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
+        Using con As New SqlConnection(constr)
+            Using cmd As New SqlCommand(spName, con)
+                cmd.CommandType = CommandType.StoredProcedure
+                cmd.Parameters.AddWithValue("@from_date", from_date)
+                cmd.Parameters.AddWithValue("@to_date", to_date)
 
-        dt.AcceptChanges()
-        GridView2.DataSource = dt
-        GridView2.DataBind()
+                Using sda As New SqlDataAdapter(cmd)
+                    Using dt As New DataTable()
+                        sda.Fill(dt)
+                        GridView2.DataSource = dt
+                        GridView2.DataBind()
 
-        GridView2.Rows(GridView2.Rows.Count - 1).Cells(8).Text = total_dr
-        GridView2.Rows(GridView2.Rows.Count - 1).Cells(9).Text = total_cr
-        GridView2.Rows(GridView2.Rows.Count - 1).Font.Bold = True
+                        calculateBankBookAmount(GridView2.Rows.Count)
 
 
-        calculateBankBookAmount(GridView2.Rows.Count - 1)
+                        'METHOD TO CALCULATE DEBIT AND CREDIT AMOUNT OF DIFFERENT HEADS
+                        Dim total_dr, total_cr As New Decimal(0)
+                        Dim I As Integer = 0
+                        For I = 0 To GridView2.Rows.Count - 1
+                            ''Calculating total Debit and Credit amount
+                            total_dr = total_dr + CDec(GridView2.Rows(I).Cells(8).Text)
+                            total_cr = total_cr + CDec(GridView2.Rows(I).Cells(9).Text)
+                        Next
+                        Dim dRow As DataRow
+                        dRow = dt.NewRow
+                        dRow.Item(7) = "Total"
+                        dt.Rows.Add(dRow)
+
+                        dt.AcceptChanges()
+                        GridView2.DataSource = dt
+                        GridView2.DataBind()
+
+                        GridView2.Rows(GridView2.Rows.Count - 1).Cells(8).Text = total_dr
+                        GridView2.Rows(GridView2.Rows.Count - 1).Cells(9).Text = total_cr
+                        GridView2.Rows(GridView2.Rows.Count - 1).Font.Bold = True
+
+
+                        calculateBankBookAmount(GridView2.Rows.Count - 1)
+                    End Using
+                End Using
+            End Using
+        End Using
+
+
+
 
     End Sub
 
@@ -2122,27 +2109,48 @@ Public Class report3
         from_date = CDate("2016-03-01")
         to_date = CDate(TextBox25.Text)
 
-        conn.Open()
-        dt.Clear()
+        'conn.Open()
+        'dt.Clear()
 
 
-        Dim quary As String = "DECLARE @TT TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),ac_description VARCHAR(250),invoice_no VARCHAR(250),FISCAL_YEAR VARCHAR(250),AMOUNT_DR DECIMAL(16,2),AMOUNT_CR DECIMAL(16,2))
-            INSERT INTO @TT
-            select AC_NO,LEDGER.SUPL_ID,SUPL_NAME,ac_description,INVOICE_NO,FISCAL_YEAR,AMOUNT_DR,AMOUNT_CR from ledger join SUPL on LEDGER.SUPL_ID=SUPL.SUPL_ID join ACDIC on LEDGER.AC_NO=ACDIC.ac_code where AC_NO='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim & "' and EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION  <>'X') order by SUPL_ID,EFECTIVE_DATE
+        'Dim quary As String = "DECLARE @TT TABLE(AC_NO VARCHAR(30),SUPL_ID VARCHAR(30),SUPL_NAME VARCHAR(100),ac_description VARCHAR(250),invoice_no VARCHAR(250),FISCAL_YEAR VARCHAR(250),AMOUNT_DR DECIMAL(16,2),AMOUNT_CR DECIMAL(16,2))
+        '    INSERT INTO @TT
+        '    select AC_NO,LEDGER.SUPL_ID,SUPL_NAME,ac_description,INVOICE_NO,FISCAL_YEAR,AMOUNT_DR,AMOUNT_CR from ledger join SUPL on LEDGER.SUPL_ID=SUPL.SUPL_ID join ACDIC on LEDGER.AC_NO=ACDIC.ac_code where AC_NO='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim & "' and EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION  <>'X') order by SUPL_ID,EFECTIVE_DATE
 
 
-            DECLARE @TT1 TABLE(SUPL_ID VARCHAR(250),invoice_no VARCHAR(250),FISCAL_YEAR VARCHAR(250),efective_date VARCHAR(250))
-            INSERT INTO @TT1
-            select distinct SUPL_ID,INVOICE_NO,FISCAL_YEAR,EFECTIVE_DATE from ledger where AC_NO='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim & "' and EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION  <>'X') order by INVOICE_NO,EFECTIVE_DATE
+        '    DECLARE @TT1 TABLE(SUPL_ID VARCHAR(250),invoice_no VARCHAR(250),FISCAL_YEAR VARCHAR(250),efective_date VARCHAR(250))
+        '    INSERT INTO @TT1
+        '    select distinct SUPL_ID,INVOICE_NO,FISCAL_YEAR,EFECTIVE_DATE from ledger where AC_NO='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim & "' and EFECTIVE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (PAYMENT_INDICATION  <>'X') order by INVOICE_NO,EFECTIVE_DATE
 
 
-            SELECT AC_NO,ac_description,T1.SUPL_ID,SUPL_NAME,t1.invoice_no,max(t2.efective_date) As efective_date,(SELECT dbo.fnc_FiscalYear(max(t2.efective_date))) As FISCAL_YEAR,sum(AMOUNT_DR) As AMOUNT_DR,sum(AMOUNT_CR) As AMOUNT_CR FROM @TT t1 join @tt1 t2 on t1.invoice_no=t2.invoice_no AND T1.FISCAL_YEAR=T2.FISCAL_YEAR AND T1.SUPL_ID=T2.SUPL_ID WHERE AMOUNT_DR <> 0 or AMOUNT_CR <> 0 group by AC_NO,T1.SUPL_ID,SUPL_NAME,ac_description,t1.invoice_no having sum(AMOUNT_CR)-sum(AMOUNT_DR) <> 0 ORDER BY AC_NO,SUPL_ID"
+        '    SELECT AC_NO,ac_description,T1.SUPL_ID,SUPL_NAME,t1.invoice_no,max(t2.efective_date) As efective_date,(SELECT dbo.fnc_FiscalYear(max(t2.efective_date))) As FISCAL_YEAR,sum(AMOUNT_DR) As AMOUNT_DR,sum(AMOUNT_CR) As AMOUNT_CR FROM @TT t1 join @tt1 t2 on t1.invoice_no=t2.invoice_no AND T1.FISCAL_YEAR=T2.FISCAL_YEAR AND T1.SUPL_ID=T2.SUPL_ID WHERE AMOUNT_DR <> 0 or AMOUNT_CR <> 0 group by AC_NO,T1.SUPL_ID,SUPL_NAME,ac_description,t1.invoice_no having sum(AMOUNT_CR)-sum(AMOUNT_DR) <> 0 ORDER BY AC_NO,SUPL_ID"
 
-        da = New SqlDataAdapter(quary, conn)
-        da.Fill(dt)
-        conn.Close()
-        GridView11.DataSource = dt
-        GridView11.DataBind()
+        'da = New SqlDataAdapter(quary, conn)
+        'da.Fill(dt)
+        'conn.Close()
+        'GridView11.DataSource = dt
+        'GridView11.DataBind()
+
+
+
+        Dim spName As String = "GetAgingReport"
+        Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
+        Using con As New SqlConnection(constr)
+            Using cmd As New SqlCommand(spName, con)
+                cmd.CommandType = CommandType.StoredProcedure
+                cmd.Parameters.AddWithValue("@AC_NO", DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim)
+                cmd.Parameters.AddWithValue("@EFFECTIVE_DATE", to_date)
+
+                Using sda As New SqlDataAdapter(cmd)
+                    Using dt As New DataTable()
+                        sda.Fill(dt)
+                        GridView11.DataSource = dt
+                        GridView11.DataBind()
+                    End Using
+                End Using
+            End Using
+        End Using
+
 
     End Sub
 
@@ -2376,7 +2384,7 @@ Public Class report3
             Button53.Visible = True
             conn.Open()
             dt.Clear()
-            da = New SqlDataAdapter("select * from AssetMaster", conn)
+            da = New SqlDataAdapter("select * from AssetMaster where status='IN USE'", conn)
             da.Fill(dt)
             conn.Close()
             GridView15.DataSource = dt
@@ -2474,17 +2482,48 @@ Public Class report3
     Protected Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
         If GridView15.Rows.Count > 0 Then
             Try
-                ''GridView15.Columns(0).Visible = False
-                Response.ClearContent()
-                Response.Buffer = True
-                Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", "AssetRegister.xlsx"))
-                Response.ContentEncoding = Encoding.UTF8
-                Response.ContentType = "application/ms-excel"
-                Dim sw As New StringWriter()
-                Dim htw As New HtmlTextWriter(sw)
-                GridView15.RenderControl(htw)
-                Response.Write(sw.ToString())
-                Response.[End]()
+                '''GridView15.Columns(0).Visible = False
+                'Response.ClearContent()
+                'Response.Buffer = True
+                'Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", "AssetRegister.xlsx"))
+                'Response.ContentEncoding = Encoding.UTF8
+                'Response.ContentType = "application/ms-excel"
+                'Dim sw As New StringWriter()
+                'Dim htw As New HtmlTextWriter(sw)
+                'GridView15.RenderControl(htw)
+                'Response.Write(sw.ToString())
+                'Response.[End]()
+
+
+                Dim dt As DataTable = New DataTable()
+                For j As Integer = 0 To GridView15.Columns.Count - 1
+                    dt.Columns.Add(GridView15.Columns(j).HeaderText)
+                Next
+                For i As Integer = 0 To GridView15.Rows.Count - 1
+                    Dim dr As DataRow = dt.NewRow()
+                    For j As Integer = 0 To GridView15.Columns.Count - 1
+                        If (GridView15.Rows(i).Cells(j).Text <> "") Then
+                            dr(GridView15.Columns(j).HeaderText) = GridView15.Rows(i).Cells(j).Text
+                        End If
+
+                    Next
+                    dt.Rows.Add(dr)
+                Next
+
+                Using wb As XLWorkbook = New XLWorkbook()
+                    wb.Worksheets.Add(dt, "Asset Report")
+                    Response.Clear()
+                    Response.Buffer = True
+                    Response.Charset = ""
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    Response.AddHeader("content-disposition", "attachment;filename=AssetRegister.xlsx")
+                    Using MyMemoryStream As MemoryStream = New MemoryStream()
+                        wb.SaveAs(MyMemoryStream)
+                        MyMemoryStream.WriteTo(Response.OutputStream)
+                        Response.Flush()
+                        Response.End()
+                    End Using
+                End Using
 
             Catch ex As Exception
             Finally
@@ -2496,23 +2535,83 @@ Public Class report3
     Protected Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
         If GridView14.Rows.Count > 0 Then
             Try
-                ''GridView14.Columns(0).Visible = False
-                Response.ClearContent()
-                Response.Buffer = True
-                Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", "AssetDepreciation_" + DropDownList6.Text + ".xlsx"))
-                Response.ContentEncoding = Encoding.UTF8
-                Response.ContentType = "application/ms-excel"
-                Dim sw As New StringWriter()
-                Dim htw As New HtmlTextWriter(sw)
-                GridView14.RenderControl(htw)
-                Response.Write(sw.ToString())
-                Response.[End]()
+                
+                Dim dt As DataTable = New DataTable()
+                For j As Integer = 0 To GridView14.Columns.Count - 1
+                    dt.Columns.Add(GridView14.Columns(j).HeaderText)
+                Next
+                For i As Integer = 0 To GridView14.Rows.Count - 1
+                    Dim dr As DataRow = dt.NewRow()
+                    For j As Integer = 0 To GridView14.Columns.Count - 1
+                        If (GridView14.Rows(i).Cells(j).Text <> "") Then
+                            dr(GridView14.Columns(j).HeaderText) = GridView14.Rows(i).Cells(j).Text
+                        End If
+
+                    Next
+                    dt.Rows.Add(dr)
+                Next
+
+                Using wb As XLWorkbook = New XLWorkbook()
+                    wb.Worksheets.Add(dt, "Depreciation Report")
+                    Response.Clear()
+                    Response.Buffer = True
+                    Response.Charset = ""
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    Response.AddHeader("content-disposition", "attachment;filename=AssetDepreciation_" + DropDownList6.Text + ".xlsx")
+                    Using MyMemoryStream As MemoryStream = New MemoryStream()
+                        wb.SaveAs(MyMemoryStream)
+                        MyMemoryStream.WriteTo(Response.OutputStream)
+                        Response.Flush()
+                        Response.End()
+                    End Using
+                End Using
 
             Catch ex As Exception
             Finally
 
             End Try
         End If
+    End Sub
+
+    Protected Sub Button38_Click(sender As Object, e As EventArgs) Handles Button38.Click
+        Try
+
+            Dim dt As DataTable = New DataTable()
+            For j As Integer = 0 To GridView11.Columns.Count - 1
+                dt.Columns.Add(GridView11.Columns(j).HeaderText)
+            Next
+            For i As Integer = 0 To GridView11.Rows.Count - 1
+                Dim dr As DataRow = dt.NewRow()
+                For j As Integer = 0 To GridView11.Columns.Count - 1
+                    If (GridView11.Rows(i).Cells(j).Text <> "") Then
+                        dr(GridView11.Columns(j).HeaderText) = GridView11.Rows(i).Cells(j).Text
+                    End If
+
+                Next
+                dt.Rows.Add(dr)
+            Next
+
+            Using wb As XLWorkbook = New XLWorkbook()
+                wb.Worksheets.Add(dt, DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim)
+                Response.Clear()
+                Response.Buffer = True
+                Response.Charset = ""
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                Response.AddHeader("content-disposition", "attachment;filename=AgingReport_" + DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1).Trim + "_AsOn_" + TextBox25.Text + ".xlsx")
+                Using MyMemoryStream As MemoryStream = New MemoryStream()
+                    wb.SaveAs(MyMemoryStream)
+                    MyMemoryStream.WriteTo(Response.OutputStream)
+                    Response.Flush()
+                    Response.End()
+                End Using
+            End Using
+
+
+        Catch ex As Exception
+            Console.WriteLine(ex.ToString())
+        Finally
+
+        End Try
     End Sub
 
     Protected Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click

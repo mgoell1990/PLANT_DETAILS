@@ -1855,6 +1855,7 @@ Partial Public Class GST_TAX_INV
             MyBase.Columns.Add(Me.columnEWB_DATE)
             Me.columnEWB_VALIDITY = New Global.System.Data.DataColumn("EWB_VALIDITY", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnEWB_VALIDITY)
+            Me.columnAMD_DATE.DateTimeMode = Global.System.Data.DataSetDateTime.Local
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

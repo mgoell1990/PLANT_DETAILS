@@ -1127,7 +1127,7 @@ Public Class add_order
                         End If
 
                         'conn.Open()
-                        Dim query As String = "Insert Into PO_ORD_MAT(PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                        Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                         Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                         cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -1156,6 +1156,7 @@ Public Class add_order
                         cmd.Parameters.AddWithValue("@TDS_SGST", TDS_SGST)
                         cmd.Parameters.AddWithValue("@TDS_CGST", TDS_CGST)
                         cmd.Parameters.AddWithValue("@TDS_IGST", TDS_IGST)
+                        cmd.Parameters.AddWithValue("@HSN_CODE", TextBox57.Text)
 
                         cmd.ExecuteReader()
                         cmd.Dispose()
@@ -3220,7 +3221,7 @@ Public Class add_order
                     End If
                     'conn.Open()
                     Dim QUARY1 As String = ""
-                    QUARY1 = "Insert Into SO_MAT_ORDER(HSN_CODE,SO_NO ,ITEM_VOCAB ,ITEM_SLNO ,ITEM_CODE ,ORD_AU ,ITEM_QTY ,ITEM_MT ,ITEM_UNIT_RATE ,ITEM_PACK ,PACK_TYPE ,ITEM_DISCOUNT ,DISC_TYPE ,ITEM_CGST ,ITEM_SGST ,ITEM_IGST ,ITEM_TERMINAL_TAX ,ITEM_TCS ,ITEM_FREIGHT_PU ,ITEM_FREIGHT_TYPE ,ITEM_DELIVERY,ITEM_QTY_SEND,ITEM_S_TAX,ITEM_STATUS,AMD_NO,AMD_DATE,ITEM_DETAILS,ITEM_WEIGHT,SALE_TYPE,ITEM_CESS)values(@HSN_CODE,@SO_NO ,@ITEM_VOCAB ,@ITEM_SLNO ,@ITEM_CODE ,@ORD_AU ,@ITEM_QTY ,@ITEM_MT ,@ITEM_UNIT_RATE ,@ITEM_PACK ,@PACK_TYPE ,@ITEM_DISCOUNT ,@DISC_TYPE ,@ITEM_CGST ,@ITEM_SGST ,@ITEM_IGST ,@ITEM_TERMINAL_TAX ,@ITEM_TCS ,@ITEM_FREIGHT_PU ,@ITEM_FREIGHT_TYPE ,@ITEM_DELIVERY,@ITEM_QTY_SEND,@ITEM_S_TAX,@ITEM_STATUS,@AMD_NO,@AMD_DATE,@ITEM_DETAILS,@ITEM_WEIGHT,@SALE_TYPE,@ITEM_CESS)"
+                    QUARY1 = "Insert Into SO_MAT_ORDER(PURPOSE,CUSTOMER_SLNO,HSN_CODE,SO_NO ,ITEM_VOCAB ,ITEM_SLNO ,ITEM_CODE ,ORD_AU ,ITEM_QTY ,ITEM_MT ,ITEM_UNIT_RATE ,ITEM_PACK ,PACK_TYPE ,ITEM_DISCOUNT ,DISC_TYPE ,ITEM_CGST ,ITEM_SGST ,ITEM_IGST ,ITEM_TERMINAL_TAX ,ITEM_TCS ,ITEM_FREIGHT_PU ,ITEM_FREIGHT_TYPE ,ITEM_DELIVERY,ITEM_QTY_SEND,ITEM_S_TAX,ITEM_STATUS,AMD_NO,AMD_DATE,ITEM_DETAILS,ITEM_WEIGHT,SALE_TYPE,ITEM_CESS)values(@PURPOSE,@CUSTOMER_SLNO,@HSN_CODE,@SO_NO ,@ITEM_VOCAB ,@ITEM_SLNO ,@ITEM_CODE ,@ORD_AU ,@ITEM_QTY ,@ITEM_MT ,@ITEM_UNIT_RATE ,@ITEM_PACK ,@PACK_TYPE ,@ITEM_DISCOUNT ,@DISC_TYPE ,@ITEM_CGST ,@ITEM_SGST ,@ITEM_IGST ,@ITEM_TERMINAL_TAX ,@ITEM_TCS ,@ITEM_FREIGHT_PU ,@ITEM_FREIGHT_TYPE ,@ITEM_DELIVERY,@ITEM_QTY_SEND,@ITEM_S_TAX,@ITEM_STATUS,@AMD_NO,@AMD_DATE,@ITEM_DETAILS,@ITEM_WEIGHT,@SALE_TYPE,@ITEM_CESS)"
                     Dim cmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@SO_NO", TextBox86.Text)
                     cmd1.Parameters.AddWithValue("@ITEM_VOCAB", TextBox59.Text)
@@ -3252,6 +3253,8 @@ Public Class add_order
                     cmd1.Parameters.AddWithValue("@SALE_TYPE", SALE_TYPE)
                     cmd1.Parameters.AddWithValue("@ITEM_CESS", CDec(TextBox9.Text))
                     cmd1.Parameters.AddWithValue("@HSN_CODE", TextBox68.Text)
+                    cmd1.Parameters.AddWithValue("@CUSTOMER_SLNO", TextBox70.Text)
+                    cmd1.Parameters.AddWithValue("@PURPOSE", TextBox71.Text)
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
 

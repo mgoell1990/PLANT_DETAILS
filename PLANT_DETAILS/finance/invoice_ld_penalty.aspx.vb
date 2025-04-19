@@ -230,6 +230,8 @@ Public Class invoice_ld_penalty
                     STR1 = (STR1 - 1) & STR1
                 End If
 
+
+
                 If DropDownList2.SelectedValue = "Tax Invoice" Then
 
                     'generateRCM("true", "rc", DESPATCH_TYPE, inv_type, inv_type1, inv_rule, inv_for, SUPL_INV, STR1, COMM, DIVISION)
@@ -715,27 +717,26 @@ Public Class invoice_ld_penalty
             dr.Close()
         End If
         conn.Close()
+
+        Dim prefixFY = Left(STR1, 2)
+
         If CInt(inv_no_ld_pen) = 0 Then
-            TextBox191.Text = "0000001"
+            TextBox191.Text = prefixFY & "00001"
             TextBox190.Text = inv_for_new & CStr(DESPATCH_TYPE)
             TextBox190.ReadOnly = True
             TextBox191.ReadOnly = True
         Else
             str = CInt(inv_no_ld_pen) + 1
             If str.Length = 1 Then
-                str = "000000" & CInt(inv_no_ld_pen) + 1
+                str = prefixFY & "0000" & CInt(inv_no_ld_pen) + 1
             ElseIf str.Length = 2 Then
-                str = "00000" & CInt(inv_no_ld_pen) + 1
+                str = prefixFY & "000" & CInt(inv_no_ld_pen) + 1
             ElseIf str.Length = 3 Then
-                str = "0000" & CInt(inv_no_ld_pen) + 1
+                str = prefixFY & "00" & CInt(inv_no_ld_pen) + 1
             ElseIf str.Length = 4 Then
-                str = "000" & CInt(inv_no_ld_pen) + 1
+                str = prefixFY & "0" & CInt(inv_no_ld_pen) + 1
             ElseIf str.Length = 5 Then
-                str = "00" & CInt(inv_no_ld_pen) + 1
-            ElseIf str.Length = 6 Then
-                str = "0" & CInt(inv_no_ld_pen) + 1
-            ElseIf str.Length = 7 Then
-                str = CInt(inv_no_ld_pen) + 1
+                str = prefixFY & CInt(inv_no_ld_pen) + 1
             End If
             TextBox191.Text = str
             TextBox190.Text = inv_for_new & CStr(DESPATCH_TYPE)

@@ -2306,13 +2306,20 @@
 
                                 <div class="row align-items-center mt-1">
                                     <div class="col-2 text-start">
-                                        <asp:Label ID="Label300" runat="server" ForeColor="Blue" Text="S.O. Line No" Font-Bold="True"></asp:Label>
+                                        <asp:Label ID="Label300" runat="server" ForeColor="Blue" Text="System Line No" Font-Bold="True"></asp:Label>
                                     </div>
                                     <div class="col-2 text-start">
                                         <asp:TextBox class="form-control" ID="TextBox64" runat="server"></asp:TextBox>
                                     </div>
 
                                     <div class="col-2 text-start">
+                                        <asp:Label ID="Label78" runat="server" ForeColor="Blue" Text="S.O. Line No" Font-Bold="True"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox70" runat="server"></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-1 text-start">
                                         <asp:Label ID="Label289" runat="server" ForeColor="Blue" Text="Ord. Unit" Font-Bold="True"></asp:Label>
                                     </div>
                                     <div class="col-2 text-start">
@@ -2403,8 +2410,10 @@
                                     </div>
 
                                     <div class="col-2 text-start">
+                                        <asp:Label ID="Label79" runat="server" Font-Bold="True" ForeColor="Blue" Text="Set Name"></asp:Label>
                                     </div>
-                                    <div class="col-2 text-start">
+                                    <div class="col-5 text-start">
+                                        <asp:TextBox class="form-control" ID="TextBox71" runat="server"></asp:TextBox>
                                     </div>
                                     <div class="col text-start">
                                     </div>

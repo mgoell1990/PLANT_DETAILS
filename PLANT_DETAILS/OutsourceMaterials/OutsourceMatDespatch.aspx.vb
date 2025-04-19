@@ -1022,7 +1022,7 @@ Public Class OutsourceMatDespatch
                     STR1 = (STR1 - 1) & STR1
                 End If
 
-                Dim prefixFY = fiscalYearSum(STR1)
+                Dim prefixFY = Left(STR1, 2)
 
                 conn.Open()
                 Dim inv_no As String = ""
@@ -1041,26 +1041,22 @@ Public Class OutsourceMatDespatch
 
                 If (Left(inv_for, 2) = "DC") Then
                     If CInt(inv_no) = 0 Then
-                        TextBox65.Text = prefixFY & "000001"
+                        TextBox65.Text = prefixFY & "00001"
                         TextBox177.Text = inv_for
                         TextBox177.ReadOnly = True
                         TextBox65.ReadOnly = True
                     Else
                         str = CInt(inv_no) + 1
                         If str.Length = 1 Then
-                            str = prefixFY & "00000" & CInt(inv_no) + 1
-                        ElseIf str.Length = 2 Then
                             str = prefixFY & "0000" & CInt(inv_no) + 1
-                        ElseIf str.Length = 3 Then
+                        ElseIf str.Length = 2 Then
                             str = prefixFY & "000" & CInt(inv_no) + 1
-                        ElseIf str.Length = 4 Then
+                        ElseIf str.Length = 3 Then
                             str = prefixFY & "00" & CInt(inv_no) + 1
-                        ElseIf str.Length = 5 Then
+                        ElseIf str.Length = 4 Then
                             str = prefixFY & "0" & CInt(inv_no) + 1
-                        ElseIf str.Length = 6 Then
+                        ElseIf str.Length = 5 Then
                             str = prefixFY & CInt(inv_no) + 1
-                        ElseIf str.Length = 7 Then
-                            str = CInt(inv_no) + 1
                         End If
                         TextBox65.Text = str
                         TextBox177.Text = inv_for
@@ -1069,26 +1065,22 @@ Public Class OutsourceMatDespatch
                     End If
                 Else
                     If CInt(inv_no) = 0 Then
-                        TextBox65.Text = "0000001"
+                        TextBox65.Text = prefixFY & "00001"
                         TextBox177.Text = inv_for
                         TextBox177.ReadOnly = True
                         TextBox65.ReadOnly = True
                     Else
                         str = CInt(inv_no) + 1
                         If str.Length = 1 Then
-                            str = "000000" & CInt(inv_no) + 1
+                            str = prefixFY & "0000" & CInt(inv_no) + 1
                         ElseIf str.Length = 2 Then
-                            str = "00000" & CInt(inv_no) + 1
+                            str = prefixFY & "000" & CInt(inv_no) + 1
                         ElseIf str.Length = 3 Then
-                            str = "0000" & CInt(inv_no) + 1
+                            str = prefixFY & "00" & CInt(inv_no) + 1
                         ElseIf str.Length = 4 Then
-                            str = "000" & CInt(inv_no) + 1
+                            str = prefixFY & "0" & CInt(inv_no) + 1
                         ElseIf str.Length = 5 Then
-                            str = "00" & CInt(inv_no) + 1
-                        ElseIf str.Length = 6 Then
-                            str = "0" & CInt(inv_no) + 1
-                        ElseIf str.Length = 7 Then
-                            str = CInt(inv_no) + 1
+                            str = prefixFY & CInt(inv_no) + 1
                         End If
                         TextBox65.Text = str
                         TextBox177.Text = inv_for

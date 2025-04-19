@@ -1,4 +1,6 @@
 ﻿Imports System.Data.SqlClient
+Imports System.IO
+Imports ClosedXML.Excel
 
 Public Class DepreciationEntry
     Inherits System.Web.UI.Page
@@ -118,14 +120,90 @@ Public Class DepreciationEntry
                 GridView14.Rows(L).Cells(11).Text = GridView14.Rows(L).Cells(8).Text
 
                 depreciationForQ1 = (CDec(GridView14.Rows(L).Cells(7).Text) * CDec(GridView14.Rows(L).Cells(6).Text)) / 400
-                If (CDec(GridView14.Rows(L).Cells(7).Text) >= (CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1)) Then
-                    GridView14.Rows(L).Cells(12).Text = depreciationForQ1
+                If (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95 > (CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1)) Then
+                    GridView14.Rows(L).Cells(12).Text = Math.Round(depreciationForQ1, 2)
                 Else
-                    GridView14.Rows(L).Cells(12).Text = depreciationForQ1 - ((CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1) - CDec(GridView14.Rows(L).Cells(7).Text))
+                    GridView14.Rows(L).Cells(12).Text = Math.Round(depreciationForQ1 - CDec(((CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1) - (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95))), 2)
+                End If
+            Next
+        ElseIf (DropDownList5.SelectedItem.Text = "Q2") Then
+            For L = 0 To GridView14.Rows.Count - 1
+                GridView14.Rows(L).Cells(14).Text = GridView14.Rows(L).Cells(8).Text
+
+                depreciationForQ2 = (CDec(GridView14.Rows(L).Cells(7).Text) * CDec(GridView14.Rows(L).Cells(6).Text)) / 400
+                If (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95 > (CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1)) Then
+                    GridView14.Rows(L).Cells(15).Text = Math.Round(depreciationForQ2, 2)
+                Else
+                    GridView14.Rows(L).Cells(15).Text = Math.Round(depreciationForQ2 - CDec(((CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ2) - (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95))), 2)
+                End If
+            Next
+        ElseIf (DropDownList5.SelectedItem.Text = "Q3") Then
+            For L = 0 To GridView14.Rows.Count - 1
+                GridView14.Rows(L).Cells(17).Text = GridView14.Rows(L).Cells(8).Text
+
+                depreciationForQ3 = (CDec(GridView14.Rows(L).Cells(7).Text) * CDec(GridView14.Rows(L).Cells(6).Text)) / 400
+                If (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95 > (CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1)) Then
+                    GridView14.Rows(L).Cells(18).Text = Math.Round(depreciationForQ3, 2)
+                Else
+                    GridView14.Rows(L).Cells(18).Text = Math.Round(depreciationForQ3 - CDec(((CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ3) - (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95))), 2)
+                End If
+            Next
+        ElseIf (DropDownList5.SelectedItem.Text = "Q4") Then
+            For L = 0 To GridView14.Rows.Count - 1
+                GridView14.Rows(L).Cells(20).Text = GridView14.Rows(L).Cells(8).Text
+
+                depreciationForQ4 = (CDec(GridView14.Rows(L).Cells(7).Text) * CDec(GridView14.Rows(L).Cells(6).Text)) / 400
+                If (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95 > (CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ1)) Then
+                    GridView14.Rows(L).Cells(21).Text = Math.Round(depreciationForQ4, 2)
+                Else
+                    GridView14.Rows(L).Cells(21).Text = Math.Round(depreciationForQ4 - CDec(((CDec(GridView14.Rows(L).Cells(8).Text) + depreciationForQ4) - (CDec(GridView14.Rows(L).Cells(7).Text) * 0.95))), 2)
                 End If
             Next
         End If
 
+    End Sub
+
+    Protected Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
+        If GridView14.Rows.Count > 0 Then
+            Try
+
+                Dim dt As DataTable = New DataTable()
+                For j As Integer = 0 To GridView14.Columns.Count - 1
+                    dt.Columns.Add(GridView14.Columns(j).HeaderText)
+                Next
+                For i As Integer = 0 To GridView14.Rows.Count - 1
+                    Dim dr As DataRow = dt.NewRow()
+                    For j As Integer = 0 To GridView14.Columns.Count - 1
+                        If (GridView14.Rows(i).Cells(j).Text <> "") Then
+                            dr(GridView14.Columns(j).HeaderText) = GridView14.Rows(i).Cells(j).Text
+                        End If
+
+                    Next
+                    dt.Rows.Add(dr)
+                Next
+
+                Using wb As XLWorkbook = New XLWorkbook()
+                    wb.Worksheets.Add(dt, "Depreciation Report")
+                    Response.Clear()
+                    Response.Buffer = True
+                    Response.Charset = ""
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    Response.AddHeader("content-disposition", "attachment;filename=Depreciation_" + DropDownList1.Text + ".xlsx")
+                    Using MyMemoryStream As MemoryStream = New MemoryStream()
+                        wb.SaveAs(MyMemoryStream)
+                        MyMemoryStream.WriteTo(Response.OutputStream)
+                        Response.Flush()
+                        Response.End()
+                    End Using
+                End Using
+
+
+            Catch ex As Exception
+                Console.WriteLine(ex.ToString())
+            Finally
+
+            End Try
+        End If
     End Sub
 
     Protected Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click

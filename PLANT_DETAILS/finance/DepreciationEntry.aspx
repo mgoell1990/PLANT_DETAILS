@@ -40,11 +40,17 @@
                                 <div class="col text-center">
 
                                     <div class="row align-items-center mt-1">
-                                        <div class="col-3 text-end">
+                                        <div class="col-2 text-end ">
+                                            <asp:Label ID="Label3" runat="server" ForeColor="Blue" Text="Voucher No."></asp:Label>
+                                        </div>
+                                        <div class="col-2 text-end ">
+                                            <asp:TextBox class="form-control" ID="TextBox3" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
+                                        </div>
+                                        <div class="col-1 text-end ">
                                             <asp:Label ID="Label2" runat="server" ForeColor="Blue" Text="Fiscal Year"></asp:Label>
 
                                         </div>
-                                        <div class="col-2 text-start">
+                                        <div class="col-1 text-start g-0">
                                             <asp:DropDownList class="form-select" ID="DropDownList1" runat="server" AutoPostBack="True">
                                                 <asp:ListItem>Select</asp:ListItem>
                                                 <asp:ListItem>2425</asp:ListItem>
@@ -63,7 +69,7 @@
                                         <div class="col-3 text-start">
                                             <asp:Button ID="Button1" runat="server" CssClass="btn btn-primary" Text="Calculate" />
                                             <asp:Button ID="Button2" runat="server" CssClass="btn btn-primary" Text="Save" />
-
+                                            <asp:Button ID="Button50" runat="server" Text="Download" CssClass="btn btn-primary" />            
                                         </div>
                                     </div>
 
@@ -85,20 +91,19 @@
                                                                 <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
                                                                 <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
                                                                 <asp:BoundField DataField="FiscalYear" HeaderText="Fiscal Year" />
-                                                                <asp:BoundField DataField="Quarter1" HeaderText="Quarter" />
+                                                                <asp:BoundField DataField="Quarter1" HeaderText="Quarter1" />
                                                                 <asp:BoundField DataField="CummDeprBeforeQ1" HeaderText="Cumm. Dep. before Q1" />
                                                                 <asp:BoundField DataField="DeprValueQ1" HeaderText="Dep. for Q1" />
 
-
-                                                                <asp:BoundField DataField="Quarter2" HeaderText="Quarter" />
+                                                                <asp:BoundField DataField="Quarter2" HeaderText="Quarter2" />
                                                                 <asp:BoundField DataField="CummDeprBeforeQ2" HeaderText="Cumm. Dep. before Q2" />
                                                                 <asp:BoundField DataField="DeprValueQ2" HeaderText="Dep. for Q2" />
 
-                                                                <asp:BoundField DataField="Quarter3" HeaderText="Quarter" />
+                                                                <asp:BoundField DataField="Quarter3" HeaderText="Quarter3" />
                                                                 <asp:BoundField DataField="CummDeprBeforeQ3" HeaderText="Cumm. Dep. before Q3" />
                                                                 <asp:BoundField DataField="DeprValueQ3" HeaderText="Dep. for Q3" />
 
-                                                                <asp:BoundField DataField="Quarter4" HeaderText="Quarter" />
+                                                                <asp:BoundField DataField="Quarter4" HeaderText="Quarter4" />
                                                                 <asp:BoundField DataField="CummDeprBeforeQ4" HeaderText="Cumm. Dep. before Q4" />
                                                                 <asp:BoundField DataField="DeprValueQ4" HeaderText="Dep. for Q4" />
                                                                 <asp:BoundField DataField="Remarks" HeaderText="Remarks" />

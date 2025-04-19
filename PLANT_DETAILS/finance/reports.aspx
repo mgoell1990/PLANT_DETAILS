@@ -1,19 +1,12 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="reports.aspx.vb" Inherits="PLANT_DETAILS.report3" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
 
-    <script src="Scripts/jquery-ui.min.js" type="text/javascript"></script>
-    <%--<link href="../Content/red.css" rel="stylesheet" type="text/css" />--%>
-    <link href="../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
-    <script>
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    </script>
+
 
     <script type="text/javascript">
         $(function () {
@@ -206,6 +199,14 @@
         });
     </script>
 
+    <script src="Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
     <div class="row text-white mt-0" style="background: #296DA9">
         <div class="col text-center">
             <asp:Label ID="Label1" runat="server" Text="Finance Reports" Font-Bold="True" Font-Size="Larger"></asp:Label>
@@ -213,6 +214,7 @@
     </div>
 
     <div class="container-fluid mt-2 mb-1">
+
         <div class="row mt-2 justify-content-center text-center">
             <div class="col-6 text-center">
                 <asp:Panel ID="Panel22" runat="server">
@@ -300,7 +302,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox4" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender3" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox4" />
+                                                <asp:CalendarExtender ID="CalendarExtender3" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox4" />
                                             </div>
 
                                             <div class="col-1 text-end">
@@ -308,14 +310,14 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox5" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender4" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox5" />
+                                                <asp:CalendarExtender ID="CalendarExtender4" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox5" />
 
                                             </div>
 
                                             <div class="col text-start">
-                                                <asp:Button ID="Button4" runat="server" CssClass="btn btn-primary" Text="Go" />
-                                                <asp:Button ID="Button16" runat="server" Text="Excel" CssClass="btn btn-primary" />
-                                                <asp:Button ID="Button5" runat="server" CssClass="btn btn-success" Text="Print" />
+                                                <asp:Button ID="Button4" runat="server" CssClass="btn btn-primary" Text="Go" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                <asp:Button ID="Button16" runat="server" Text="Excel" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                <asp:Button ID="Button5" runat="server" CssClass="btn btn-success" Text="Print" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
                                             </div>
                                         </div>
 
@@ -423,7 +425,7 @@
                                                     </div>
                                                     <div class="col-2 text-start">
                                                         <asp:TextBox class="form-control" ID="TextBox19" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                        <cc1:CalendarExtender ID="CalendarExtender16" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox19" />
+                                                        <asp:CalendarExtender ID="CalendarExtender16" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox19" />
                                                     </div>
                                                 </div>
                                                 <div class="row align-items-center">
@@ -432,7 +434,7 @@
                                                     </div>
                                                     <div class="col-2 text-start">
                                                         <asp:TextBox class="form-control" ID="TextBox20" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                        <cc1:CalendarExtender ID="CalendarExtender17" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox20" />
+                                                        <asp:CalendarExtender ID="CalendarExtender17" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox20" />
                                                     </div>
                                                     <div class="col text-start">
                                                         <asp:Button ID="Button29" runat="server" CssClass="btn btn-primary" Text="Go" />
@@ -535,7 +537,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox33" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="TextBox33_CalendarExtender" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox33" />
+                                                <asp:CalendarExtender ID="TextBox33_CalendarExtender" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox33" />
                                             </div>
 
                                             <div class="col-1 text-end">
@@ -543,7 +545,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox34" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="TextBox34_CalendarExtender" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox34" />
+                                                <asp:CalendarExtender ID="TextBox34_CalendarExtender" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox34" />
 
                                             </div>
 
@@ -610,7 +612,7 @@
                                     </div>
                                     <div class="col-2 text-start">
                                         <asp:TextBox class="form-control" ID="TextBox8" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                        <cc1:CalendarExtender ID="CalendarExtender6" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox8" />
+                                        <asp:CalendarExtender ID="CalendarExtender6" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox8" />
                                     </div>
                                 </div>
                                 <div class="row align-items-center">
@@ -619,7 +621,7 @@
                                     </div>
                                     <div class="col-2 text-start">
                                         <asp:TextBox class="form-control" ID="TextBox9" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                        <cc1:CalendarExtender ID="CalendarExtender7" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox9" />
+                                        <asp:CalendarExtender ID="CalendarExtender7" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox9" />
                                     </div>
                                     <div class="col text-start">
                                         <asp:Button ID="Button9" runat="server" CssClass="btn btn-primary" Text="Go" />
@@ -673,7 +675,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox16" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender14" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox16" />
+                                                <asp:CalendarExtender ID="CalendarExtender14" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox16" />
                                             </div>
                                         </div>
 
@@ -683,7 +685,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox17" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender15" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox17" />
+                                                <asp:CalendarExtender ID="CalendarExtender15" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox17" />
                                             </div>
 
                                             <div class="col text-start">
@@ -737,7 +739,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox22" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender19" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox22" />
+                                                <asp:CalendarExtender ID="CalendarExtender19" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox22" />
                                             </div>
                                         </div>
 
@@ -747,7 +749,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox23" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender20" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox23" />
+                                                <asp:CalendarExtender ID="CalendarExtender20" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox23" />
                                             </div>
 
                                             <div class="col text-start">
@@ -797,7 +799,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox10" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender10" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox10" />
+                                                <asp:CalendarExtender ID="CalendarExtender10" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox10" />
                                             </div>
                                         </div>
 
@@ -807,7 +809,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox11" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender11" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox11" />
+                                                <asp:CalendarExtender ID="CalendarExtender11" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox11" />
                                             </div>
 
                                             <div class="col text-start">
@@ -864,7 +866,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox14" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender12" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox14" />
+                                                <asp:CalendarExtender ID="CalendarExtender12" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox14" />
                                             </div>
                                         </div>
 
@@ -874,7 +876,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox15" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender13" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox15" />
+                                                <asp:CalendarExtender ID="CalendarExtender13" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox15" />
                                             </div>
 
                                             <div class="col text-start">
@@ -978,7 +980,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox12" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender8" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox12" />
+                                                <asp:CalendarExtender ID="CalendarExtender8" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox12" />
                                             </div>
                                         </div>
 
@@ -988,7 +990,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox13" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender9" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox13" />
+                                                <asp:CalendarExtender ID="CalendarExtender9" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox13" />
                                             </div>
 
                                             <div class="col text-start">
@@ -1049,7 +1051,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox21" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender18" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox21" />
+                                                <asp:CalendarExtender ID="CalendarExtender18" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox21" />
                                             </div>
 
                                             <div class="col-1 text-end">
@@ -1057,14 +1059,14 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox6" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender5" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox6" />
+                                                <asp:CalendarExtender ID="CalendarExtender5" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox6" />
 
                                             </div>
 
                                             <div class="col text-start">
-                                                <asp:Button ID="Button6" runat="server" CssClass="btn btn-primary" Text="Go" />
-                                                <asp:Button ID="Button15" runat="server" Text="Excel" CssClass="btn btn-primary" />
-                                                <asp:Button ID="Button7" runat="server" CssClass="btn btn-success" Text="Print" />
+                                                <asp:Button ID="Button6" runat="server" CssClass="btn btn-primary" Text="Go" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                <asp:Button ID="Button15" runat="server" Text="Excel" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                <asp:Button ID="Button7" runat="server" CssClass="btn btn-success" Text="Print" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
                                             </div>
                                         </div>
 
@@ -1110,7 +1112,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox2" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender1" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox2" />
+                                                <asp:CalendarExtender ID="CalendarExtender1" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox2" />
                                             </div>
                                         </div>
 
@@ -1120,7 +1122,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox3" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender2" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox3" />
+                                                <asp:CalendarExtender ID="CalendarExtender2" runat="server" BehaviorID="TextBox34_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox3" />
                                             </div>
 
                                             <div class="col text-start">
@@ -1206,68 +1208,76 @@
                     </asp:View>
 
                     <%--=====VIEW 20 EGING START=====--%>
+
                     <asp:View ID="View20" runat="server">
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
-                                <div class="row justify-content-center">
-                                    <div class="col text-center">
-                                        <div class="row align-items-center">
+                        <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                            <ContentTemplate>
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
+                                        <div class="row justify-content-center">
                                             <div class="col text-center">
-                                                <asp:Label ID="Label33" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Aging Report" Font-Underline="True"></asp:Label>
+                                                <div class="row align-items-center">
+                                                    <div class="col text-center">
+                                                        <asp:Label ID="Label33" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Aging Report" Font-Underline="True"></asp:Label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                        <asp:Label ID="Label54" runat="server" Text="A/c No" ForeColor="Blue"></asp:Label>
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                        <asp:DropDownList class="form-select" ID="DropDownList4" runat="server"></asp:DropDownList>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                        <asp:Label ID="Label58" runat="server" ForeColor="Blue" Style="text-align: left" Text="Date"></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-start">
+                                                        <asp:TextBox class="form-control" ID="TextBox25" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
+                                                        <asp:CalendarExtender ID="CalendarExtender21" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox25" />
+                                                    </div>
+
+                                                    <div class="col text-start">
+                                                        <asp:Button ID="Button36" runat="server" CssClass="btn btn-primary" Text="Search" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                        <asp:Button ID="Button38" runat="server" Text="Download" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                        <asp:Button ID="Button39" runat="server" CssClass="btn btn-success" Text="Print" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'"></asp:Button>
+                                                    </div>
+                                                </div>
+
+
                                             </div>
                                         </div>
 
                                         <div class="row align-items-center mt-1">
-                                            <div class="col-5 text-end">
-                                                <asp:Label ID="Label54" runat="server" Text="A/c No" ForeColor="Blue"></asp:Label>
+                                            <div class="col g-0">
+                                                <asp:Panel ID="Panel1" runat="server" ScrollBars="Auto" Width="100%">
+                                                    <asp:GridView ID="GridView11" CssClass="table table-bordered border-2 table-responsive text-center" Style="font-size: 15px" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                        <Columns>
+                                                            <asp:BoundField DataField="AC_NO" HeaderText="A/c No" />
+                                                            <asp:BoundField DataField="ac_description" HeaderText="A/c Name" />
+                                                            <asp:BoundField DataField="SUPL_ID" HeaderText="SUPL ID" />
+                                                            <asp:BoundField DataField="SUPL_NAME" HeaderText="SUPL NAME" />
+                                                            <asp:BoundField DataField="AGING_FLAG" HeaderText="INVOICE No" />
+                                                            <asp:BoundField DataField="EFECTIVE_DATE" HeaderText="Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                            <asp:BoundField DataField="FISCAL_YEAR" HeaderText="FISCAL YEAR" />
+                                                            <asp:BoundField DataField="AMOUNT_DR" HeaderText="DEBIT" />
+                                                            <asp:BoundField DataField="AMOUNT_CR" HeaderText="CREDIT" />
+                                                        </Columns>
+                                                    </asp:GridView>
+                                                </asp:Panel>
                                             </div>
-                                            <div class="col-4 text-start">
-                                                <asp:DropDownList class="form-select" ID="DropDownList4" runat="server"></asp:DropDownList>
-                                            </div>
+
                                         </div>
-
-                                        <div class="row align-items-center mt-1">
-                                            <div class="col-5 text-end">
-                                                <asp:Label ID="Label58" runat="server" ForeColor="Blue" Style="text-align: left" Text="Date"></asp:Label>
-                                            </div>
-                                            <div class="col-2 text-start">
-                                                <asp:TextBox class="form-control" ID="TextBox25" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender21" runat="server" BehaviorID="TextBox33_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox8" />
-                                            </div>
-
-                                            <div class="col text-start">
-                                                <asp:Button ID="Button36" runat="server" CssClass="btn btn-primary" Text="Search" />
-                                                <asp:Button ID="Button38" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                                <asp:Button ID="Button39" runat="server" CssClass="btn btn-success" Text="Print"></asp:Button>
-                                            </div>
-                                        </div>
-
-
                                     </div>
                                 </div>
-
-                                <div class="row align-items-center mt-1">
-                                    <div class="col g-0">
-                                        <asp:Panel ID="Panel1" runat="server" ScrollBars="Auto" Width="100%">
-                                            <asp:GridView ID="GridView11" CssClass="table table-bordered border-2 table-responsive text-center" Style="font-size: 15px" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
-                                                <Columns>
-                                                    <asp:BoundField DataField="AC_NO" HeaderText="A/c No" />
-                                                    <asp:BoundField DataField="ac_description" HeaderText="A/c Name" />
-                                                    <asp:BoundField DataField="SUPL_ID" HeaderText="SUPL ID" />
-                                                    <asp:BoundField DataField="SUPL_NAME" HeaderText="SUPL NAME" />
-                                                    <asp:BoundField DataField="INVOICE_NO" HeaderText="INVOICE No" />
-                                                    <asp:BoundField DataField="EFECTIVE_DATE" HeaderText="Date" DataFormatString="{0:dd/MM/yyyy}" />
-                                                    <asp:BoundField DataField="FISCAL_YEAR" HeaderText="FISCAL YEAR" />
-                                                    <asp:BoundField DataField="AMOUNT_DR" HeaderText="DEBIT" />
-                                                    <asp:BoundField DataField="AMOUNT_CR" HeaderText="CREDIT" />
-                                                </Columns>
-                                            </asp:GridView>
-                                        </asp:Panel>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="Button38" />
+                            </Triggers>
+                        </asp:UpdatePanel>
                     </asp:View>
 
                     <%--=====VIEW 21 TRIAL REPORT(MERGED A/C CODE) START=====--%>
@@ -1288,7 +1298,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox26" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender22" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox26" />
+                                                <asp:CalendarExtender ID="CalendarExtender22" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox26" />
                                             </div>
                                         </div>
 
@@ -1298,19 +1308,21 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox27" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender23" runat="server" BehaviorID="TextBox27_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox27" />
+                                                <asp:CalendarExtender ID="CalendarExtender23" runat="server" BehaviorID="TextBox27_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox27" />
                                             </div>
 
                                             <div class="col text-start">
-                                                <asp:Button ID="Button40" runat="server" CssClass="btn btn-primary" Text="Search" />
-                                                <asp:Button ID="Button41" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                                <asp:Button ID="Button42" runat="server" CssClass="btn btn-success" Text="Print"></asp:Button>
+                                                <asp:Button ID="Button40" runat="server" CssClass="btn btn-primary" Text="Search" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                <asp:Button ID="Button41" runat="server" Text="Download" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                                <asp:Button ID="Button42" runat="server" CssClass="btn btn-success" Text="Print" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'"></asp:Button>
+
                                             </div>
                                         </div>
 
 
                                     </div>
                                 </div>
+
 
                                 <div class="row align-items-center mt-1">
                                     <div class="col g-0">
@@ -1349,7 +1361,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox28" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender24" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox28" />
+                                                <asp:CalendarExtender ID="CalendarExtender24" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox28" />
                                             </div>
                                         </div>
 
@@ -1359,7 +1371,7 @@
                                             </div>
                                             <div class="col-2 text-start">
                                                 <asp:TextBox class="form-control" ID="TextBox29" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
-                                                <cc1:CalendarExtender ID="CalendarExtender25" runat="server" BehaviorID="TextBox27_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox29" />
+                                                <asp:CalendarExtender ID="CalendarExtender25" runat="server" BehaviorID="TextBox27_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox29" />
                                             </div>
 
                                             <div class="col text-start">
@@ -1589,6 +1601,7 @@
                 </asp:MultiView>
             </div>
         </div>
+
     </div>
 
 </asp:Content>

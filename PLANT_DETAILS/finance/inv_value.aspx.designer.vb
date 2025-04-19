@@ -203,6 +203,15 @@ Partial Public Class inv_value
     Protected WithEvents View1 As Global.System.Web.UI.WebControls.View
     
     '''<summary>
+    '''UpdatePanel2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents UpdatePanel2 As Global.System.Web.UI.UpdatePanel
+    
+    '''<summary>
     '''Label399 control.
     '''</summary>
     '''<remarks>
@@ -1011,6 +1020,15 @@ Partial Public Class inv_value
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents View2 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''UpdatePanel3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents UpdatePanel3 As Global.System.Web.UI.UpdatePanel
     
     '''<summary>
     '''Label1 control.
@@ -2046,6 +2064,15 @@ Partial Public Class inv_value
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents View3 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''UpdatePanel4 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents UpdatePanel4 As Global.System.Web.UI.UpdatePanel
     
     '''<summary>
     '''Label74 control.

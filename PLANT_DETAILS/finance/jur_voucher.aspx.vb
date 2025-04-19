@@ -353,6 +353,7 @@ Public Class jur_voucher
                             cmd.Parameters.AddWithValue("@BE_NO", "")
                         End If
                         cmd.Parameters.AddWithValue("@INVOICE_NO", GridView2.Rows(i).Cells(6).Text)
+                        cmd.Parameters.AddWithValue("@AGING_FLAG", GridView2.Rows(i).Cells(6).Text)
                         cmd.ExecuteReader()
                         cmd.Dispose()
 
