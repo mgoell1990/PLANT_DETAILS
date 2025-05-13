@@ -14,13 +14,40 @@ Option Explicit On
 Partial Public Class Credit_Debit_note1
     
     '''<summary>
-    '''Label321 control.
+    '''Label94 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label321 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label94 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''Label53 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label53 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList2 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''Label1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label1 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''txtInvoiceDate control.
@@ -32,22 +59,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents txtInvoiceDate As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''Label4 control.
+    '''CalendarExtender3 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label4 As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''DropDownList2 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents DropDownList2 As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents CalendarExtender3 As Global.AjaxControlToolkit.CalendarExtender
     
     '''<summary>
     '''MultiView1 control.
@@ -68,22 +86,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents View1 As Global.System.Web.UI.WebControls.View
     
     '''<summary>
-    '''Panel4 control.
+    '''Label629 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Panel4 As Global.System.Web.UI.WebControls.Panel
-    
-    '''<summary>
-    '''Label30 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents Label30 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label629 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''TextBox6 control.
@@ -95,13 +104,22 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents TextBox6 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''Label5 control.
+    '''Label455 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label5 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label455 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''Label451 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label451 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''TextBox65 control.
@@ -113,13 +131,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents TextBox65 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''Label9 control.
+    '''Label449 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label9 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label449 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''DropDownList3 control.
@@ -131,13 +149,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents DropDownList3 As Global.System.Web.UI.WebControls.DropDownList
     
     '''<summary>
-    '''Label2 control.
+    '''Label507 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label2 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label507 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''DropDownList4 control.
@@ -149,13 +167,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents DropDownList4 As Global.System.Web.UI.WebControls.DropDownList
     
     '''<summary>
-    '''Label6 control.
+    '''Label453 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label6 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label453 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''Label7 control.
@@ -167,13 +185,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents Label7 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''Label319 control.
+    '''Label639 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label319 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label639 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''Label320 control.
@@ -185,13 +203,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents Label320 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''Label8 control.
+    '''Label510 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label8 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label510 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''TextBox2 control.
@@ -237,6 +255,15 @@ Partial Public Class Credit_Debit_note1
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents Button2 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''GridView2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents GridView2 As Global.System.Web.UI.WebControls.GridView
     
     '''<summary>
     '''Panel11 control.
@@ -302,13 +329,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents txtEinvoiceErrorMessage As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''View2 control.
+    '''View4 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents View2 As Global.System.Web.UI.WebControls.View
+    Protected WithEvents View4 As Global.System.Web.UI.WebControls.View
     
     '''<summary>
     '''Panel1 control.
@@ -347,13 +374,13 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents txtInvSearch As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''Label316 control.
+    '''Label29 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label316 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label29 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''Button38 control.

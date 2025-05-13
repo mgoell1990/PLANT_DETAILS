@@ -2228,6 +2228,42 @@ Partial Public Class report3
     Protected WithEvents GridView14 As Global.System.Web.UI.WebControls.GridView
     
     '''<summary>
+    '''View27 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View27 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Button51 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button51 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Panel13 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Panel13 As Global.System.Web.UI.WebControls.Panel
+    
+    '''<summary>
+    '''GridView17 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents GridView17 As Global.System.Web.UI.WebControls.GridView
+    
+    '''<summary>
     '''View26 control.
     '''</summary>
     '''<remarks>

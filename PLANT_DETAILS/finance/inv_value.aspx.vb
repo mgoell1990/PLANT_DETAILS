@@ -57,6 +57,15 @@ Public Class inv_value
             Page.ClientScript.RegisterStartupScript(Me.[GetType](), Guid.NewGuid().ToString(), "alert('Sorry permission denied!!');window.location.href='../Default.aspx';", True)
 
         End If
+
+        If (Request.QueryString("status") = "success") Then
+            ScriptManager.RegisterStartupScript(Page, Page.GetType, "ShowInfoPage", "ShowInfoPage(1)", True)
+            lblErrorMsg.Visible = True
+            lblErrorMsg.Text = "Data saved successfully!!!"
+        ElseIf (Request.QueryString("status") = "error") Then
+            lblErrorMsg.Visible = True
+            lblErrorMsg.Text = "There was some Error, please contact EDP."
+        End If
     End Sub
 
     Protected Sub DropDownList40_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList40.SelectedIndexChanged
@@ -1263,6 +1272,7 @@ Public Class inv_value
                 myTrans.Commit()
                 GARN_ERR_LABLE.Visible = True
                 GARN_ERR_LABLE.Text = "All records are written to database."
+                Response.Redirect(Request.Url.AbsoluteUri)
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()
@@ -2590,6 +2600,7 @@ Public Class inv_value
                 M_DropDownList6.Items.Clear()
                 M_GARN_ERR_LABLE.Visible = True
                 M_GARN_ERR_LABLE.Text = "All records are written to database."
+                Response.Redirect(Request.Url.AbsoluteUri)
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()
@@ -3154,10 +3165,11 @@ Public Class inv_value
     End Sub
 
     Protected Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-
-        Using conn_trans
-            conn_trans.Open()
-            myTrans = conn_trans.BeginTransaction()
+        Dim conn_trans_Transporter As New SqlConnection(ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
+        Dim myTrans As SqlTransaction
+        Using conn_trans_Transporter
+            conn_trans_Transporter.Open()
+            myTrans = conn_trans_Transporter.BeginTransaction()
 
             Try
                 'Database updation entry
@@ -3254,7 +3266,7 @@ Public Class inv_value
                                     'update mb book
                                     Dim cmd As New SqlCommand
                                     Dim Query_1 As String = "update mb_book set TAXABLE_VALUE=@TAXABLE_VALUE,BillTrackID=@BillTrackID,GST_STATUS=@GST_STATUS,Valuation_Date=@Valuation_Date,fiscal_year=@fiscal_year,valuation_amt=@valuation_amt,rcm_sgst=@rcm_sgst,rcm_cgst=@rcm_cgst,rcm_igst=@rcm_igst,rcm_cess=@rcm_cess,ld=@ld, rcm=@rcm, sgst=@sgst,cgst=@cgst ,igst=@igst,cess=@cess,sgst_liab=@sgst_liab,cgst_liab=@cgst_liab,igst_liab=@igst_liab,cess_liab=@cess_liab,inv_no=@inv_no,inv_date=@inv_date,prov_amt=@prov_amt,pen_amt=@pen_amt,it_amt=@it_amt,pay_ind=@pay_ind,v_ind=@v_ind,mat_rate=@mat_rate WHERE po_no ='" & Label12.Text & "' AND wo_slno =" & CDec(row.Cells(4).Text) & " AND mb_no  ='" & row.Cells(1).Text & "'  AND v_ind IS NULL"
-                                    cmd = New SqlCommand(Query_1, conn_trans, myTrans)
+                                    cmd = New SqlCommand(Query_1, conn_trans_Transporter, myTrans)
                                     cmd.Parameters.AddWithValue("@inv_no", TextBox160.Text)
                                     cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
                                     cmd.Parameters.AddWithValue("@prov_amt", CDec(row.Cells(12).Text))
@@ -3480,14 +3492,14 @@ Public Class inv_value
 
                                     Dim cmd11 As New SqlCommand
                                     Dim Query11 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & Label12.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & row.Cells(1).Text & "'"
-                                    cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
+                                    cmd11 = New SqlCommand(Query11, conn_trans_Transporter, myTrans)
                                     cmd11.ExecuteReader()
                                     cmd11.Dispose()
 
                                     ''insert party amount
 
                                     Dim query As String = "INSERT INTO PARTY_AMT (POST_TYPE,AMOUNT_BAL,SUPL_CODE,SUPL_NAME,TOKEN_NO,ORDER_NO,GARN_MB_NO,AC_CODE,AMOUNT_DR,AMOUNT_CR,POST_DATE,EMP_ID)VALUES(@POST_TYPE,@AMOUNT_BAL,@SUPL_CODE,@SUPL_NAME,@TOKEN_NO,@ORDER_NO,@GARN_MB_NO,@AC_CODE,@AMOUNT_DR,@AMOUNT_CR,@POST_DATE,@EMP_ID)"
-                                    Dim cmd_1 As New SqlCommand(query, conn_trans, myTrans)
+                                    Dim cmd_1 As New SqlCommand(query, conn_trans_Transporter, myTrans)
                                     cmd_1.Parameters.AddWithValue("@SUPL_CODE", TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1))
                                     cmd_1.Parameters.AddWithValue("@SUPL_NAME", TextBox168.Text.Substring(TextBox168.Text.IndexOf(",") + 2))
                                     cmd_1.Parameters.AddWithValue("@TOKEN_NO", DropDownList40.SelectedValue)
@@ -3507,7 +3519,7 @@ Public Class inv_value
                                         ''insert party amount
 
                                         query = "INSERT INTO PARTY_AMT (POST_TYPE,IND,AMOUNT_BAL,SUPL_CODE,SUPL_NAME,TOKEN_NO,ORDER_NO,GARN_MB_NO,AC_CODE,AMOUNT_DR,AMOUNT_CR,POST_DATE,EMP_ID)VALUES(@POST_TYPE,@IND,@AMOUNT_BAL,@SUPL_CODE,@SUPL_NAME,@TOKEN_NO,@ORDER_NO,@GARN_MB_NO,@AC_CODE,@AMOUNT_DR,@AMOUNT_CR,@POST_DATE,@EMP_ID)"
-                                        cmd_1 = New SqlCommand(query, conn_trans, myTrans)
+                                        cmd_1 = New SqlCommand(query, conn_trans_Transporter, myTrans)
                                         cmd_1.Parameters.AddWithValue("@SUPL_CODE", TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1))
                                         cmd_1.Parameters.AddWithValue("@SUPL_NAME", TextBox168.Text.Substring(TextBox168.Text.IndexOf(",") + 2))
                                         cmd_1.Parameters.AddWithValue("@TOKEN_NO", DropDownList40.SelectedValue)
@@ -3554,7 +3566,7 @@ Public Class inv_value
 
                                         ''INSERT DATA INTO TAXABLE VALUES TABLE
                                         Query_1 = "INSERT INTO Taxable_Values (GST_STATUS,GST_PAYMENT_DATE,GST_PAYMENT_VOUCHER_NO,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_STATUS,@GST_PAYMENT_DATE,@GST_PAYMENT_VOUCHER_NO,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
-                                        cmd = New SqlCommand(Query_1, conn_trans, myTrans)
+                                        cmd = New SqlCommand(Query_1, conn_trans_Transporter, myTrans)
                                         cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox160.Text)
                                         cmd.Parameters.AddWithValue("@INVOICE_DATE", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
                                         cmd.Parameters.AddWithValue("@GARN_CRR_MB_NO", row.Cells(1).Text)
@@ -3635,6 +3647,8 @@ Public Class inv_value
 
                             '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         End If
+
+
                     Else
                         Label20.Text = "Auth. Failed"
                         TextBox6.Text = ""
@@ -3645,16 +3659,35 @@ Public Class inv_value
                 myTrans.Commit()
                 Label17.Visible = True
                 Label17.Text = "All records are written to database."
+
+
+                Response.Redirect(Request.RawUrl.ToString() + "?status=success", False)
+
+                '            Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs)
+                '    If (Not (Session("status")) Is Nothing) Then
+                '        If (Session("status").ToString = "success") Then
+                '            ScriptManager.RegisterStartupScript(Page, Page.GetType, "ShowInfoPage", "ShowInfoPage(2)", True)
+                '            Session.Remove("status")
+                '        End If
+                '    End If
+                'End Sub
+
+                'Protected Sub Button1_Click(ByVal sender As Object, ByVal e As EventArgs)
+                '    Session("status") = "success"
+                '    Response.Redirect(Request.RawUrl.ToString, False)
+                'End Sub
+
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()
                 conn.Close()
-                conn_trans.Close()
+                conn_trans_Transporter.Close()
                 Label17.Visible = True
                 Label17.Text = "There was some Error, please contact EDP."
+                Response.Redirect(Request.RawUrl.ToString() + "?status=error", False)
             Finally
                 conn.Close()
-                conn_trans.Close()
+                conn_trans_Transporter.Close()
             End Try
 
         End Using

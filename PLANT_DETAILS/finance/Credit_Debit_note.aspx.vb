@@ -34,6 +34,13 @@ Public Class Credit_Debit_note1
             DropDownList3.DataBind()
             DropDownList3.Items.Insert(0, "Select")
             conn.Close()
+
+
+            Dim DT5 As New DataTable
+            DT5.Columns.AddRange(New DataColumn(9) {New DataColumn("PO_NO"), New DataColumn("GARN_NO_MB_NO"), New DataColumn("SUPL_ID"), New DataColumn("FISCAL_YEAR"), New DataColumn("PERIOD"), New DataColumn("EFECTIVE_DATE"), New DataColumn("AC_NO"), New DataColumn("AMOUNT_DR"), New DataColumn("AMOUNT_CR"), New DataColumn("POST_INDICATION")})
+            ViewState("REVERSAL_JV") = DT5
+            Me.BINDGRID5()
+
         End If
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
 
@@ -220,8 +227,6 @@ Public Class Credit_Debit_note1
                 scmd.Parameters.AddWithValue("@TOTAL_VALUE", GridView1.Rows(0).Cells(18).Text)
                 scmd.Parameters.AddWithValue("@NOTIFICATION", TextBox66.Text)
 
-
-
                 scmd.ExecuteReader()
                 scmd.Dispose()
 
@@ -290,6 +295,11 @@ Public Class Credit_Debit_note1
                     End If
                     conn.Close()
                 End If
+
+
+
+
+
 
 
                 ''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -961,9 +971,30 @@ Public Class Credit_Debit_note1
                 dr.Close()
             End If
             conn.Close()
+
+
+            If (Label7.Text = "Credit Note") Then
+                conn.Open()
+                Dim dt2 As DataTable = DirectCast(ViewState("REVERSAL_JV"), DataTable)
+                da = New SqlDataAdapter("select * from ledger where GARN_NO_MB_NO='" & DropDownList4.SelectedValue & "' and FISCAL_YEAR= '" & DropDownList3.SelectedValue & "'", conn)
+                da.Fill(dt2)
+                conn.Close()
+
+                ViewState("REVERSAL_JV") = dt2
+                BINDGRID5()
+            ElseIf (Label7.Text = "Debit Note") Then
+
+            End If
+
         Else
             DropDownList4.Items.Clear()
             DropDownList4.DataBind()
         End If
     End Sub
+
+    Protected Sub BINDGRID5()
+        GridView2.DataSource = DirectCast(ViewState("REVERSAL_JV"), DataTable)
+        GridView2.DataBind()
+    End Sub
+
 End Class

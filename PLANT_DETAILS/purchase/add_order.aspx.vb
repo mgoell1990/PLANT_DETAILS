@@ -2950,20 +2950,20 @@ Public Class add_order
         ''Panel4.Visible = False
         If DropDownList8.SelectedValue = "Set" Then
             po_matqty_text.Text = "0"
-            po_unitWEIGHTText.Text = "0"
+            ''po_unitWEIGHTText.Text = "0"
             po_matqty_text.ReadOnly = False
-            po_unitWEIGHTText.ReadOnly = False
+            ''po_unitWEIGHTText.ReadOnly = False
             GridView1.Columns(8).HeaderText = "Unit Price(Mt)"
         ElseIf (DropDownList8.SelectedValue = "Pcs" Or DropDownList8.SelectedValue = "PCS") Then
             po_matqty_text.Text = "1"
             po_matqty_text.ReadOnly = False
-            po_unitWEIGHTText.ReadOnly = False
+            ''po_unitWEIGHTText.ReadOnly = False
             GridView1.Columns(8).HeaderText = "Unit Price(Pcs)"
             po_matcodecombo.Visible = True
         ElseIf (DropDownList8.SelectedValue = "Mt" Or DropDownList8.SelectedValue = "MT" Or DropDownList8.SelectedValue = "MTS") Then
             po_matqty_text.Text = "1"
             po_matqty_text.ReadOnly = False
-            po_unitWEIGHTText.ReadOnly = False
+            ''po_unitWEIGHTText.ReadOnly = False
             GridView1.Columns(8).HeaderText = "Unit Price(Mt)"
             TextBox1.Visible = True
         ElseIf DropDownList8.SelectedValue = "Activity" Then
@@ -3108,7 +3108,8 @@ Public Class add_order
         End If
         count = GridView1.Rows.Count + 1
         Dim dt_x As DataTable = DirectCast(ViewState("mat"), DataTable)
-        dt_x.Rows.Add(TextBox64.Text, mat_code, mat_name, HiddenField1.Value, po_matqty_text.Text, po_unitWEIGHTText.Text, FormatNumber(CDec(po_matqty_text.Text) * CDec(TextBox60.Text), 3), FormatNumber((((CDec(po_matqty_text.Text) * CDec(TextBox60.Text)) * CDec(po_unitWEIGHTText.Text))) / 1000, 3), TextBox62.Text, TextBox63.Text)
+        ''dt_x.Rows.Add(TextBox64.Text, mat_code, mat_name, HiddenField1.Value, po_matqty_text.Text, po_unitWEIGHTText.Text, FormatNumber(CDec(po_matqty_text.Text) * CDec(TextBox60.Text), 3), FormatNumber((((CDec(po_matqty_text.Text) * CDec(TextBox60.Text)) * CDec(po_unitWEIGHTText.Text))) / 1000, 3), TextBox62.Text, TextBox63.Text)
+        dt_x.Rows.Add(TextBox64.Text, mat_code, mat_name, HiddenField1.Value, po_matqty_text.Text, HiddenField3.Value, FormatNumber(CDec(po_matqty_text.Text) * CDec(TextBox60.Text), 3), FormatNumber((((CDec(po_matqty_text.Text) * CDec(TextBox60.Text)) * CDec(HiddenField3.Value))) / 1000, 3), TextBox62.Text, TextBox63.Text)
         ViewState("mat") = dt_x
         Me.BINDGRID1()
         po_matcodecombo.Focus()
@@ -3286,20 +3287,20 @@ Public Class add_order
             DropDownList8.Focus()
             Return
         ElseIf (DropDownList8.SelectedValue = "Pcs" Or DropDownList8.SelectedValue = "PCS") Then
-            po_unitWEIGHTText.ReadOnly = False
-            po_unitWEIGHTText.Text = ""
+            ''po_unitWEIGHTText.ReadOnly = False
+            ''po_unitWEIGHTText.Text = ""
             po_matcodecombo.Visible = True
             TextBox1.Visible = False
             TextBox2.Visible = False
         ElseIf (DropDownList8.SelectedValue = "Mt" Or DropDownList8.SelectedValue = "MT" Or DropDownList8.SelectedValue = "MTS") Then
-            po_unitWEIGHTText.ReadOnly = True
-            po_unitWEIGHTText.Text = 1000.0
+            ''po_unitWEIGHTText.ReadOnly = True
+            ''po_unitWEIGHTText.Text = 1000.0
             TextBox1.Visible = True
             po_matcodecombo.Visible = False
             TextBox2.Visible = False
         ElseIf DropDownList8.SelectedValue = "Activity" Then
-            po_unitWEIGHTText.ReadOnly = True
-            po_unitWEIGHTText.Text = 0.0
+            ''po_unitWEIGHTText.ReadOnly = True
+            ''po_unitWEIGHTText.Text = 0.0
             TextBox2.Visible = True
             po_matcodecombo.Visible = False
             TextBox1.Visible = False

@@ -1434,6 +1434,7 @@
                                                     <asp:ListItem>Select</asp:ListItem>
                                                     <asp:ListItem>Asset Register</asp:ListItem>
                                                     <asp:ListItem>Depreciation Entry</asp:ListItem>
+                                                    <asp:ListItem>Sold Out</asp:ListItem>
                                                 </asp:DropDownList>
                                             </div>
                                             <div class="col text-start">
@@ -1487,7 +1488,6 @@
                                                     <div class="col text-start">
                                                         <asp:Button ID="Button49" runat="server" CssClass="btn btn-primary" Text="Go" />
                                                         <asp:Button ID="Button50" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                                        <%--<asp:Button ID="Button51" runat="server" CssClass="btn btn-success" Text="Print" />--%>
                                                     </div>
                                                 </div>
 
@@ -1523,6 +1523,45 @@
                                                                     <asp:BoundField DataField="CummDeprBeforeQ4" HeaderText="Cumm. Dep. before Q4" />
                                                                     <asp:BoundField DataField="DeprValueQ4" HeaderText="Dep. for Q4" />
                                                                     <asp:BoundField DataField="Remarks" HeaderText="Remarks" />
+
+                                                                </Columns>
+
+                                                            </asp:GridView>
+                                                        </asp:Panel>
+                                                    </div>
+
+                                                </div>
+
+                                            </asp:View>
+
+                                            <asp:View ID="View27" runat="server">
+                                                <div class="row align-items-center">
+                                                    
+
+                                                    <div class="col text-start">
+                                                        
+                                                        <asp:Button ID="Button51" runat="server" Text="Download" CssClass="btn btn-primary" />
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col g-0">
+                                                        <asp:Panel ID="Panel13" runat="server" ScrollBars="Auto" Width="100%">
+                                                            <asp:GridView ID="GridView17" Style="font-size: 15px" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                                <Columns>
+                                                                    <asp:BoundField DataField="AssetCode" HeaderText="Asset Code" />
+                                                                    <asp:BoundField DataField="AccountCode" HeaderText="Account Code" />
+                                                                    <asp:BoundField DataField="AssetName" HeaderText="Asset Name" />
+                                                                    <asp:BoundField DataField="DateOfCommisioning" HeaderText="Commisioning Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                                    <asp:BoundField DataField="PhysicalQuantity" HeaderText="Quantity" />
+                                                                    <asp:BoundField DataField="PhysicalLocation" HeaderText="Physical Location" />
+                                                                    <asp:BoundField DataField="DepreciationPercentage" HeaderText="Depreciation Percentage" />
+                                                                    <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
+                                                                    <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
+                                                                    <asp:BoundField DataField="Remarks" HeaderText="Remarks" />
+                                                                    <asp:BoundField DataField="disposeOFFInvoiceNo" HeaderText="Dispose OFF Invoice No" />
+                                                                    <asp:BoundField DataField="disposeOFFDate" HeaderText="Dispose OFF Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                                    <asp:BoundField DataField="disposeOffValue" HeaderText="Dispose OFF Value" />
 
                                                                 </Columns>
 

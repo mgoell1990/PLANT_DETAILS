@@ -116,10 +116,14 @@
                 select: function (e, i) {
                     $("[id$=TextBox816]").val(i.item.ITEM_AU);
                     $("[id$=HiddenField2]").val(i.item.ITEM_AU);
+                    $("[id$=po_unitWEIGHTText]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=HiddenField3]").val(i.item.ITEM_WEIGHT);
                 },
                 minLength: 1
             });
         });
+
+        
     </script>
     <script type="text/javascript">
 
@@ -152,10 +156,14 @@
                 },
                 select: function (e, i) {
                     $("[id$=TextBox48]").val(i.item.ITEM_AU);
+                    $("[id$=po_unitWEIGHTText]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=HiddenField3]").val(i.item.ITEM_WEIGHT);
+
                 },
                 minLength: 1
             });
         });
+        
     </script>
     <script type="text/javascript">
 
@@ -189,10 +197,14 @@
                 select: function (e, i) {
                     $("[id$=TextBox816]").val(i.item.ITEM_AU);
                     $("[id$=HiddenField2]").val(i.item.ITEM_AU);
+                    $("[id$=po_unitWEIGHTText]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=HiddenField3]").val(i.item.ITEM_WEIGHT);
                 },
                 minLength: 1
             });
         });
+
+        
     </script>
     <script type="text/javascript">
 
@@ -225,10 +237,15 @@
                 },
                 select: function (e, i) {
                     $("[id$=TextBox816]").val(i.item.ITEM_AU);
+                    $("[id$=HiddenField2]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=po_unitWEIGHTText]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=HiddenField3]").val(i.item.ITEM_WEIGHT);
                 },
                 minLength: 1
             });
+            
         });
+        
     </script>
     <script type="text/javascript">
 
@@ -475,9 +492,12 @@
                 select: function (e, i) {
                     $("[id$=TextBox816]").val(i.item.ITEM_AU);
                     $("[id$=HiddenField1]").val(i.item.ITEM_AU);
+                    $("[id$=po_unitWEIGHTText]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=HiddenField3]").val(i.item.ITEM_WEIGHT);
                 },
                 minLength: 1
             });
+
         });
     </script>
     <script type="text/javascript">
@@ -512,6 +532,8 @@
                 select: function (e, i) {
                     $("[id$=TextBox816]").val(i.item.ITEM_AU);
                     $("[id$=HiddenField1]").val(i.item.ITEM_AU);
+                    $("[id$=po_unitWEIGHTText]").val(i.item.ITEM_WEIGHT);
+                    $("[id$=HiddenField3]").val(i.item.ITEM_WEIGHT);
                 },
                 minLength: 1
             });
@@ -557,6 +579,7 @@
 
     <asp:HiddenField ID="HiddenField1" runat="server" />
     <asp:HiddenField ID="HiddenField2" runat="server" />
+    <asp:HiddenField ID="HiddenField3" runat="server" />
     <%--<asp:Button runat="server" ID="btnSample" ClientIDMode="Static" Text="" Style="display: none;" OnClick="btnSample_Click" />
     <asp:Button runat="server" ID="chkPartyCodePO" ClientIDMode="Static" Text="" Style="display: none;" OnClick="chkPartyCodePO_Click" />--%>
     <div class="row text-white mt-0" style="background: #296DA9">
@@ -820,10 +843,8 @@
                                         <asp:TextBox class="form-control" ID="TextBox57" runat="server"></asp:TextBox>
                                     </div>
                                     <div class="col-2 text-start">
-                                        
                                     </div>
                                     <div class="col-2 text-start">
-                                        
                                     </div>
                                     <div class="col-2 text-start g-0">
                                     </div>
@@ -1371,7 +1392,7 @@
 
                                 <div class="row align-items-center mt-1">
                                     <div class="col text-start">
-                                        <asp:GridView ID="GridView216" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" Style="text-align: center" >
+                                        <asp:GridView ID="GridView216" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" Style="text-align: center">
                                             <Columns>
                                                 <asp:BoundField DataField="MAT_SLNO" HeaderText="Mat SLNo" />
                                                 <asp:BoundField DataField="MAT_CODE" HeaderText="Mat Code" />
@@ -1565,7 +1586,7 @@
 
                                 <div class="row align-items-center mt-1">
                                     <div class="col text-start">
-                                        <asp:GridView ID="GridView6" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" Style="text-align: center" >
+                                        <asp:GridView ID="GridView6" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" Style="text-align: center">
                                             <Columns>
                                                 <asp:BoundField DataField="MAT_SLNO" HeaderText="Mat SLNo" />
                                                 <asp:BoundField DataField="MAT_CODE" HeaderText="Mat Code" />
@@ -1759,7 +1780,7 @@
 
                                 <div class="row align-items-center mt-1">
                                     <div class="col text-start">
-                                        <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" Style="text-align: center" >
+                                        <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" Style="text-align: center">
                                             <Columns>
                                                 <asp:BoundField DataField="MAT_SLNO" HeaderText="Mat SLNo" />
                                                 <asp:BoundField DataField="MAT_CODE" HeaderText="Mat Code" />
@@ -2480,10 +2501,8 @@
                                     </div>
 
                                     <div class="col-2 text-start">
-                                        
                                     </div>
                                     <div class="col-2 text-start">
-                                        
                                     </div>
                                     <div class="col text-start">
                                     </div>
@@ -2501,84 +2520,85 @@
                                     </div>
                                 </div>
 
+                                
+                                        <div class="row align-items-center mt-1">
+                                            <div class="col text-center g-0">
+                                                <asp:Panel ID="Panel5" runat="server" Visible="False">
+                                                    <asp:Label ID="Label302" runat="server" BackColor="Blue" Font-Bold="True" ForeColor="White" Style="text-align: center" Text="INDIVIDUAL ITEM DETAILS AS PER SALE ORDER" Width="100%"></asp:Label>
 
-                                <div class="row align-items-center mt-1">
-                                    <div class="col text-center g-0">
-                                        <asp:Panel ID="Panel5" runat="server" Visible="False">
-                                            <asp:Label ID="Label302" runat="server" BackColor="Blue" Font-Bold="True" ForeColor="White" Style="text-align: center" Text="INDIVIDUAL ITEM DETAILS AS PER SALE ORDER" Width="100%"></asp:Label>
+                                                    <div class="row align-items-center mt-1 ms-1">
+                                                        <div class="col-2 text-start">
+                                                            <asp:Label ID="Label32" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Code"></asp:Label>
+                                                        </div>
+                                                        <div class="col-4 text-start">
+                                                            <asp:TextBox class="form-control" ID="po_matcodecombo" runat="server" BorderStyle="Double" Visible="False"></asp:TextBox>
+                                                            <asp:TextBox class="form-control" ID="TextBox1" runat="server" BorderStyle="Double" Visible="False"></asp:TextBox>
+                                                            <asp:TextBox class="form-control" ID="TextBox2" runat="server" BorderStyle="Double" Visible="False"></asp:TextBox>
+                                                        </div>
 
-                                            <div class="row align-items-center mt-1 ms-1">
-                                                <div class="col-2 text-start">
-                                                    <asp:Label ID="Label32" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Code"></asp:Label>
-                                                </div>
-                                                <div class="col-4 text-start">
-                                                    <asp:TextBox class="form-control" ID="po_matcodecombo" runat="server" BorderStyle="Double" Visible="False"></asp:TextBox>
-                                                    <asp:TextBox class="form-control" ID="TextBox1" runat="server" BorderStyle="Double" Visible="False"></asp:TextBox>
-                                                    <asp:TextBox class="form-control" ID="TextBox2" runat="server" BorderStyle="Double" Visible="False"></asp:TextBox>
-                                                </div>
+                                                    </div>
 
-                                            </div>
+                                                    <div class="row align-items-center mt-1 ms-1">
+                                                        <div class="col-2 text-start">
+                                                            <asp:Label ID="Label631" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Accounting Unit"></asp:Label>
+                                                        </div>
+                                                        <div class="col-2 text-start">
+                                                            <asp:Label ID="Label632" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Ord. Unit"></asp:Label>
+                                                        </div>
+                                                        <div class="col-2 text-start">
+                                                            <asp:Label ID="Label633" runat="server" ForeColor="Blue" Font-Bold="True" Text="Unit Weight (Kg)"></asp:Label>
+                                                        </div>
+                                                    </div>
 
-                                            <div class="row align-items-center mt-1 ms-1">
-                                                <div class="col-2 text-start">
-                                                    <asp:Label ID="Label631" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Accounting Unit"></asp:Label>
-                                                </div>
-                                                <div class="col-2 text-start">
-                                                    <asp:Label ID="Label632" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Ord. Unit"></asp:Label>
-                                                </div>
-                                                <div class="col-2 text-start">
-                                                    <asp:Label ID="Label633" runat="server" ForeColor="Blue" Font-Bold="True" Text="Unit Weight (Kg)"></asp:Label>
-                                                </div>
-                                            </div>
+                                                    <div class="row align-items-center mt-1 ms-1">
+                                                        <div class="col-2 text-start">
+                                                            <asp:TextBox class="form-control" ID="TextBox816" runat="server" BorderStyle="Double" ReadOnly="True" ForeColor="Red"></asp:TextBox>
+                                                        </div>
+                                                        <div class="col-2 text-start">
+                                                            <asp:TextBox class="form-control" ID="po_matqty_text" runat="server" BorderStyle="Double" ReadOnly="True" ForeColor="Red">0</asp:TextBox>
+                                                        </div>
+                                                        <div class="col-2 text-start">
+                                                            <asp:TextBox class="form-control" ID="po_unitWEIGHTText" runat="server" BorderStyle="Double" ForeColor="Red" ReadOnly="True">0.000</asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row align-items-center justify-content-center ms-1">
+                                                        <div class="col text-start">
+                                                            <asp:Label ID="Label299" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Description"></asp:Label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row align-items-center ms-1">
+                                                        <div class="col-6 text-start">
+                                                            <asp:TextBox class="form-control" ID="TextBox63" runat="server" BorderStyle="Double" TextMode="MultiLine"></asp:TextBox>
+                                                        </div>
+                                                        <div class="col text-end">
+                                                            <asp:Button ID="Button3" runat="server" BorderColor="Lime" CssClass="btn btn-primary" Font-Bold="True" Text="Add" />
+                                                            <asp:Button ID="Button41" runat="server" BorderColor="Lime" CssClass="btn btn-primary" Text="Calculate" Visible="False" />
+                                                            <asp:Button ID="Button42" runat="server" BorderColor="Lime" CssClass="btn btn-success" Text="Save and Go to another Vocab" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row align-items-center m-1">
+                                                        <div class="col text-center" style="overflow: scroll">
+                                                            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered border-2 table-responsive text-center" ShowHeaderWhenEmpty="True" Width="100%">
+                                                                <Columns>
+                                                                    <asp:BoundField DataField="SlNo" HeaderText="SlNo"></asp:BoundField>
+                                                                    <asp:BoundField DataField="Mat Code" HeaderText="Item Code"></asp:BoundField>
+                                                                    <asp:BoundField DataField="Mat Name" HeaderText="Item Name" />
+                                                                    <asp:BoundField DataField="A/U" HeaderText="A/U"></asp:BoundField>
+                                                                    <asp:BoundField DataField="Qty" HeaderText="Item Unit Qty "></asp:BoundField>
+                                                                    <asp:BoundField DataField="Unit Weight" HeaderText="Unit Weight"></asp:BoundField>
+                                                                    <asp:BoundField DataField="Mat Ord. Qty" HeaderText="Item Ord. Qty"></asp:BoundField>
+                                                                    <asp:BoundField DataField="ORD_QTY_MT" HeaderText="Ord Qty (Mt)"></asp:BoundField>
+                                                                    <asp:BoundField DataField="Unit Price" HeaderText="Unit Price(Mt)"></asp:BoundField>
+                                                                    <asp:BoundField DataField="Mat Desc" HeaderText="Item Description"></asp:BoundField>
+                                                                </Columns>
+                                                            </asp:GridView>
+                                                        </div>
 
-                                            <div class="row align-items-center mt-1 ms-1">
-                                                <div class="col-2 text-start">
-                                                    <asp:TextBox class="form-control" ID="TextBox816" runat="server" BorderStyle="Double" ReadOnly="True" ForeColor="Red"></asp:TextBox>
-                                                </div>
-                                                <div class="col-2 text-start">
-                                                    <asp:TextBox class="form-control" ID="po_matqty_text" runat="server" BorderStyle="Double" ReadOnly="True" ForeColor="Red">0</asp:TextBox>
-                                                </div>
-                                                <div class="col-2 text-start">
-                                                    <asp:TextBox class="form-control" ID="po_unitWEIGHTText" runat="server" BorderStyle="Double" ForeColor="Red">0.000</asp:TextBox>
-                                                </div>
+                                                    </div>
+                                                </asp:Panel>
                                             </div>
-                                            <div class="row align-items-center justify-content-center ms-1">
-                                                <div class="col text-start">
-                                                    <asp:Label ID="Label299" runat="server" ForeColor="Blue" Font-Bold="True" Text="Item Description"></asp:Label>
-                                                </div>
-                                            </div>
-                                            <div class="row align-items-center ms-1">
-                                                <div class="col-6 text-start">
-                                                    <asp:TextBox class="form-control" ID="TextBox63" runat="server" BorderStyle="Double" TextMode="MultiLine"></asp:TextBox>
-                                                </div>
-                                                <div class="col text-end">
-                                                    <asp:Button ID="Button3" runat="server" BorderColor="Lime" CssClass="btn btn-primary" Font-Bold="True" Text="Add" />
-                                                    <asp:Button ID="Button41" runat="server" BorderColor="Lime" CssClass="btn btn-primary" Text="Calculate" Visible="False" />
-                                                    <asp:Button ID="Button42" runat="server" BorderColor="Lime" CssClass="btn btn-success" Text="Save and Go to another Vocab" />
-                                                </div>
-                                            </div>
-                                            <div class="row align-items-center m-1">
-                                                <div class="col text-center" style="overflow: scroll">
-                                                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered border-2 table-responsive text-center" ShowHeaderWhenEmpty="True" Width="100%">
-                                                        <Columns>
-                                                            <asp:BoundField DataField="SlNo" HeaderText="SlNo"></asp:BoundField>
-                                                            <asp:BoundField DataField="Mat Code" HeaderText="Item Code"></asp:BoundField>
-                                                            <asp:BoundField DataField="Mat Name" HeaderText="Item Name" />
-                                                            <asp:BoundField DataField="A/U" HeaderText="A/U"></asp:BoundField>
-                                                            <asp:BoundField DataField="Qty" HeaderText="Item Unit Qty "></asp:BoundField>
-                                                            <asp:BoundField DataField="Unit Weight" HeaderText="Unit Weight"></asp:BoundField>
-                                                            <asp:BoundField DataField="Mat Ord. Qty" HeaderText="Item Ord. Qty"></asp:BoundField>
-                                                            <asp:BoundField DataField="ORD_QTY_MT" HeaderText="Ord Qty (Mt)"></asp:BoundField>
-                                                            <asp:BoundField DataField="Unit Price" HeaderText="Unit Price(Mt)"></asp:BoundField>
-                                                            <asp:BoundField DataField="Mat Desc" HeaderText="Item Description"></asp:BoundField>
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </div>
-
-                                            </div>
-                                        </asp:Panel>
-                                    </div>
-                                </div>
+                                        </div>
+                                    
 
                             </div>
                         </div>
@@ -2803,10 +2823,8 @@
                                     </div>
 
                                     <div class="col-2 text-start">
-                                        
                                     </div>
                                     <div class="col-2 text-start">
-                                        
                                     </div>
                                     <div class="col text-start">
                                     </div>
@@ -2967,7 +2985,7 @@
 
 
 
-     <%--==================OUTSOURCE ITEM SALE ORDER START===========================--%>
+    <%--==================OUTSOURCE ITEM SALE ORDER START===========================--%>
 
 
     <%--<center>
@@ -3154,8 +3172,4 @@
             
              </div> 
     </center>--%>
-
-
-
-
 </asp:Content>

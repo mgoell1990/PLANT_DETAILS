@@ -32,6 +32,15 @@ Partial Public Class add_order
     Protected WithEvents HiddenField2 As Global.System.Web.UI.WebControls.HiddenField
     
     '''<summary>
+    '''HiddenField3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents HiddenField3 As Global.System.Web.UI.WebControls.HiddenField
+    
+    '''<summary>
     '''Label270 control.
     '''</summary>
     '''<remarks>

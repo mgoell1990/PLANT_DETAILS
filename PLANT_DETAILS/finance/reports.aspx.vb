@@ -2389,11 +2389,25 @@ Public Class report3
             conn.Close()
             GridView15.DataSource = dt
             GridView15.DataBind()
+            Button51.Visible = False
         ElseIf DropDownList5.SelectedValue = "Depreciation Entry" Then
 
             MultiView3.ActiveViewIndex = 1
             Button53.Visible = False
+            Button51.Visible = False
+        ElseIf DropDownList5.SelectedValue = "Sold Out" Then
 
+            MultiView3.ActiveViewIndex = 2
+
+            conn.Open()
+            dt.Clear()
+            da = New SqlDataAdapter("select * from AssetMaster where status='SOLD'", conn)
+            da.Fill(dt)
+            conn.Close()
+            GridView17.DataSource = dt
+            GridView17.DataBind()
+            Button53.Visible = False
+            Button51.Visible = True
         End If
     End Sub
 
@@ -2613,6 +2627,40 @@ Public Class report3
 
         End Try
     End Sub
+
+    Protected Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
+        Dim dt As DataTable = New DataTable()
+        For j As Integer = 0 To GridView17.Columns.Count - 1
+            dt.Columns.Add(GridView17.Columns(j).HeaderText)
+        Next
+        For i As Integer = 0 To GridView17.Rows.Count - 1
+            Dim dr As DataRow = dt.NewRow()
+            For j As Integer = 0 To GridView17.Columns.Count - 1
+                If (GridView17.Rows(i).Cells(j).Text <> "") Then
+                    dr(GridView17.Columns(j).HeaderText) = GridView17.Rows(i).Cells(j).Text
+                End If
+
+            Next
+            dt.Rows.Add(dr)
+        Next
+
+        Using wb As XLWorkbook = New XLWorkbook()
+            wb.Worksheets.Add(dt, "Asset Report")
+            Response.Clear()
+            Response.Buffer = True
+            Response.Charset = ""
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            Response.AddHeader("content-disposition", "attachment;filename=SoldOutAssets.xlsx")
+            Using MyMemoryStream As MemoryStream = New MemoryStream()
+                wb.SaveAs(MyMemoryStream)
+                MyMemoryStream.WriteTo(Response.OutputStream)
+                Response.Flush()
+                Response.End()
+            End Using
+        End Using
+    End Sub
+
+
 
     Protected Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
 

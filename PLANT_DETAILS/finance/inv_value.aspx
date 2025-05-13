@@ -47,7 +47,43 @@
     </script>
 
     <script type="text/javascript">
+
         $(function () {
+            SetAutoCompleteDeductionHeadMB();
+        });
+
+        //On UpdatePanel Refresh.
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        if (prm != null) {
+            prm.add_endRequest(function (sender, e) {
+                if (sender._postBackSettings.panelsToUpdate != null) {
+                    SetAutoCompleteDeductionHeadMB();
+                }
+            });
+        };
+
+        function SetAutoCompleteDeductionHeadMB() {
+            $("[id$=TextBox45]").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '<%=ResolveUrl("~/Service.asmx/ac_head")%>',
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item.split('^')[0],
+                                };
+                            }))
+                        }
+                    });
+                }
+            });
+        }
+
+        <%--$(function () {
             $("[id$=TextBox45]").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -75,11 +111,47 @@
                 },
                 minLength: 1
             });
-        });
+        });--%>
     </script>
 
     <script type="text/javascript">
+
         $(function () {
+            SetAutoCompletePaymentHeadMB();
+        });
+
+        //On UpdatePanel Refresh.
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        if (prm != null) {
+            prm.add_endRequest(function (sender, e) {
+                if (sender._postBackSettings.panelsToUpdate != null) {
+                    SetAutoCompletePaymentHeadMB();
+                }
+            });
+        };
+
+        function SetAutoCompletePaymentHeadMB() {
+            $("[id$=TextBox61]").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '<%=ResolveUrl("~/Service.asmx/ac_head")%>',
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item.split('^')[0],
+                                };
+                            }))
+                        }
+                    });
+                }
+            });
+        }
+
+        <%--$(function () {
             $("[id$=TextBox61]").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -107,11 +179,47 @@
                 },
                 minLength: 1
             });
-        });
+        });--%>
     </script>
 
     <script type="text/javascript">
+
         $(function () {
+            SetAutoCompleteDeductionHeadGARN();
+        });
+
+        //On UpdatePanel Refresh.
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        if (prm != null) {
+            prm.add_endRequest(function (sender, e) {
+                if (sender._postBackSettings.panelsToUpdate != null) {
+                    SetAutoCompleteDeductionHeadGARN();
+                }
+            });
+        };
+
+        function SetAutoCompleteDeductionHeadGARN() {
+            $("[id$=TextBox59]").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '<%=ResolveUrl("~/Service.asmx/ac_head")%>',
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item.split('^')[0],
+                                };
+                            }))
+                        }
+                    });
+                }
+            });
+        }
+
+        <%--$(function () {
             $("[id$=TextBox59]").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -139,7 +247,7 @@
                 },
                 minLength: 1
             });
-        });
+        });--%>
     </script>
 
     <script src="Scripts/jquery-ui.min.js" type="text/javascript"></script>
@@ -247,8 +355,7 @@
 
                     <%--=====VIEW 1 MB START=====--%>
                     <asp:View ID="View1" runat="server">
-                        <asp:UpdatePanel ID="UpdatePanel2" runat="server">
-                            <ContentTemplate>
+                        
                                 <div class="row justify-content-center">
                                     <div class="col">
                                         <div class="row" style="border: 3px; border-style: Groove; border-color: #FF3399">
@@ -852,15 +959,13 @@
 
                                     </div>
                                 </div>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
+                            
                     </asp:View>
                     <%--=================================== MB View End=====================================--%>
 
                     <%--=====VIEW 2 GARN VALUATION START=====--%>
                     <asp:View ID="View2" runat="server">
-                        <asp:UpdatePanel ID="UpdatePanel3" runat="server">
-                            <ContentTemplate>
+                        
                                 <div class="row justify-content-center">
                                     <div class="col">
                                         <div class="row" style="border: 3px; border-style: Groove; border-color: #FF3399">
@@ -1587,16 +1692,14 @@
 
                                     </div>
                                 </div>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
+                            
                     </asp:View>
 
                     <%--=================================== GARN View END=====================================--%>
 
-                    <%--=====VIEW 2 Transporter VALUATION START=====--%>
+                    <%--=====VIEW 3 Transporter VALUATION START=====--%>
                     <asp:View ID="View3" runat="server">
-                        <asp:UpdatePanel ID="UpdatePanel4" runat="server">
-                            <ContentTemplate>
+                        
                                 <div class="row justify-content-center">
                                     <div class="col">
                                         <div class="row" style="border: 3px; border-style: Groove; border-color: #FF3399">
@@ -2330,8 +2433,7 @@
 
                                     </div>
                                 </div>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
+                            
                     </asp:View>
 
                     <%--=================================== Transporter View END=====================================--%>
