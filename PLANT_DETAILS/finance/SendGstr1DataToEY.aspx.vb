@@ -133,7 +133,7 @@ Public Class SendGstr1DataToEY
             conn.Open()
             Dim mc1 As New SqlCommand
 
-            mc1.CommandText = "SELECT d_type+inv_no AS INVOICE_NO, * FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE+INV_NO='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='0') ORDER BY INVOICE_NO"
+            mc1.CommandText = "SELECT d_type+inv_no AS INVOICE_NO, * FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE+INV_NO='" & DropDownList28.Text & "' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='NotFound' OR EY_STATUS='0') ORDER BY INVOICE_NO"
             mc1.Connection = conn
             dr = mc1.ExecuteReader
             If dr.HasRows Then
@@ -177,7 +177,7 @@ Public Class SendGstr1DataToEY
 
                             'conn.Open()
                             dt.Clear()
-                            da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE NOT LIKE 'DC%' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='0') ORDER BY INVOICE_NO", conn)
+                            da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' AND D_TYPE NOT LIKE 'DC%' AND FISCAL_YEAR='" & DropDownList27.Text & "' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='NotFound' OR EY_STATUS='0') ORDER BY INVOICE_NO", conn)
                             da.Fill(dt)
                             'conn.Close()
                             DropDownList28.Items.Clear()
@@ -208,9 +208,6 @@ Public Class SendGstr1DataToEY
                 conn.Close()
             End If
         End If
-
-
-
 
     End Sub
 
@@ -498,7 +495,7 @@ Public Class SendGstr1DataToEY
         Else
             conn.Open()
             dt.Clear()
-            da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' and FISCAL_YEAR='" + DropDownList27.Text + "' AND D_TYPE NOT LIKE 'DC%' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK') ORDER BY INVOICE_NO", conn)
+            da = New SqlDataAdapter("SELECT d_type+inv_no AS INVOICE_NO FROM DESPATCH WHERE INV_DATE > '2021-04-30' and FISCAL_YEAR='" + DropDownList27.Text + "' AND D_TYPE NOT LIKE 'DC%' AND (EY_STATUS IS NULL or EY_STATUS='BadRequest' OR EY_STATUS='OK' OR EY_STATUS='NotFound' OR EY_STATUS='0') ORDER BY INVOICE_NO", conn)
             da.Fill(dt)
             conn.Close()
             DropDownList28.Items.Clear()

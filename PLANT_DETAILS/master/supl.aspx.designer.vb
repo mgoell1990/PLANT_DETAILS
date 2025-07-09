@@ -131,6 +131,51 @@ Partial Public Class supl
     Protected WithEvents TextBox1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
+    '''Label9 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label9 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList3 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''Label10 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label10 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox2 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''TextBox2_CalendarExtender control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox2_CalendarExtender As Global.AjaxControlToolkit.CalendarExtender
+    
+    '''<summary>
     '''Label8 control.
     '''</summary>
     '''<remarks>

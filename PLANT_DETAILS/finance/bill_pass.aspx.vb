@@ -761,15 +761,11 @@ Public Class bill_pass1
 
 
                         ''UPDATE  LEDGER
-                        If DropDownList2.SelectedValue = "Current" Then
-
-                            query = "UPDATE LEDGER SET VOUCHER_NO=@VOUCHER_NO WHERE BILL_TRACK_ID='" & DropDownList15.SelectedValue & "'"
-                            cmd = New SqlCommand(query, conn_trans, myTrans)
-                            cmd.Parameters.AddWithValue("@VOUCHER_NO", TextBox53.Text)
-                            cmd.ExecuteReader()
-                            cmd.Dispose()
-
-                        End If
+                        query = "UPDATE LEDGER SET VOUCHER_NO=@VOUCHER_NO WHERE BILL_TRACK_ID='" & DropDownList15.SelectedValue & "'"
+                        cmd = New SqlCommand(query, conn_trans, myTrans)
+                        cmd.Parameters.AddWithValue("@VOUCHER_NO", TextBox53.Text)
+                        cmd.ExecuteReader()
+                        cmd.Dispose()
 
                         Button13.Enabled = False
                         Panel6.Visible = False

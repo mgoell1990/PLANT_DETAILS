@@ -198,11 +198,12 @@ Public Class c_entry
                     DT3.Columns.AddRange(New DataColumn(6) {New DataColumn("TOKEN NO"), New DataColumn("SUPL NAME"), New DataColumn("A/C Head"), New DataColumn("A/C_Description"), New DataColumn("AMOUNT"), New DataColumn("CHEQUE NO"), New DataColumn("CHEQUE DATE")})
                     ViewState("CPV_ENTRY") = DT3
                     Me.BINDGRID2()
+
+                    myTrans.Commit()
+                    Label541.Text = "All records are written to database."
                 End If
 
-                myTrans.Commit()
 
-                Label541.Text = "All records are written to database."
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()

@@ -47,6 +47,16 @@ Public Class supl
             ERR_LABLE.Visible = True
             ERR_LABLE.Text = "Incorrect Admin Password"
             Return
+        ElseIf DropDownList3.SelectedValue = "Select" Then
+            DropDownList3.Focus()
+            ERR_LABLE.Visible = True
+            ERR_LABLE.Text = "Please select supplier status."
+            Return
+        ElseIf TextBox2.Text = "" Then
+            TextBox2.Focus()
+            ERR_LABLE.Visible = True
+            ERR_LABLE.Text = "Please enter Validity."
+            Return
         ElseIf TextBox114.Text = "123456987" Then
             Dim newSupplierCode As New String("")
             If (TextBox84.Text = "") Then
@@ -80,12 +90,12 @@ Public Class supl
                         If TextBox84.Text = "" Then
                             TextBox84.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Id "
+                            ERR_LABLE.Text = " Fill Supplier Id "
                             Return
                         ElseIf TextBox85.Text = "" Then
                             TextBox85.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Name "
+                            ERR_LABLE.Text = " Fill Supplier Name "
                             Return
                         ElseIf TextBox111.Text = "" Then
                             '' TextBox85.Focus()
@@ -95,12 +105,12 @@ Public Class supl
                         ElseIf TextBox86.Text = "" Then
                             TextBox86.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Contact Person "
+                            ERR_LABLE.Text = " Fill Supplier Contact Person "
                             Return
                         ElseIf SUPLDropDownList17.SelectedValue = "Select" Then
                             SUPLDropDownList17.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Type "
+                            ERR_LABLE.Text = " Fill Supplier Type "
                             Return
                         End If
 
@@ -111,7 +121,7 @@ Public Class supl
                         conn.Close()
                         If count = 1 Then
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = "Suppplier Code Already Exist"
+                            ERR_LABLE.Text = "Supplier Code Already Exist"
                             TextBox84.Focus()
                             Return
                         End If
@@ -122,7 +132,7 @@ Public Class supl
                         conn.Close()
                         If count = 1 Then
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = "Suppplier PAN Already Exist"
+                            ERR_LABLE.Text = "Supplier PAN Already Exist"
                             '' TextBox84.Focus()
                             '' Return
                         End If
@@ -195,12 +205,12 @@ Public Class supl
                         If TextBox84.Text = "" Then
                             TextBox84.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Id "
+                            ERR_LABLE.Text = " Fill Supplier Id "
                             Return
                         ElseIf TextBox85.Text = "" Then
                             TextBox85.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Name "
+                            ERR_LABLE.Text = " Fill Supplier Name "
                             Return
                         ElseIf TextBox111.Text = "" Then
                             ''  TextBox85.Focus()
@@ -211,12 +221,12 @@ Public Class supl
                         ElseIf TextBox86.Text = "" Then
                             TextBox86.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Contact Person "
+                            ERR_LABLE.Text = " Fill Supplier Contact Person "
                             Return
                         ElseIf SUPLDropDownList17.SelectedValue = "Select" Then
                             SUPLDropDownList17.Focus()
                             ERR_LABLE.Visible = True
-                            ERR_LABLE.Text = " Fill Suppplier Type "
+                            ERR_LABLE.Text = " Fill Supplier Type "
                             Return
                         End If
                         conn.Open()
@@ -226,7 +236,7 @@ Public Class supl
                         conn.Close()
                         If count = 1 Then
                             ''  ERR_LABLE.Visible = True
-                            ''  ERR_LABLE.Text = "Suppplier PAN Already Exit "
+                            ''  ERR_LABLE.Text = "Supplier PAN Already Exit "
                             ''  TextBox84.Focus()
                             '' Return
                         End If
@@ -422,12 +432,12 @@ End Class
 '                If TextBox84.Text = "" Then
 '                    TextBox84.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Id "
+'                    ERR_LABLE.Text = " Fill Supplier Id "
 '                    Return
 '                ElseIf TextBox85.Text = "" Then
 '                    TextBox85.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Name "
+'                    ERR_LABLE.Text = " Fill Supplier Name "
 '                    Return
 '                ElseIf TextBox111.Text = "" Then
 '                    '' TextBox85.Focus()
@@ -437,12 +447,12 @@ End Class
 '                ElseIf TextBox86.Text = "" Then
 '                    TextBox86.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Contact Person "
+'                    ERR_LABLE.Text = " Fill Supplier Contact Person "
 '                    Return
 '                ElseIf SUPLDropDownList17.SelectedValue = "Select" Then
 '                    SUPLDropDownList17.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Type "
+'                    ERR_LABLE.Text = " Fill Supplier Type "
 '                    Return
 '                End If
 '                conn.Open()
@@ -452,7 +462,7 @@ End Class
 '                conn.Close()
 '                If count = 1 Then
 '                    '' ERR_LABLE.Visible = True
-'                    '' ERR_LABLE.Text = "Suppplier Id Already Exit "
+'                    '' ERR_LABLE.Text = "Supplier Id Already Exit "
 '                    '' TextBox84.Focus()
 '                    '' Return
 '                End If
@@ -463,7 +473,7 @@ End Class
 '                conn.Close()
 '                If count = 1 Then
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = "Suppplier Code Already Exit "
+'                    ERR_LABLE.Text = "Supplier Code Already Exit "
 '                    TextBox84.Focus()
 '                    Return
 '                End If
@@ -474,7 +484,7 @@ End Class
 '                conn.Close()
 '                If count = 1 Then
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = "Suppplier PAN Already Exit "
+'                    ERR_LABLE.Text = "Supplier PAN Already Exit "
 '                    '' TextBox84.Focus()
 '                    '' Return
 '                End If
@@ -546,12 +556,12 @@ End Class
 '                If TextBox84.Text = "" Then
 '                    TextBox84.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Id "
+'                    ERR_LABLE.Text = " Fill Supplier Id "
 '                    Return
 '                ElseIf TextBox85.Text = "" Then
 '                    TextBox85.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Name "
+'                    ERR_LABLE.Text = " Fill Supplier Name "
 '                    Return
 '                ElseIf TextBox111.Text = "" Then
 '                    ''  TextBox85.Focus()
@@ -562,12 +572,12 @@ End Class
 '                ElseIf TextBox86.Text = "" Then
 '                    TextBox86.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Contact Person "
+'                    ERR_LABLE.Text = " Fill Supplier Contact Person "
 '                    Return
 '                ElseIf SUPLDropDownList17.SelectedValue = "Select" Then
 '                    SUPLDropDownList17.Focus()
 '                    ERR_LABLE.Visible = True
-'                    ERR_LABLE.Text = " Fill Suppplier Type "
+'                    ERR_LABLE.Text = " Fill Supplier Type "
 '                    Return
 '                End If
 '                conn.Open()
@@ -577,7 +587,7 @@ End Class
 '                conn.Close()
 '                If count = 1 Then
 '                    ''  ERR_LABLE.Visible = True
-'                    ''  ERR_LABLE.Text = "Suppplier PAN Already Exit "
+'                    ''  ERR_LABLE.Text = "Supplier PAN Already Exit "
 '                    ''  TextBox84.Focus()
 '                    '' Return
 '                End If

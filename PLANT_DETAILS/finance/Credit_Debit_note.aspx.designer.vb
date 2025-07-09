@@ -149,6 +149,24 @@ Partial Public Class Credit_Debit_note1
     Protected WithEvents DropDownList3 As Global.System.Web.UI.WebControls.DropDownList
     
     '''<summary>
+    '''Label2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label2 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList1 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
     '''Label507 control.
     '''</summary>
     '''<remarks>

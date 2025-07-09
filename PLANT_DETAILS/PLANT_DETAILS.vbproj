@@ -1643,9 +1643,8 @@
     <Content Include="finance\rev_voucher.aspx" />
     <Content Include="finance\SendGstr1DataToEY.aspx" />
     <Content Include="finance\Store_PO_Approval.aspx" />
-    <Content Include="finance\WebForm1.aspx" />
+    <Content Include="finance\ForeignDAEntry.aspx" />
     <Content Include="finance\rcm_service.aspx" />
-    <Content Include="finance\WebForm2.aspx" />
     <Content Include="finance\LDM.aspx" />
     <Content Include="finish_goods\add_transporter.aspx" />
     <Content Include="finish_goods\c_inv.aspx">
@@ -1737,6 +1736,7 @@
     <Content Include="purchase\order_close.aspx" />
     <Content Include="purchase\print_order.aspx" />
     <Content Include="purchase\REPORT.aspx" />
+    <Content Include="purchase\Reports.aspx" />
     <Content Include="purchase\update_order.aspx" />
     <Content Include="raw_material\bin_card_rm.aspx" />
     <Content Include="raw_material\ind_garn.aspx" />
@@ -2551,11 +2551,11 @@
       <DependentUpon>Store_PO_Approval.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="finance\WebForm1.aspx.designer.vb">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
+    <Compile Include="finance\ForeignDAEntry.aspx.designer.vb">
+      <DependentUpon>ForeignDAEntry.aspx</DependentUpon>
     </Compile>
-    <Compile Include="finance\WebForm1.aspx.vb">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
+    <Compile Include="finance\ForeignDAEntry.aspx.vb">
+      <DependentUpon>ForeignDAEntry.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="finance\rcm_service.aspx.designer.vb">
@@ -2564,12 +2564,6 @@
     <Compile Include="finance\rcm_service.aspx.vb">
       <DependentUpon>rcm_service.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="finance\WebForm2.aspx.designer.vb">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="finance\WebForm2.aspx.vb">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
     </Compile>
     <Compile Include="finance\LDM.aspx.designer.vb">
       <DependentUpon>LDM.aspx</DependentUpon>
@@ -2992,6 +2986,18 @@
       <DependentUpon>QR_Code.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="print_rpt\RateContract.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RateContract.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="print_rpt\RateContractStore.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RateContractStore.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="print_rpt\rm_daily_rpt.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3078,6 +3084,13 @@
     </Compile>
     <Compile Include="purchase\order_balance.aspx.vb">
       <DependentUpon>order_balance.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="purchase\Reports.aspx.designer.vb">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="purchase\Reports.aspx.vb">
+      <DependentUpon>Reports.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="purchase\update_order.aspx.designer.vb">
@@ -4005,6 +4018,14 @@
       <LastGenOutput>sale_order_misc.vb</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="print_rpt\RateContract.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RateContract.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="print_rpt\RateContractStore.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RateContractStore.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="print_rpt\Sample_invoice.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Sample_invoice.vb</LastGenOutput>

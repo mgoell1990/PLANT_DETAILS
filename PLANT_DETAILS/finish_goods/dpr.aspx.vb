@@ -349,7 +349,7 @@ Public Class dpr1
                     conn.Close()
                     'conn.Open()
                     Dim QUARY1 As String = ""
-                    QUARY1 = "Insert Into PROD_CONTROL(QUALITY,ENTRY_DATE,fiscal_year,name_user,ITEM_CODE,PROD_DATE,ITEM_F_QTY,ITEM_I_QTY,ITEM_I_SO,ITEM_F_STOCK,ITEM_I_TOTAL)values(@QUALITY,@ENTRY_DATE,@fiscal_year,@name_user,@ITEM_CODE,@PROD_DATE,@ITEM_F_QTY,@ITEM_I_QTY,@ITEM_I_SO,@ITEM_F_STOCK,@ITEM_I_TOTAL)"
+                    QUARY1 = "Insert Into PROD_CONTROL(ITEM_WEIGHT,TOTAL_WEIGHT,TRANSACTION_TYPE,QUALITY,ENTRY_DATE,fiscal_year,name_user,ITEM_CODE,PROD_DATE,ITEM_F_QTY,ITEM_I_QTY,ITEM_I_SO,ITEM_F_STOCK,ITEM_I_TOTAL)values(@ITEM_WEIGHT,@TOTAL_WEIGHT,@TRANSACTION_TYPE,@QUALITY,@ENTRY_DATE,@fiscal_year,@name_user,@ITEM_CODE,@PROD_DATE,@ITEM_F_QTY,@ITEM_I_QTY,@ITEM_I_SO,@ITEM_F_STOCK,@ITEM_I_TOTAL)"
                     Dim cmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@ITEM_CODE", GridView1.Rows(i).Cells(0).Text)
                     cmd1.Parameters.AddWithValue("@PROD_DATE", Date.ParseExact(GridView1.Rows(i).Cells(3).Text, "dd-MM-yyyy", provider))
@@ -363,6 +363,8 @@ Public Class dpr1
                     cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
                     cmd1.Parameters.AddWithValue("@QUALITY", DetailsView1.Rows(10).Cells(1).Text)
                     cmd1.Parameters.AddWithValue("@ITEM_WEIGHT", DetailsView1.Rows(4).Cells(1).Text)
+                    cmd1.Parameters.AddWithValue("@TRANSACTION_TYPE", "PRODUCTION")
+                    cmd1.Parameters.AddWithValue("@TOTAL_WEIGHT", CDec(GridView1.Rows(i).Cells(5).Text))
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
                     'conn.Close()

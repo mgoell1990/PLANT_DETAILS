@@ -31,7 +31,7 @@ Public Class mis_sale
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
 
-            CreateToken()
+            ''CreateToken()
             MultiView1.ActiveViewIndex = 0
 
             TextBox123.Attributes.Add("readonly", "readonly")
@@ -75,33 +75,33 @@ Public Class mis_sale
 
     End Sub
 
-    Private Sub CreateToken()
-        Dim token As String = Guid.NewGuid().ToString()
-        Session("miscSaleToken") = token
-        tokenField.Value = token
-        Throw New NotImplementedException()
-    End Sub
+    'Private Sub CreateToken()
+    '    Dim token As String = Guid.NewGuid().ToString()
+    '    Session("miscSaleToken") = token
+    '    tokenField.Value = token
+    '    Throw New NotImplementedException()
+    'End Sub
 
-    Private Function TokenIsValid() As Boolean
-        Dim expectedToken As String = Session("miscSaleToken").ToString()
-        If (IsDBNull(expectedToken)) Then
-            Return False
-        End If
+    'Private Function TokenIsValid() As Boolean
+    '    Dim expectedToken As String = Session("miscSaleToken").ToString()
+    '    If (IsDBNull(expectedToken)) Then
+    '        Return False
+    '    End If
 
-        Dim actualToken As String = tokenField.Value
-        If (expectedToken = actualToken) Then
-            Return True
-        Else
-            Return False
-        End If
-        Throw New NotImplementedException()
-    End Function
+    '    Dim actualToken As String = tokenField.Value
+    '    If (expectedToken = actualToken) Then
+    '        Return True
+    '    Else
+    '        Return False
+    '    End If
+    '    Throw New NotImplementedException()
+    'End Function
 
-    Private Sub ConsumeToken()
+    'Private Sub ConsumeToken()
 
-        Session.Remove("miscSaleToken")
-        Throw New NotImplementedException()
-    End Sub
+    '    Session.Remove("miscSaleToken")
+    '    Throw New NotImplementedException()
+    'End Sub
 
     Protected Sub BINDGRID_RAW()
         GridView4.DataSource = DirectCast(ViewState("despatch_raw"), DataTable)
@@ -991,14 +991,14 @@ Public Class mis_sale
 
                 'conn.Open()
                 Dim QUARY1 As String = ""
-                QUARY1 = "Insert Into DESPATCH(TCS_TAX,TCS_AMT,INV_STATUS,SO_NO ,SO_DATE ,PO_NO ,PO_DATE ,AMD_NO ,AMD_DATE ,TRANS_WO ,TRANS_SLNO ,TRANS_NAME ,TRUCK_NO ,PARTY_CODE ,
+                QUARY1 = "Insert Into DESPATCH(MATERIAL_TYPE,TCS_TAX,TCS_AMT,INV_STATUS,SO_NO ,SO_DATE ,PO_NO ,PO_DATE ,AMD_NO ,AMD_DATE ,TRANS_WO ,TRANS_SLNO ,TRANS_NAME ,TRUCK_NO ,PARTY_CODE ,
                     CONSIGN_CODE ,MAT_VOCAB ,MAT_SLNO ,INV_NO,INV_DATE,D_TYPE,CHPTR_HEAD ,FISCAL_YEAR,INV_ISSUE ,PLACE_OF_SUPPLY ,BILL_PARTY_ADD ,CON_PARTY_ADD ,B_STATE ,
                     B_STATE_CODE ,C_STATE ,C_STATE_CODE ,BILL_PARTY_GST_N ,CON_PARTY_GST_N ,NEGOTIATING_BRANCH ,PAYING_AUTH ,RR_NO ,RR_DATE ,TOTAL_WEIGHT ,ACC_UNIT ,
                     PURITY ,TC_NO ,FINANCE_ARRENGE ,MILL_CODE ,DA_NO ,CONTRACT_NO ,RCD_VOUCHER_NO ,RCD_VOUCHER_DATE ,ROUT_CARD_NO ,DESPATCH_TYPE ,TAX_REVERS_CHARGE ,RLY_INV_NO ,
                     RLY_INV_DATE ,FRT_WT_AMT ,TOTAL_PCS,P_CODE ,P_DESC ,D1 ,D2 ,D3 ,D4 ,BASE_PRICE ,PACK_PRICE ,PACK_TYPE ,QLTY_PRICE ,SEC_PRICE ,TOTAL_TDC ,UNIT_PRICE ,
                     SY_MARGIN ,PPM_FRT ,FRT_TYPE ,RLY_ROAD_FRT ,TOTAL_RATE_UNIT ,REBATE_UNIT ,REBATE_TYPE ,TAXABLE_RATE_UNIT ,TOTAL_QTY ,TAXABLE_VALUE ,CGST_RATE ,CGST_AMT ,
                     SGST_RATE ,SGST_AMT ,IGST_RATE ,IGST_AMT ,CESS_RATE ,CESS_AMT ,TERM_RATE ,TERM_AMT ,TOTAL_AMT ,LESS_LOAD_AMT ,TOTAL_BAG ,ADVANCE_PAID ,GST_PAID_ADV ,NET_PAY ,
-                    NOTIFICATION_TEXT ,COMM ,DIV_ADD ,INV_TYPE ,INV_RULE ,FORM_NAME,EMP_ID)values(@TCS_TAX,@TCS_AMT,@INV_STATUS,@SO_NO ,@SO_DATE ,@PO_NO ,@PO_DATE ,@AMD_NO ,
+                    NOTIFICATION_TEXT ,COMM ,DIV_ADD ,INV_TYPE ,INV_RULE ,FORM_NAME,EMP_ID)values(@MATERIAL_TYPE,@TCS_TAX,@TCS_AMT,@INV_STATUS,@SO_NO ,@SO_DATE ,@PO_NO ,@PO_DATE ,@AMD_NO ,
                     @AMD_DATE ,@TRANS_WO ,@TRANS_SLNO ,@TRANS_NAME ,@TRUCK_NO ,@PARTY_CODE ,@CONSIGN_CODE ,@MAT_VOCAB ,@MAT_SLNO ,@INV_NO,@INV_DATE,@D_TYPE,@CHPTR_HEAD ,@FISCAL_YEAR,
                     @INV_ISSUE ,@PLACE_OF_SUPPLY ,@BILL_PARTY_ADD ,@CON_PARTY_ADD ,@B_STATE ,@B_STATE_CODE ,@C_STATE ,@C_STATE_CODE ,@BILL_PARTY_GST_N ,@CON_PARTY_GST_N ,@NEGOTIATING_BRANCH,
                     @PAYING_AUTH ,@RR_NO ,@RR_DATE ,@TOTAL_WEIGHT ,@ACC_UNIT ,@PURITY ,@TC_NO ,@FINANCE_ARRENGE ,@MILL_CODE ,@DA_NO ,@CONTRACT_NO ,@RCD_VOUCHER_NO ,@RCD_VOUCHER_DATE ,
@@ -1107,6 +1107,7 @@ Public Class mis_sale
                 cmd1.Parameters.AddWithValue("@INV_STATUS", "ACTIVE")
                 cmd1.Parameters.AddWithValue("@TCS_TAX", item_tcs)
                 cmd1.Parameters.AddWithValue("@TCS_AMT", CDec(TextBox119.Text))
+                cmd1.Parameters.AddWithValue("@MATERIAL_TYPE", "MISCELLANEOUS SALE")
                 cmd1.ExecuteReader()
                 cmd1.Dispose()
                 'conn.Close()

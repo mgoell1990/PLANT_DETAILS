@@ -695,7 +695,7 @@ Public Class crr
                     cmd.Parameters.AddWithValue("@FISCAL_YEAR", CInt(STR1))
                     cmd.Parameters.AddWithValue("@TOTAL_MT", TOTAL_MT)
                     cmd.Parameters.AddWithValue("@CRR_ENTRY_DATE", Now)
-                    cmd.Parameters.AddWithValue("@MAT_NAME", matnameTextBox.Text)
+                    cmd.Parameters.AddWithValue("@MAT_NAME", crr_gridview.Rows(I).Cells(2).Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()

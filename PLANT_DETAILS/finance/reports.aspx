@@ -1457,11 +1457,11 @@
                                                                     <asp:BoundField DataField="AssetName" HeaderText="Asset Name" />
                                                                     <asp:BoundField DataField="DateOfCommisioning" HeaderText="Commisioning Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                                     <asp:BoundField DataField="PhysicalQuantity" HeaderText="Quantity" />
-                                                                    <asp:BoundField DataField="PhysicalLocation" HeaderText="Physical Location" />
+                                                                    <%--<asp:BoundField DataField="PhysicalLocation" HeaderText="Physical Location" />--%>
                                                                     <asp:BoundField DataField="DepreciationPercentage" HeaderText="Depreciation Percentage" />
                                                                     <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
                                                                     <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
-                                                                    <asp:BoundField DataField="Remarks" HeaderText="Remarks" />
+                                                                    <%--<asp:BoundField DataField="Remarks" HeaderText="Remarks" />--%>
 
                                                                 </Columns>
 

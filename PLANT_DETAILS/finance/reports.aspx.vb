@@ -2384,7 +2384,7 @@ Public Class report3
             Button53.Visible = True
             conn.Open()
             dt.Clear()
-            da = New SqlDataAdapter("select * from AssetMaster where status='IN USE'", conn)
+            da = New SqlDataAdapter("select * from AssetMaster where status='IN USE' order by assetCode", conn)
             da.Fill(dt)
             conn.Close()
             GridView15.DataSource = dt

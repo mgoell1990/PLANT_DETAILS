@@ -122,6 +122,19 @@
 
                                 </div>
 
+                                <div class="row  align-items-center mt-1">
+                                    <div class="col-2 text-start">
+                                        <asp:Label ID="Label2" runat="server" ForeColor="Blue" Text="Transport Reversal"></asp:Label>
+                                    </div>
+                                    <div class="col-2 text-start ">
+                                        <asp:DropDownList ID="DropDownList1" class="form-select" runat="server">
+                                            <asp:ListItem Selected="True">Yes</asp:ListItem>
+                                            <asp:ListItem>No</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+
+                                </div>
+
 
                                 <div class="row  align-items-center mt-1">
                                     <div class="col-2 text-start">
@@ -189,7 +202,7 @@
                                                 <asp:BoundField DataField="SUPL_ID" HeaderText="Supl Code" />
                                                 <asp:BoundField DataField="FISCAL_YEAR" HeaderText="FISCAL_YEAR" />
                                                 <asp:BoundField DataField="PERIOD" HeaderText="QUARTER" />
-                                                <asp:BoundField DataField="EFECTIVE_DATE" HeaderText="EFECTIVE DATE" />
+                                                <asp:BoundField DataField="EFECTIVE_DATE" HeaderText="EFECTIVE DATE" DataFormatString="{0:dd/MM/yyyy}"/>
                                                 <asp:BoundField DataField="AC_NO" HeaderText="A/C Head" />
                                                 <asp:BoundField DataField="AMOUNT_DR" HeaderText="Amount Debit" />
                                                 <asp:BoundField DataField="AMOUNT_CR" HeaderText="Amount Credit" />

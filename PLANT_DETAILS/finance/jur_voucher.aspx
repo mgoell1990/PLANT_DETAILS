@@ -14,8 +14,24 @@
             window.history.replaceState(null, null, window.location.href);
         }
     </script>
+
     <script type="text/javascript">
+
         $(function () {
+            SetAutoCompleteBENumber();
+        });
+
+        //On UpdatePanel Refresh.
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        if (prm != null) {
+            prm.add_endRequest(function (sender, e) {
+                if (sender._postBackSettings.panelsToUpdate != null) {
+                    SetAutoCompleteBENumber();
+                }
+            });
+        };
+
+        function SetAutoCompleteBENumber() {
             $("[id$=DropDownList29]").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -28,23 +44,18 @@
                             response($.map(data.d, function (item) {
                                 return {
                                     label: item.split('^')[0],
-                                }
+                                };
                             }))
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
                         }
                     });
-                },
-                select: function (e, i) {
-                },
-                minLength: 1
+                }
             });
-        });
+        }
+
+       
     </script>
+
+    
 
     <script type="text/javascript">
         $(function () {
@@ -83,67 +94,11 @@
         }
 
 
-        <%--$(function () {
-            $("[id$=DropDownList25]").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '<%=ResolveUrl("~/Service.asmx/supl_and_dater")%>',
-                        data: "{ 'prefix': '" + request.term + "'}",
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-                            response($.map(data.d, function (item) {
-                                return {
-                                    label: item.split('^')[0],
-                                }
-                            }))
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                },
-                select: function (e, i) {
-                },
-                minLength: 1
-            });
-        });--%>
+        
     </script>
 
     <script type="text/javascript">
-        <%--$(function () {
-            $("[id$=DropDownList26]").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '<%=ResolveUrl("~/Service.asmx/ac_head")%>',
-                        data: "{ 'prefix': '" + request.term + "'}",
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-                            response($.map(data.d, function (item) {
-                                return {
-                                    label: item.split('^')[0],
-                                }
-                            }))
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                },
-                select: function (e, i) {
-                },
-                minLength: 1
-            });
-        });--%>
+       
 
          $(function () {
             SetAutoCompleteAccountCode();
@@ -210,8 +165,7 @@
     </div>
 
     <div class="container-fluid mb-2">
-        <asp:UpdatePanel ID="UpdatePanel2" runat="server">
-            <ContentTemplate>
+        
                 <div class="row mt-1 justify-content-center text-center">
                     <div class="col text-center">
                         <asp:Panel ID="Panel30" runat="server">
@@ -415,8 +369,7 @@
                         </asp:Panel>
                     </div>
                 </div>
-            </ContentTemplate>
-        </asp:UpdatePanel>
+            
     </div>
 
 

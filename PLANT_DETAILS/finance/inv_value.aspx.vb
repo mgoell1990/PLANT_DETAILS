@@ -12,6 +12,10 @@ Public Class inv_value
     Dim conn As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
     Dim conn_trans As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
     Dim myTrans As SqlTransaction
+
+    Dim conn_trans_Transporter As New SqlConnection(ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
+    Dim myTransactionForTransport As SqlTransaction
+
     Dim count As Integer
     Dim dr As SqlDataReader
     Dim mycommand As New SqlCommand
@@ -1079,15 +1083,15 @@ Public Class inv_value
                         Next
 
 
-                        'For L = 0 To GridView6.Rows.Count - 1
+                        For L = 0 To GridView6.Rows.Count - 1
 
-                        '    ''update ledger
-                        '    Dim cmd12 As New SqlCommand
-                        '    Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                        '    cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                        '    cmd12.ExecuteReader()
-                        '    cmd12.Dispose()
-                        'Next
+                            ''update ledger
+                            Dim cmd12 As New SqlCommand
+                            Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                            cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                            cmd12.ExecuteReader()
+                            cmd12.Dispose()
+                        Next
 
 
                         If (DropDownList4.SelectedValue = "Yes") Then
@@ -1316,6 +1320,115 @@ Public Class inv_value
 
         Session.Remove("miscSaleToken")
         Throw New NotImplementedException()
+    End Sub
+
+
+    Protected Sub save_ledger_transport(ItemSlNo As String, so_no As String, garn_mb As String, inv_no As String, dt_id As String, ac_head As String, ac_term As String, price As Decimal, post_ind As String, token_no As String, line_no As Integer, PAY_IND As String)
+
+        Dim working_date As Date
+        If TextBox1.Text = "" Then
+            TextBox1.Focus()
+            Return
+        ElseIf IsDate(TextBox1.Text) = False Then
+            TextBox1.Text = ""
+            TextBox1.Focus()
+            Return
+        End If
+        working_date = CDate(TextBox1.Text)
+        If price > 0 Then
+            Dim STR1 As String = ""
+            If working_date.Month > 3 Then
+                STR1 = working_date.Year
+                STR1 = STR1.Trim.Substring(2)
+                STR1 = STR1 & (STR1 + 1)
+            ElseIf working_date.Month <= 3 Then
+                STR1 = working_date.Year
+                STR1 = STR1.Trim.Substring(2)
+                STR1 = (STR1 - 1) & STR1
+            End If
+            Dim month1 As Integer
+            month1 = working_date.Month
+            Dim qtr1 As String = ""
+            If month1 = 4 Or month1 = 5 Or month1 = 6 Then
+                qtr1 = "Q1"
+            ElseIf month1 = 7 Or month1 = 8 Or month1 = 9 Then
+                qtr1 = "Q2"
+            ElseIf month1 = 10 Or month1 = 11 Or month1 = 12 Then
+                qtr1 = "Q3"
+            ElseIf month1 = 1 Or month1 = 2 Or month1 = 3 Then
+                qtr1 = "Q4"
+            End If
+            Dim dr_value, cr_value As Decimal
+            dr_value = 0.0
+            cr_value = 0.0
+            If ac_term = "Dr" Then
+                dr_value = price
+                cr_value = 0.0
+            ElseIf ac_term = "Cr" Then
+                dr_value = 0.0
+                cr_value = price
+            End If
+
+            Dim cmd As New SqlCommand
+            Dim Query As String = "Insert Into LEDGER(Journal_ID,AGING_FLAG,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID, @AGING_FLAG,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            cmd = New SqlCommand(Query, conn_trans_Transporter, myTransactionForTransport)
+            cmd.Parameters.AddWithValue("@Journal_ID", ItemSlNo)
+            cmd.Parameters.AddWithValue("@PO_NO", so_no)
+            cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", garn_mb)
+            cmd.Parameters.AddWithValue("@SUPL_ID", dt_id)
+            cmd.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
+            cmd.Parameters.AddWithValue("@INVOICE_NO", inv_no)
+            cmd.Parameters.AddWithValue("@PERIOD", qtr1)
+            cmd.Parameters.AddWithValue("@EFECTIVE_DATE", working_date.Date)
+            cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
+            cmd.Parameters.AddWithValue("@AC_NO", ac_head)
+            cmd.Parameters.AddWithValue("@AMOUNT_DR", dr_value)
+            cmd.Parameters.AddWithValue("@AMOUNT_CR", cr_value)
+            cmd.Parameters.AddWithValue("@POST_INDICATION", post_ind)
+            cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", PAY_IND)
+            cmd.Parameters.AddWithValue("@BILL_TRACK_ID", token_no)
+            cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", line_no)
+            If (TextBox57.Text = "N/A") Then
+                cmd.Parameters.AddWithValue("@AGING_FLAG", inv_no)
+            Else
+                cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox57.Text)
+            End If
+
+            cmd.ExecuteReader()
+            cmd.Dispose()
+
+            ''
+
+            ''update ledger
+            Dim Query11 As New String("")
+            If (TextBox57.Text = "N/A") Then
+
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_CR ='" & dr_value & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
+
+            Else
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_CR ='" & dr_value & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
+            End If
+
+            Dim cmd11 As New SqlCommand
+            cmd11 = New SqlCommand(Query11, conn_trans_Transporter, myTransactionForTransport)
+            cmd11.ExecuteReader()
+            cmd11.Dispose()
+
+            If (TextBox57.Text = "N/A") Then
+
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_DR ='" & dr_value & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
+
+            Else
+                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_DR ='" & dr_value & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
+            End If
+
+            'Dim cmd11 As New SqlCommand
+            cmd11 = New SqlCommand(Query11, conn_trans_Transporter, myTransactionForTransport)
+            cmd11.ExecuteReader()
+            cmd11.Dispose()
+
+
+        End If
     End Sub
 
 
@@ -2447,11 +2560,11 @@ Public Class inv_value
                                 End If
 
                                 ''update ledger
-                                'Dim cmd12 As New SqlCommand
-                                'Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                                'cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                                'cmd12.ExecuteReader()
-                                'cmd12.Dispose()
+                                Dim cmd12 As New SqlCommand
+                                Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                                cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                cmd12.ExecuteReader()
+                                cmd12.Dispose()
 
 
                             End If
@@ -3165,11 +3278,10 @@ Public Class inv_value
     End Sub
 
     Protected Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        Dim conn_trans_Transporter As New SqlConnection(ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
-        Dim myTrans As SqlTransaction
+
         Using conn_trans_Transporter
             conn_trans_Transporter.Open()
-            myTrans = conn_trans_Transporter.BeginTransaction()
+            myTransactionForTransport = conn_trans_Transporter.BeginTransaction()
 
             Try
                 'Database updation entry
@@ -3266,7 +3378,7 @@ Public Class inv_value
                                     'update mb book
                                     Dim cmd As New SqlCommand
                                     Dim Query_1 As String = "update mb_book set TAXABLE_VALUE=@TAXABLE_VALUE,BillTrackID=@BillTrackID,GST_STATUS=@GST_STATUS,Valuation_Date=@Valuation_Date,fiscal_year=@fiscal_year,valuation_amt=@valuation_amt,rcm_sgst=@rcm_sgst,rcm_cgst=@rcm_cgst,rcm_igst=@rcm_igst,rcm_cess=@rcm_cess,ld=@ld, rcm=@rcm, sgst=@sgst,cgst=@cgst ,igst=@igst,cess=@cess,sgst_liab=@sgst_liab,cgst_liab=@cgst_liab,igst_liab=@igst_liab,cess_liab=@cess_liab,inv_no=@inv_no,inv_date=@inv_date,prov_amt=@prov_amt,pen_amt=@pen_amt,it_amt=@it_amt,pay_ind=@pay_ind,v_ind=@v_ind,mat_rate=@mat_rate WHERE po_no ='" & Label12.Text & "' AND wo_slno =" & CDec(row.Cells(4).Text) & " AND mb_no  ='" & row.Cells(1).Text & "'  AND v_ind IS NULL"
-                                    cmd = New SqlCommand(Query_1, conn_trans_Transporter, myTrans)
+                                    cmd = New SqlCommand(Query_1, conn_trans_Transporter, myTransactionForTransport)
                                     cmd.Parameters.AddWithValue("@inv_no", TextBox160.Text)
                                     cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
                                     cmd.Parameters.AddWithValue("@prov_amt", CDec(row.Cells(12).Text))
@@ -3440,66 +3552,66 @@ Public Class inv_value
 
 
 
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), PROV_HEAD, "Dr", PROV_PRICE, "PROV", DropDownList40.Text, 1, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), PROV_HEAD, "Dr", PROV_PRICE, "PROV", DropDownList40.Text, 1, "")
 
                                     If DropDownList2.SelectedValue = "Yes" Then
 
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SGST_HEAD, "Dr", sgst_price, "SGST", DropDownList40.Text, 2, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CGST_HEAD, "Dr", cgst_price, "CGST", DropDownList40.Text, 2, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), IGST_HEAD, "Dr", igst_price, "IGST", DropDownList40.Text, 2, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CESS_HEAD, "Dr", cess_price, "CESS", DropDownList40.Text, 2, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SGST_LIAB_HEAD, "Cr", sgst_liab, "SGST_LIAB", DropDownList40.Text, 3, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CGST_LIAB_HEAD, "Cr", cgst_liab, "CGST_LIAB", DropDownList40.Text, 3, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), IGST_LIAB_HEAD, "Cr", igst_liab, "IGST_LIAB", DropDownList40.Text, 3, "")
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CESS_LIAB_HEAD, "Cr", cess_liab, "CESS_LIAB", DropDownList40.Text, 3, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SGST_HEAD, "Dr", sgst_price, "SGST", DropDownList40.Text, 2, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CGST_HEAD, "Dr", cgst_price, "CGST", DropDownList40.Text, 2, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), IGST_HEAD, "Dr", igst_price, "IGST", DropDownList40.Text, 2, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CESS_HEAD, "Dr", cess_price, "CESS", DropDownList40.Text, 2, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SGST_LIAB_HEAD, "Cr", sgst_liab, "SGST_LIAB", DropDownList40.Text, 3, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CGST_LIAB_HEAD, "Cr", cgst_liab, "CGST_LIAB", DropDownList40.Text, 3, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), IGST_LIAB_HEAD, "Cr", igst_liab, "IGST_LIAB", DropDownList40.Text, 3, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CESS_LIAB_HEAD, "Cr", cess_liab, "CESS_LIAB", DropDownList40.Text, 3, "")
 
                                     Else
                                         If DropDownList7.SelectedValue = "Yes" Then
-                                            save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SGST_WITHOUT_RCM, "Dr", sgst_price, "SGST", DropDownList40.Text, 2, "")
-                                            save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CGST_WITHOUT_RCM, "Dr", cgst_price, "CGST", DropDownList40.Text, 2, "")
-                                            save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), IGST_WITHOUT_RCM, "Dr", igst_price, "IGST", DropDownList40.Text, 2, "")
+                                            save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SGST_WITHOUT_RCM, "Dr", sgst_price, "SGST", DropDownList40.Text, 2, "")
+                                            save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), CGST_WITHOUT_RCM, "Dr", cgst_price, "CGST", DropDownList40.Text, 2, "")
+                                            save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), IGST_WITHOUT_RCM, "Dr", igst_price, "IGST", DropDownList40.Text, 2, "")
                                         End If
 
 
 
                                     End If
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SD_HEAD, "Cr", SD_PRICE, "SD", DropDownList40.Text, 4, "")
-                                    'save_ledger(Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), LD_HEAD, "Cr", LD_PRICE + PEN_PRICE, "PENALITY_LD", DropDownList40.Text, 6, "")
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), LD_HEAD, "Cr", LD_PRICE, "LD", DropDownList40.Text, 5, "")
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), AC_PUR, "Cr", PEN_PRICE, "SHORTAGE PENALITY", DropDownList40.Text, 6, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SD_HEAD, "Cr", SD_PRICE, "SD", DropDownList40.Text, 4, "")
+                                    'save_ledger_transport(Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), LD_HEAD, "Cr", LD_PRICE + PEN_PRICE, "PENALITY_LD", DropDownList40.Text, 6, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), LD_HEAD, "Cr", LD_PRICE, "LD", DropDownList40.Text, 5, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), AC_PUR, "Cr", PEN_PRICE, "SHORTAGE PENALITY", DropDownList40.Text, 6, "")
                                     If (CDec(TextBox63.Text) > 0) Then
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), "51704", "Cr", TDS_PRICE, "TDS_194(O)", DropDownList40.Text, 7, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), "51704", "Cr", TDS_PRICE, "TDS_194(O)", DropDownList40.Text, 7, "")
                                     Else
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_HEAD, "Cr", TDS_PRICE, "IT", DropDownList40.Text, 7, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_HEAD, "Cr", TDS_PRICE, "IT", DropDownList40.Text, 7, "")
                                     End If
 
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SUND_HEAD, "Cr", SUND_PRICE, "SUND", DropDownList40.Text, 12, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), SUND_HEAD, "Cr", SUND_PRICE, "SUND", DropDownList40.Text, 12, "")
 
                                     ''TDS ON GST
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_SGST_HEAD, "Cr", TDS_SGST, "TDS_SGST", DropDownList40.Text, 8, "")
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_CGST_HEAD, "Cr", TDS_CGST, "TDS_CGST", DropDownList40.Text, 8, "")
-                                    save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_IGST_HEAD, "Cr", TDS_IGST, "TDS_IGST", DropDownList40.Text, 8, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_SGST_HEAD, "Cr", TDS_SGST, "TDS_SGST", DropDownList40.Text, 8, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_CGST_HEAD, "Cr", TDS_CGST, "TDS_CGST", DropDownList40.Text, 8, "")
+                                    save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), TDS_IGST_HEAD, "Cr", TDS_IGST, "TDS_IGST", DropDownList40.Text, 8, "")
 
                                     ''psc calculation
                                     If PSC_PRICE > 0 Then
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Cr", PSC_PRICE, "PSC", DropDownList40.Text, 8, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Cr", PSC_PRICE, "PSC", DropDownList40.Text, 8, "")
                                     ElseIf PSC_PRICE < 0 Then
                                         Dim DIFF As Decimal = 0.0
                                         DIFF = PSC_PRICE * (-1)
-                                        save_ledger(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Dr", DIFF, "PSC", DropDownList40.Text, 8, "")
+                                        save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), EXPENSE_HEAD, "Dr", DIFF, "PSC", DropDownList40.Text, 8, "")
                                     End If
                                     ''update ledger
 
                                     Dim cmd11 As New SqlCommand
                                     Dim Query11 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & Label12.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & row.Cells(1).Text & "'"
-                                    cmd11 = New SqlCommand(Query11, conn_trans_Transporter, myTrans)
+                                    cmd11 = New SqlCommand(Query11, conn_trans_Transporter, myTransactionForTransport)
                                     cmd11.ExecuteReader()
                                     cmd11.Dispose()
 
                                     ''insert party amount
 
                                     Dim query As String = "INSERT INTO PARTY_AMT (POST_TYPE,AMOUNT_BAL,SUPL_CODE,SUPL_NAME,TOKEN_NO,ORDER_NO,GARN_MB_NO,AC_CODE,AMOUNT_DR,AMOUNT_CR,POST_DATE,EMP_ID)VALUES(@POST_TYPE,@AMOUNT_BAL,@SUPL_CODE,@SUPL_NAME,@TOKEN_NO,@ORDER_NO,@GARN_MB_NO,@AC_CODE,@AMOUNT_DR,@AMOUNT_CR,@POST_DATE,@EMP_ID)"
-                                    Dim cmd_1 As New SqlCommand(query, conn_trans_Transporter, myTrans)
+                                    Dim cmd_1 As New SqlCommand(query, conn_trans_Transporter, myTransactionForTransport)
                                     cmd_1.Parameters.AddWithValue("@SUPL_CODE", TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1))
                                     cmd_1.Parameters.AddWithValue("@SUPL_NAME", TextBox168.Text.Substring(TextBox168.Text.IndexOf(",") + 2))
                                     cmd_1.Parameters.AddWithValue("@TOKEN_NO", DropDownList40.SelectedValue)
@@ -3519,7 +3631,7 @@ Public Class inv_value
                                         ''insert party amount
 
                                         query = "INSERT INTO PARTY_AMT (POST_TYPE,IND,AMOUNT_BAL,SUPL_CODE,SUPL_NAME,TOKEN_NO,ORDER_NO,GARN_MB_NO,AC_CODE,AMOUNT_DR,AMOUNT_CR,POST_DATE,EMP_ID)VALUES(@POST_TYPE,@IND,@AMOUNT_BAL,@SUPL_CODE,@SUPL_NAME,@TOKEN_NO,@ORDER_NO,@GARN_MB_NO,@AC_CODE,@AMOUNT_DR,@AMOUNT_CR,@POST_DATE,@EMP_ID)"
-                                        cmd_1 = New SqlCommand(query, conn_trans_Transporter, myTrans)
+                                        cmd_1 = New SqlCommand(query, conn_trans_Transporter, myTransactionForTransport)
                                         cmd_1.Parameters.AddWithValue("@SUPL_CODE", TextBox168.Text.Substring(0, TextBox168.Text.IndexOf(",") - 1))
                                         cmd_1.Parameters.AddWithValue("@SUPL_NAME", TextBox168.Text.Substring(TextBox168.Text.IndexOf(",") + 2))
                                         cmd_1.Parameters.AddWithValue("@TOKEN_NO", DropDownList40.SelectedValue)
@@ -3566,7 +3678,7 @@ Public Class inv_value
 
                                         ''INSERT DATA INTO TAXABLE VALUES TABLE
                                         Query_1 = "INSERT INTO Taxable_Values (GST_STATUS,GST_PAYMENT_DATE,GST_PAYMENT_VOUCHER_NO,INVOICE_NO,INVOICE_DATE,ENTRY_DATE,RCM_CGST_AMT,RCM_SGST_AMT,RCM_IGST_AMT,RCM_CESS_AMT,GARN_CRR_MB_NO,VALUATION_DATE,DATA_TYPE,SL_NO,SUPL_CODE,SUPL_NAME,TAXABLE_VALUE,FISCAL_YEAR,CGST_PERCENTAGE,SGST_PERCENTAGE,IGST_PERCENTAGE,CESS_PERCENTAGE,CGST_AMT,SGST_AMT,IGST_AMT,CESS_AMT,TAXABLE_LD_PENALTY,CGST_LD_PENALTY,SGST_LD_PENALTY,IGST_LD_PENALTY,CESS_LD_PENALTY,CGST_TDS,SGST_TDS,IGST_TDS,CESS_TDS)VALUES(@GST_STATUS,@GST_PAYMENT_DATE,@GST_PAYMENT_VOUCHER_NO,@INVOICE_NO,@INVOICE_DATE,@ENTRY_DATE,@RCM_CGST_AMT,@RCM_SGST_AMT,@RCM_IGST_AMT,@RCM_CESS_AMT,@GARN_CRR_MB_NO,@VALUATION_DATE,@DATA_TYPE,@SL_NO,@SUPL_CODE,@SUPL_NAME,@TAXABLE_VALUE,@FISCAL_YEAR,@CGST_PERCENTAGE,@SGST_PERCENTAGE,@IGST_PERCENTAGE,@CESS_PERCENTAGE,@CGST_AMT,@SGST_AMT,@IGST_AMT,@CESS_AMT,@TAXABLE_LD_PENALTY,@CGST_LD_PENALTY,@SGST_LD_PENALTY,@IGST_LD_PENALTY,@CESS_LD_PENALTY,@CGST_TDS,@SGST_TDS,@IGST_TDS,@CESS_TDS)"
-                                        cmd = New SqlCommand(Query_1, conn_trans_Transporter, myTrans)
+                                        cmd = New SqlCommand(Query_1, conn_trans_Transporter, myTransactionForTransport)
                                         cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox160.Text)
                                         cmd.Parameters.AddWithValue("@INVOICE_DATE", Date.ParseExact(TextBox161.Text, "dd-MM-yyyy", provider))
                                         cmd.Parameters.AddWithValue("@GARN_CRR_MB_NO", row.Cells(1).Text)
@@ -3656,7 +3768,7 @@ Public Class inv_value
                     End If
                 End If
 
-                myTrans.Commit()
+                myTransactionForTransport.Commit()
                 Label17.Visible = True
                 Label17.Text = "All records are written to database."
 
@@ -3679,7 +3791,7 @@ Public Class inv_value
 
             Catch ee As Exception
                 ' Roll back the transaction. 
-                myTrans.Rollback()
+                myTransactionForTransport.Rollback()
                 conn.Close()
                 conn_trans_Transporter.Close()
                 Label17.Visible = True

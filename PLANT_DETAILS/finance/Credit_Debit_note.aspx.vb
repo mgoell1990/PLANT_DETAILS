@@ -226,7 +226,6 @@ Public Class Credit_Debit_note1
                 scmd.Parameters.AddWithValue("@IGST_AMT", GridView1.Rows(0).Cells(17).Text)
                 scmd.Parameters.AddWithValue("@TOTAL_VALUE", GridView1.Rows(0).Cells(18).Text)
                 scmd.Parameters.AddWithValue("@NOTIFICATION", TextBox66.Text)
-
                 scmd.ExecuteReader()
                 scmd.Dispose()
 
@@ -296,6 +295,57 @@ Public Class Credit_Debit_note1
                     conn.Close()
                 End If
 
+                Dim query As New String("")
+
+                Dim month1 As Integer
+                month1 = CDate(txtInvoiceDate.Text).Month
+                Dim qtr1 As String = ""
+                If month1 = 4 Or month1 = 5 Or month1 = 6 Then
+                    qtr1 = "Q1"
+                ElseIf month1 = 7 Or month1 = 8 Or month1 = 9 Then
+                    qtr1 = "Q2"
+                ElseIf month1 = 10 Or month1 = 11 Or month1 = 12 Then
+                    qtr1 = "Q3"
+                ElseIf month1 = 1 Or month1 = 2 Or month1 = 3 Then
+                    qtr1 = "Q4"
+                End If
+
+                If (Label7.Text = "Credit Note") Then
+
+                    'Dim sqlQuery As String = "update CN_DN_DETAILS set irn_no ='" & EinvErrorData.Item(0).IRN & "', QR_CODE ='" & EinvErrorData.Item(0).QRCode & "', EY_STATUS ='" & result.ToString() & "' where DEBIT_CREDIT_NO  ='" & TextBox65.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
+                    'Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                    'despatch.ExecuteReader()
+                    'despatch.Dispose()
+
+
+                    Dim I As Integer = 0
+                    For I = 0 To GridView2.Rows.Count - 1
+                        ''SAVE LEDGER
+
+                        query = "Insert Into LEDGER(BE_NO,POST_INDICATION,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,REVERSAL_INDICATOR,PAYMENT_INDICATION)VALUES(@BE_NO,@POST_INDICATION,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@REVERSAL_INDICATOR,@PAYMENT_INDICATION)"
+                        cmd = New SqlCommand(query, conn_trans, myTrans)
+                        cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", TextBox65.Text)
+                        cmd.Parameters.AddWithValue("@SUPL_ID", GridView2.Rows(I).Cells(2).Text)
+                        cmd.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
+                        cmd.Parameters.AddWithValue("@PERIOD", qtr1)
+                        cmd.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
+                        cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
+                        cmd.Parameters.AddWithValue("@AC_NO", GridView2.Rows(I).Cells(6).Text)
+                        cmd.Parameters.AddWithValue("@AMOUNT_CR", CDec(GridView2.Rows(I).Cells(7).Text))
+                        cmd.Parameters.AddWithValue("@AMOUNT_DR", CDec(GridView2.Rows(I).Cells(8).Text))
+                        cmd.Parameters.AddWithValue("@REVERSAL_INDICATOR", "REVERSAL ENTRY")
+                        cmd.Parameters.AddWithValue("@POST_INDICATION", GridView2.Rows(I).Cells(9).Text)
+                        cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
+                        cmd.Parameters.AddWithValue("@BE_NO", "")
+                        cmd.ExecuteReader()
+                        cmd.Dispose()
+
+                    Next
+
+
+
+
+                End If
 
 
 
@@ -923,9 +973,7 @@ Public Class Credit_Debit_note1
         GridView3.Visible = True
     End Sub
 
-    Protected Sub GridView3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles GridView3.SelectedIndexChanged
 
-    End Sub
 
     Protected Sub DropDownList2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList2.SelectedIndexChanged
         If DropDownList2.SelectedValue = "Credit Note" Then
@@ -956,6 +1004,11 @@ Public Class Credit_Debit_note1
     End Sub
 
     Protected Sub DropDownList4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList4.SelectedIndexChanged
+        Dim dt2 As DataTable = DirectCast(ViewState("REVERSAL_JV"), DataTable)
+        dt2.Clear()
+        GridView2.DataSource = dt2
+        GridView2.DataBind()
+
         If (DropDownList4.SelectedValue <> "Select") Then
 
             Dim mc1 As New SqlCommand
@@ -974,9 +1027,17 @@ Public Class Credit_Debit_note1
 
 
             If (Label7.Text = "Credit Note") Then
+
                 conn.Open()
-                Dim dt2 As DataTable = DirectCast(ViewState("REVERSAL_JV"), DataTable)
-                da = New SqlDataAdapter("select * from ledger where GARN_NO_MB_NO='" & DropDownList4.SelectedValue & "' and FISCAL_YEAR= '" & DropDownList3.SelectedValue & "'", conn)
+
+                If (DropDownList1.SelectedValue = "Yes") Then
+                    da = New SqlDataAdapter("select * from ledger where GARN_NO_MB_NO='" & DropDownList4.SelectedValue & "' and FISCAL_YEAR= '" & DropDownList3.SelectedValue & "'", conn)
+                Else
+                    da = New SqlDataAdapter("select * from ledger where GARN_NO_MB_NO='" & DropDownList4.SelectedValue & "' and FISCAL_YEAR= '" & DropDownList3.SelectedValue & "' and po_no not like 'W%'", conn)
+                End If
+
+
+
                 da.Fill(dt2)
                 conn.Close()
 

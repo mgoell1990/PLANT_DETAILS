@@ -52,7 +52,9 @@
                                     SUPL_GST_NO: item.split('^')[24],
                                     SUPL_STATE_CODE: item.split('^')[25],
                                     PARTY_TYPE: item.split('^')[26],
-                                    MSME_NO: item.split('^')[27]
+                                    MSME_NO: item.split('^')[27],
+                                    SUPL_STATUS: item.split('^')[28],
+                                    SUPL_VALIDITY: item.split('^')[29]
 
                                 }
                             }))
@@ -89,6 +91,8 @@
                     $("[id$=TextBox113]").val(i.item.SUPL_STATE_CODE);
                     $("[id$=DropDownList2]").val(i.item.PARTY_TYPE);
                     $("[id$=TextBox1]").val(i.item.MSME_NO);
+                    $("[id$=DropDownList3]").val(i.item.SUPL_STATUS);
+                    $("[id$=TextBox2]").val(i.item.SUPL_VALIDITY);
                 },
                 minLength: 1
             });
@@ -133,7 +137,9 @@
                                     SUPL_GST_NO: item.split('^')[24],
                                     SUPL_STATE_CODE: item.split('^')[25],
                                     PARTY_TYPE: item.split('^')[26],
-                                    MSME_NO: item.split('^')[27]
+                                    MSME_NO: item.split('^')[27],
+                                    SUPL_STATUS: item.split('^')[28],
+                                    SUPL_VALIDITY: item.split('^')[29]
 
                                 }
                             }))
@@ -170,6 +176,8 @@
                     $("[id$=TextBox113]").val(i.item.SUPL_STATE_CODE);
                     $("[id$=DropDownList2]").val(i.item.PARTY_TYPE);
                     $("[id$=TextBox1]").val(i.item.MSME_NO);
+                    $("[id$=DropDownList3]").val(i.item.SUPL_STATUS);
+                    $("[id$=TextBox2]").val(i.item.SUPL_VALIDITY);
 
                 },
                 minLength: 1
@@ -236,7 +244,7 @@
                             <div class="col-4 text-end">
                                 <asp:Label ID="Label2" runat="server" ForeColor="Blue" Text="Party Type"></asp:Label>
                             </div>
-                            <div class="col-8 text-start">
+                            <div class="col-3 text-start">
                                 <asp:DropDownList class="form-select" ID="DropDownList2" runat="server" AutoPostBack="True">
                                     <asp:ListItem>NA</asp:ListItem>
                                     <asp:ListItem>MSME</asp:ListItem>
@@ -244,14 +252,34 @@
                                     
                                 </asp:DropDownList>
                             </div>
+
+                            <div class="col-2 text-end">
+                                <asp:Label ID="Label5" runat="server" ForeColor="Blue" Text="MSME NO."></asp:Label>
+                            </div>
+                            <div class="col-3 text-start">
+                                <asp:TextBox class="form-control" ID="TextBox1" runat="server"></asp:TextBox>
+                            </div>
                         </div>
 
                         <div class="row align-items-center">
                             <div class="col-4 text-end">
-                                <asp:Label ID="Label5" runat="server" ForeColor="Blue" Text="MSME NO."></asp:Label>
+                                <asp:Label ID="Label9" runat="server" ForeColor="Blue" Text="Status"></asp:Label>
                             </div>
-                            <div class="col-8 text-start">
-                                <asp:TextBox class="form-control" ID="TextBox1" runat="server"></asp:TextBox>
+                            <div class="col-3 text-start">
+                                <asp:DropDownList class="form-select" ID="DropDownList3" runat="server" AutoPostBack="True">
+                                    <asp:ListItem>Select</asp:ListItem>
+                                    <asp:ListItem>ACTIVE</asp:ListItem>
+                                    <asp:ListItem>IN-ACTIVE</asp:ListItem>
+                                    
+                                </asp:DropDownList>
+                            </div>
+
+                            <div class="col-2 text-end">
+                                <asp:Label ID="Label10" runat="server" ForeColor="Blue" Text="Validity"></asp:Label>
+                            </div>
+                            <div class="col-3 text-start">
+                                <asp:TextBox class="form-control" ID="TextBox2" runat="server"></asp:TextBox>
+                                <cc1:CalendarExtender ID="TextBox2_CalendarExtender" runat="server" CssClass="red" Enabled="True" Format="dd-MM-yyyy" TargetControlID="TextBox2" />
                             </div>
                         </div>
 

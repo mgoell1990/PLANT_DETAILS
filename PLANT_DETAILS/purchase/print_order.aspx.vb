@@ -26,7 +26,7 @@ Public Class print_order
             DropDownList50.DataValueField = "order_type"
             DropDownList50.DataBind()
             conn.Close()
-            DropDownList50.Items.Add("Select")
+            DropDownList50.Items.Insert(0, "Select")
             DropDownList50.SelectedValue = "Select"
             ''search mat group
             ''Panel32.Visible = True
@@ -62,11 +62,35 @@ Public Class print_order
                 crystalReport.Load(Server.MapPath("~/print_rpt/sale_order_misc.rpt"))
             End If
 
-        ElseIf DropDownList50.SelectedValue = "Purchase Order" Or DropDownList50.SelectedValue = "Rate Contract" Then
+        ElseIf DropDownList50.SelectedValue = "Purchase Order" Then
             crystalReport.Load(Server.MapPath("~/print_rpt/po_store.rpt"))
 
         ElseIf DropDownList50.SelectedValue = "Work Order" Then
             crystalReport.Load(Server.MapPath("~/print_rpt/w_order.rpt"))
+
+        ElseIf DropDownList50.SelectedValue = "Rate Contract" Then
+
+            Dim po_type As New String("")
+
+            conn.Open()
+            Dim mc1 As New SqlCommand
+            mc1.CommandText = "select PO_TYPE from ORDER_DETAILS where SO_NO='" & DropDownList49.Text.Substring(0, DropDownList49.Text.IndexOf(",") - 1).Trim & "'"
+            mc1.Connection = conn
+            dr = mc1.ExecuteReader
+            If dr.HasRows Then
+                dr.Read()
+                po_type = dr.Item("PO_TYPE")
+                dr.Close()
+            End If
+            conn.Close()
+
+            If (po_type = "STORE MATERIAL") Then
+                crystalReport.Load(Server.MapPath("~/print_rpt/RateContractStore.rpt"))
+            Else
+                crystalReport.Load(Server.MapPath("~/print_rpt/RateContract.rpt"))
+            End If
+
+
 
         End If
         crystalReport.SetDataSource(dt)
@@ -125,7 +149,7 @@ Public Class print_order
         DropDownList49.DataValueField = "so_no"
         DropDownList49.DataBind()
         conn.Close()
-        DropDownList49.Items.Add("Select")
+        DropDownList49.Items.Insert(0, "Select")
         DropDownList49.SelectedValue = "Select"
     End Sub
 

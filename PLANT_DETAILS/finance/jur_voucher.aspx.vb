@@ -361,6 +361,7 @@ Public Class jur_voucher
 
                     myTrans.Commit()
                     Label468.Text = "All records are written to database."
+
                 End If
 
 
@@ -374,6 +375,13 @@ Public Class jur_voucher
             Finally
                 conn.Close()
                 conn_trans.Close()
+
+
+                Dim DT4 As New DataTable
+                DT4.Columns.AddRange(New DataColumn(6) {New DataColumn("AC HEAD"), New DataColumn("A/C DESCRIPTION"), New DataColumn("SUPL CODE"), New DataColumn("DEBIT AMOUNT"), New DataColumn("CREDIT AMOUNT"), New DataColumn("BE/BL NO"), New DataColumn("INVOICE NO")})
+                ViewState("EXTERNAL_JV") = DT4
+                Me.BINDGRID4()
+
             End Try
 
         End Using
