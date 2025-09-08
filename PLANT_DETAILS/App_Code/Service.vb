@@ -1112,7 +1112,7 @@ Public Class Service
         Using conn As New SqlConnection()
             conn.ConnectionString = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
             Using cmd As New SqlCommand()
-                cmd.CommandText = "SELECT distinct TOP 20 (SO_NO + ' , ' + SO_ACTUAL) as po_details FROM ORDER_DETAILS join WO_ORDER on WO_ORDER .PO_NO =ORDER_DETAILS .SO_NO  WHERE (SO_STATUS='RCW' OR SO_STATUS='ACTIVE') AND (SO_NO like '%' + @SearchText + '%' or SO_ACTUAL like '%' + @SearchText + '%' or PARTY_CODE like '%' + @SearchText + '%') and (so_no like 'w%' or so_no like 'r%') AND WO_TYPE <>'FREIGHT INWARD' AND WO_TYPE <>'FREIGHT OUTWARD' AND W_STATUS ='PENDING' ORDER BY po_details"
+                cmd.CommandText = "SELECT distinct TOP 20 (SO_NO + ' , ' + SO_ACTUAL) as po_details FROM ORDER_DETAILS join WO_ORDER on WO_ORDER .PO_NO =ORDER_DETAILS .SO_NO  WHERE (SO_STATUS='RCW' OR SO_STATUS='ACTIVE' OR SO_STATUS='DRAFT') AND (SO_NO like '%' + @SearchText + '%' or SO_ACTUAL like '%' + @SearchText + '%' or PARTY_CODE like '%' + @SearchText + '%') and (so_no like 'w%' or so_no like 'r%') AND WO_TYPE <>'FREIGHT INWARD' AND WO_TYPE <>'FREIGHT OUTWARD' AND W_STATUS ='PENDING' ORDER BY po_details"
                 cmd.Parameters.AddWithValue("@SearchText", prefix)
                 cmd.Connection = conn
                 conn.Open()

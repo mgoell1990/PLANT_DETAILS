@@ -226,7 +226,7 @@ Public Class fg_report
 
             INSERT INTO @TT
             select ITEM_CODE, P_DESC AS ITEM_NAME,'0.00' AS ITEM_OPEN_STOCK, '0.00' as PROD_F_QTY, '0.00' as TRANSFER_QTY,'0.00' as SALES_QTY, 
-            (case when SUM(total_weight) is null then '0.000' else SUM(total_weight) end) AS SALES_MT, (case when SUM(TAXABLE_VALUE) is null then '0.000' else SUM(TAXABLE_VALUE) end) AS SALES_VALUE,
+            (case when SUM(DESPATCH.total_weight) is null then '0.000' else SUM(DESPATCH.total_weight) end) AS SALES_MT, (case when SUM(TAXABLE_VALUE) is null then '0.000' else SUM(TAXABLE_VALUE) end) AS SALES_VALUE,
             (case when SUM(SGST_AMT) is null then '0.000' else SUM(SGST_AMT) end) AS SGST_AMT, (case when SUM(CGST_AMT) is null then '0.000' else SUM(CGST_AMT) end) AS CGST_AMT,
             (case when SUM(IGST_AMT) is null then '0.000' else SUM(IGST_AMT) end) AS IGST_AMT, (case when SUM(CESS_AMT) is null then '0.000' else SUM(CESS_AMT) end) AS CESS_AMT
             from PROD_CONTROL join DESPATCH on DESPATCH .D_TYPE +DESPATCH .INV_NO =PROD_CONTROL.INV_NO and DESPATCH.FISCAL_YEAR=PROD_CONTROL.FISCAL_YEAR where DESPATCH .INV_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' and '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' and INV_STATUS <> 'cancelled' GROUP BY ITEM_CODE, P_DESC order by ITEM_CODE

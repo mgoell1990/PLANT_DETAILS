@@ -85,15 +85,15 @@ Public Class item_transfer
             End If
             conn.Close()
 
-            conn.Open()
-            dt.Clear()
-            'da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM where ITEM_TYPE='" & DropDownList2.Text.Substring(0, (DropDownList2.Text.IndexOf(",") - 1)).Trim & "' ", conn)
-            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where qual_desc='" + qualityType + "' order by ITEM_CODE", conn)
-            da.Fill(dt)
-            conn.Close()
-            DropDownList4.DataSource = dt
-            DropDownList4.DataValueField = "ITEM_CODE"
-            DropDownList4.DataBind()
+            'conn.Open()
+            'dt.Clear()
+            ''da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM where ITEM_TYPE='" & DropDownList2.Text.Substring(0, (DropDownList2.Text.IndexOf(",") - 1)).Trim & "' ", conn)
+            'da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where qual_desc='" + qualityType + "' order by ITEM_CODE", conn)
+            'da.Fill(dt)
+            'conn.Close()
+            'DropDownList4.DataSource = dt
+            'DropDownList4.DataValueField = "ITEM_CODE"
+            'DropDownList4.DataBind()
 
             Panel1.Visible = True
         End If
@@ -108,7 +108,7 @@ Public Class item_transfer
 
     Protected Sub DropDownList2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList2.SelectedIndexChanged
         Dim working_date As Date
-        Dim qualityType As New String("")
+
         working_date = Today.Date
         conn.Open()
         dt.Clear()
@@ -118,73 +118,7 @@ Public Class item_transfer
         DropDownList1.DataSource = dt
         DropDownList1.DataValueField = "ITEM_CODE"
         DropDownList1.DataBind()
-        conn.Open()
-        Dim mc1 As New SqlCommand
-        mc1.CommandText = "select * from F_ITEM where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
-        mc1.Connection = conn
-        dr = mc1.ExecuteReader
-        If dr.HasRows Then
-            dr.Read()
-            Label276.Text = dr.Item("ITEM_AU")
-            Label277.Text = dr.Item("ITEM_AU")
-            TextBox1.Text = dr.Item("ITEM_F_STOCK")
-            TextBox50.Text = dr.Item("ITEM_B_STOCK")
-            dr.Close()
-        Else
-            dr.Close()
-        End If
-        conn.Close()
 
-        ''Getting quality group
-        conn.Open()
-        mc1.CommandText = "select qual_desc from qual_group where qual_code='" & DropDownList2.Text.Substring(0, (DropDownList2.Text.IndexOf(",") - 1)).Trim & "' "
-        mc1.Connection = conn
-        dr = mc1.ExecuteReader
-        If dr.HasRows Then
-            dr.Read()
-            qualityType = dr.Item("qual_desc")
-            dr.Close()
-        Else
-            dr.Close()
-        End If
-        conn.Close()
-
-        conn.Open()
-        dt.Clear()
-
-        If (qualityType = "MCB") Then
-            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where (qual_desc='" + qualityType + "' or qual_desc='AMC') order by ITEM_CODE", conn)
-
-        ElseIf (qualityType = "AMC") Then
-            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where (qual_desc='" + qualityType + "' or qual_desc='MCB') order by ITEM_CODE", conn)
-
-        Else
-            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where qual_desc='" + qualityType + "' order by ITEM_CODE", conn)
-        End If
-
-        'da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code order by ITEM_CODE", conn)
-
-        da.Fill(dt)
-        conn.Close()
-        DropDownList4.DataSource = dt
-        DropDownList4.DataValueField = "ITEM_CODE"
-        DropDownList4.DataBind()
-        conn.Open()
-        mc1.CommandText = "select * from F_ITEM where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
-        mc1.Connection = conn
-        dr = mc1.ExecuteReader
-        If dr.HasRows Then
-            dr.Read()
-            Label285.Text = dr.Item("ITEM_AU")
-            Label287.Text = dr.Item("ITEM_AU")
-            Label290.Text = dr.Item("ITEM_AU")
-            TextBox54.Text = dr.Item("ITEM_F_STOCK")
-            TextBox55.Text = dr.Item("ITEM_B_STOCK")
-            dr.Close()
-        Else
-            dr.Close()
-        End If
-        conn.Close()
     End Sub
 
     Protected Sub DropDownList1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList1.SelectedIndexChanged
@@ -224,6 +158,92 @@ Public Class item_transfer
             Label291.Visible = False
             Panel3.Visible = True
         End If
+
+
+        conn.Open()
+        ''Dim mc1 As New SqlCommand
+        mc1.CommandText = "select * from F_ITEM where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows Then
+            dr.Read()
+            Label276.Text = dr.Item("ITEM_AU")
+            Label277.Text = dr.Item("ITEM_AU")
+            TextBox1.Text = dr.Item("ITEM_F_STOCK")
+            TextBox50.Text = dr.Item("ITEM_B_STOCK")
+            dr.Close()
+        Else
+            dr.Close()
+        End If
+        conn.Close()
+
+        Dim qualityType As New String("")
+        Dim unitWeight As New Double()
+        ''Getting quality group
+        conn.Open()
+        mc1.CommandText = "select qual_desc from qual_group where qual_code='" & DropDownList2.Text.Substring(0, (DropDownList2.Text.IndexOf(",") - 1)).Trim & "' "
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows Then
+            dr.Read()
+            qualityType = dr.Item("qual_desc")
+            dr.Close()
+        Else
+            dr.Close()
+        End If
+        conn.Close()
+
+        conn.Open()
+        mc1.CommandText = "select * from F_ITEM where ITEM_code='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows Then
+            dr.Read()
+            unitWeight = dr.Item("ITEM_WEIGHT")
+            dr.Close()
+        Else
+            dr.Close()
+        End If
+        conn.Close()
+
+        conn.Open()
+        dt.Clear()
+
+        If (qualityType = "MCB") Then
+            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where (qual_desc='" + qualityType + "' or qual_desc='AMC') AND F_ITEM.ITEM_WEIGHT='" & unitWeight & "' order by ITEM_CODE", conn)
+
+        ElseIf (qualityType = "AMC") Then
+            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where (qual_desc='" + qualityType + "' or qual_desc='MCB') AND F_ITEM.ITEM_WEIGHT='" & unitWeight & "' order by ITEM_CODE", conn)
+
+        Else
+            ''da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where qual_desc='" + qualityType + "' order by ITEM_CODE", conn)
+            da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),F_ITEM.ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code where qual_desc='" + qualityType + "' AND ITEM_WEIGHT='" & unitWeight & "' order by ITEM_CODE", conn)
+        End If
+
+        'da = New SqlDataAdapter("select (ITEM_CODE + ' , ' + ITEM_NAME + ' - ' +  convert(varchar,convert(decimal(8,3),ITEM_WEIGHT)) + 'Kg') AS ITEM_CODE from F_ITEM join qual_group on F_ITEM.ITEM_TYPE=qual_group.qual_code order by ITEM_CODE", conn)
+
+        da.Fill(dt)
+        conn.Close()
+        DropDownList4.DataSource = dt
+        DropDownList4.DataValueField = "ITEM_CODE"
+        DropDownList4.DataBind()
+        conn.Open()
+        mc1.CommandText = "select * from F_ITEM where ITEM_CODE='" & DropDownList1.Text.Substring(0, (DropDownList1.Text.IndexOf(",") - 1)).Trim & "' "
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows Then
+            dr.Read()
+            Label285.Text = dr.Item("ITEM_AU")
+            Label287.Text = dr.Item("ITEM_AU")
+            Label290.Text = dr.Item("ITEM_AU")
+            TextBox54.Text = dr.Item("ITEM_F_STOCK")
+            TextBox55.Text = dr.Item("ITEM_B_STOCK")
+            dr.Close()
+        Else
+            dr.Close()
+        End If
+        conn.Close()
+
     End Sub
 
     Protected Sub DropDownList4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList4.SelectedIndexChanged

@@ -957,6 +957,20 @@ Public Class s_report
             DropDownList6.SelectedValue = "Select"
             conn.Close()
 
+        ElseIf DropDownList9.SelectedValue = "Insured Items" Then
+            MultiView1.ActiveViewIndex = 8
+
+            Dim dt As New DataTable()
+
+            conn.Open()
+            dt.Clear()
+
+            da = New SqlDataAdapter("select ROW_NUMBER() OVER (ORDER BY MAT_CODE) AS ROW_NO,*,(MAT_AVG*MAT_STOCK) AS Value from MATERIAL where MATERIAL_TYPE='INSURED ITEMS' and MAT_STOCK>0", conn)
+            da.Fill(dt)
+            conn.Close()
+            GridView8.DataSource = dt
+            GridView8.DataBind()
+
         End If
 
     End Sub
@@ -1991,7 +2005,7 @@ Public Class s_report
 				SELECT E.MAT_CODE,'2016-04-01' As LINE_DATE ,'1617' as FISCAL_YEAR, '0' as LINE_NO, E.OPEN_STOCK As MAT_BALANCE,E.OPEN_AVG_PRICE As UNIT_PRICE,(E.OPEN_STOCK*E.OPEN_AVG_PRICE) AS TOTAL_VALUE FROM MATERIAL E where e.MAT_CODE not like '100%' and e.MAT_CODE not in (select distinct MAT_CODE from MAT_DETAILS where MAT_CODE not like '100%' and LINE_DATE<=@Upto_date) and e.OPEN_STOCK>0 ORDER BY MAT_CODE
 
 
-				select ROW_NUMBER() OVER (ORDER BY t1.MAT_CODE) AS ROW_NO,t1.MAT_CODE,m1.MAT_NAME,m1.MAT_LASTPUR_DATE,m1.LAST_ISSUE_DATE,(SELECT dbo.fnc_FiscalYear(m1.LAST_ISSUE_DATE)) As ISSUE_FY,t1.MAT_BALANCE As MAT_STOCK,t1.UNIT_PRICE,(t1.MAT_BALANCE*t1.UNIT_PRICE) As Value, M1.PURPOSE, M1.REMARKS from @TT t1 join MATERIAL m1 on t1.MAT_CODE=m1.MAT_CODE where t1.MAT_BALANCE>0 and m1.LAST_ISSUE_DATE<@Upto_date order by t1.MAT_CODE", conn)
+				select ROW_NUMBER() OVER (ORDER BY t1.MAT_CODE) AS ROW_NO,t1.MAT_CODE,m1.MAT_NAME,m1.MAT_LASTPUR_DATE,m1.LAST_ISSUE_DATE,(SELECT dbo.fnc_FiscalYear((case when m1.LAST_ISSUE_DATE IS NULL THEN m1.MAT_LASTPUR_DATE else m1.MAT_LASTPUR_DATE end))) As ISSUE_FY,t1.MAT_BALANCE As MAT_STOCK,t1.UNIT_PRICE,(t1.MAT_BALANCE*t1.UNIT_PRICE) As Value, M1.PURPOSE, M1.MATERIAL_TYPE from @TT t1 join MATERIAL m1 on t1.MAT_CODE=m1.MAT_CODE where t1.MAT_BALANCE>0 and (m1.LAST_ISSUE_DATE<@Upto_date or (case when m1.LAST_ISSUE_DATE IS NULL THEN m1.MAT_LASTPUR_DATE end)<@Upto_date) and (m1.MATERIAL_TYPE is null or m1.MATERIAL_TYPE not like '%INSURED%') and m1.MAT_CODE<'090000001' order by t1.MAT_CODE", conn)
         da.Fill(dt)
         conn.Close()
         GridView5.DataSource = dt
@@ -2008,7 +2022,7 @@ Public Class s_report
         dt3.Columns.Add(New DataColumn("Mat Code", GetType(String)))
         dt3.Columns.Add(New DataColumn("Mat Name", GetType(String)))
         dt3.Columns.Add(New DataColumn("Last Purchase Date", GetType(Date)))
-        dt3.Columns.Add(New DataColumn("Last Issue Date", GetType(Date)))
+        dt3.Columns.Add(New DataColumn("Last Issue Date", GetType(String)))
         dt3.Columns.Add(New DataColumn("Fiscal Year", GetType(String)))
         dt3.Columns.Add(New DataColumn("Stock", GetType(Decimal)))
         dt3.Columns.Add(New DataColumn("Unit Price", GetType(Decimal)))
@@ -2016,8 +2030,18 @@ Public Class s_report
         dt3.Columns.Add(New DataColumn("Purpose", GetType(String)))
         dt3.Columns.Add(New DataColumn("Remarks", GetType(String)))
         For Me.count = 0 To GridView5.Rows.Count - 1
-            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, CDate(GridView5.Rows(count).Cells(3).Text), CDate(GridView5.Rows(count).Cells(4).Text), GridView5.Rows(count).Cells(5).Text, CDec(GridView5.Rows(count).Cells(6).Text), CDec(GridView5.Rows(count).Cells(7).Text), CDec(GridView5.Rows(count).Cells(8).Text), GridView5.Rows(count).Cells(9).Text, GridView5.Rows(count).Cells(10).Text)
+            Dim LastPurDate As String = ""
+            If IsDate(GridView5.Rows(count).Cells(4).Text) Then
+                LastPurDate = CDate(GridView5.Rows(count).Cells(4).Text)
+            Else
+                LastPurDate = ""
+            End If
+
+
+            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, CDate(GridView5.Rows(count).Cells(3).Text), LastPurDate, GridView5.Rows(count).Cells(5).Text, CDec(GridView5.Rows(count).Cells(6).Text), CDec(GridView5.Rows(count).Cells(7).Text), CDec(GridView5.Rows(count).Cells(8).Text), Replace(GridView5.Rows(count).Cells(9).Text, "&nbsp;", " "), Replace(GridView5.Rows(count).Cells(10).Text, "&nbsp;", " "))
         Next
+
+
 
         Using wb As New XLWorkbook()
 
@@ -2027,7 +2051,7 @@ Public Class s_report
             Response.Buffer = True
             Response.Charset = ""
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            Response.AddHeader("content-disposition", "attachment;filename=Non_Moving_Items_Stores.xlsx")
+            Response.AddHeader("content-disposition", "attachment;filename=Non_Moving_Items_Stores_" + DropDownList10.SelectedValue + "_Years_" + TextBox19.Text + ".xlsx")
             Using MyMemoryStream As New MemoryStream()
                 wb.SaveAs(MyMemoryStream)
                 MyMemoryStream.WriteTo(Response.OutputStream)
@@ -2206,5 +2230,45 @@ Public Class s_report
                 Response.End()
             End Using
         End Using
+    End Sub
+
+    Protected Sub Button22_Click(sender As Object, e As EventArgs) Handles Button22.Click
+        If GridView8.Rows.Count > 0 Then
+            Try
+                Dim dt As DataTable = New DataTable()
+                For j As Integer = 0 To GridView8.Columns.Count - 1
+                    dt.Columns.Add(GridView8.Columns(j).HeaderText)
+                Next
+                For i As Integer = 0 To GridView8.Rows.Count - 1
+                    Dim dr As DataRow = dt.NewRow()
+                    For j As Integer = 0 To GridView8.Columns.Count - 1
+                        If (GridView8.Rows(i).Cells(j).Text <> "") Then
+                            dr(GridView8.Columns(j).HeaderText) = GridView8.Rows(i).Cells(j).Text
+                        End If
+
+                    Next
+                    dt.Rows.Add(dr)
+                Next
+
+                Using wb As XLWorkbook = New XLWorkbook()
+                    wb.Worksheets.Add(dt, "Asset Report")
+                    Response.Clear()
+                    Response.Buffer = True
+                    Response.Charset = ""
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    Response.AddHeader("content-disposition", "attachment;filename=StoreInsuredItems.xlsx")
+                    Using MyMemoryStream As MemoryStream = New MemoryStream()
+                        wb.SaveAs(MyMemoryStream)
+                        MyMemoryStream.WriteTo(Response.OutputStream)
+                        Response.Flush()
+                        Response.End()
+                    End Using
+                End Using
+
+            Catch ex As Exception
+            Finally
+
+            End Try
+        End If
     End Sub
 End Class

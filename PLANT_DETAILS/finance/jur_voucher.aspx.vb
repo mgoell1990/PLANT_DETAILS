@@ -331,7 +331,7 @@ Public Class jur_voucher
                     For i = 0 To GridView2.Rows.Count - 1
                         ''SAVE LEDGER PARTY CREDIT
 
-                        query = "Insert Into LEDGER(INVOICE_NO,POST_INDICATION,BE_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,REVERSAL_INDICATOR,PAYMENT_INDICATION,Journal_ID)VALUES(@INVOICE_NO,@POST_INDICATION,@BE_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@REVERSAL_INDICATOR,@PAYMENT_INDICATION,@Journal_ID)"
+                        query = "Insert Into LEDGER(AGING_FLAG,AGING_FLAG_NEW,INVOICE_NO,POST_INDICATION,BE_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,REVERSAL_INDICATOR,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG,@AGING_FLAG_NEW,@INVOICE_NO,@POST_INDICATION,@BE_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@REVERSAL_INDICATOR,@PAYMENT_INDICATION,@Journal_ID)"
                         cmd = New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", TextBox61.Text)
                         cmd.Parameters.AddWithValue("@Journal_ID", TextBox62.Text)
@@ -354,6 +354,7 @@ Public Class jur_voucher
                         End If
                         cmd.Parameters.AddWithValue("@INVOICE_NO", GridView2.Rows(i).Cells(6).Text)
                         cmd.Parameters.AddWithValue("@AGING_FLAG", GridView2.Rows(i).Cells(6).Text)
+                        cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", GridView2.Rows(i).Cells(6).Text)
                         cmd.ExecuteReader()
                         cmd.Dispose()
 

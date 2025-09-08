@@ -204,7 +204,7 @@ Public Class rcd_voucher
 
 
                         ''SAVE LEDGER PARTY CREDIT
-                        query = "Insert Into LEDGER(AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
+                        query = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
                         cmd = New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", TextBox59.Text)
                         cmd.Parameters.AddWithValue("@Journal_ID", TextBox56.Text)
@@ -221,6 +221,7 @@ Public Class rcd_voucher
                         cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                         cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox2.Text)
                         cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
+                        cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox2.Text)
                         cmd.ExecuteReader()
                         cmd.Dispose()
 
@@ -231,7 +232,7 @@ Public Class rcd_voucher
                     Next
                     ''SAVE LEDGER BANK DEBIT
 
-                    Dim query1 As String = "Insert Into LEDGER(AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
+                    Dim query1 As String = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
                     Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@VOUCHER_NO", TextBox59.Text)
                     cmd1.Parameters.AddWithValue("@Journal_ID", TextBox56.Text)
@@ -248,6 +249,7 @@ Public Class rcd_voucher
                     cmd1.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                     cmd1.Parameters.AddWithValue("@INVOICE_NO", TextBox2.Text)
                     cmd1.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
+                    cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox2.Text)
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
 

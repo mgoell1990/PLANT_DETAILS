@@ -63,9 +63,13 @@ Public Class EinvoiceLogicClassEY
             'requestObjPost.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(user_name_test + ":" + password_test)))
 
             '''Production Credentials
-            Dim user_name_Production As New String("P000094")
-            Dim password_Production As New String("JM2Fk4ZUTgWdKqkU")
-            Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateAccessToken.do")
+            'Dim user_name_Production As New String("P000094")
+            'Dim password_Production As New String("JM2Fk4ZUTgWdKqkU")
+            'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateAccessToken.do")
+
+            Dim user_name_Production As New String("api.sail5440")
+            Dim password_Production As New String("Nfu0BvzpwHF@ZF")
+            Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/generateAccessToken.do")
             Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
             requestObjPost.Method = "POST"
             requestObjPost.ContentType = "application/json"
@@ -184,6 +188,8 @@ Public Class EinvoiceLogicClassEY
         'requestObjPost.AddHeader("idtoken", idtoken)
         'requestObjPost.AddHeader("payloadId", payloadId)
 
+
+        ''Need to be updated as per cloud migration of EY
         Dim user_name_Production As New String("P000094")
         Dim password_Production As New String("JM2Fk4ZUTgWdKqkU")
         Dim strposturlProduction = String.Format("https://api.eydigigst.com/http/sp0049/inwardrestdata")
@@ -359,9 +365,14 @@ Public Class EinvoiceLogicClassEY
         'requestObjPost.AddHeader("idtoken", idtoken)
         'requestObjPost.AddHeader("payloadId", payloadId)
 
-        Dim user_name_Production As New String("P000094")
-        Dim password_Production As New String("JM2Fk4ZUTgWdKqkU")
-        Dim strposturlProduction = String.Format("https://api.eydigigst.com/http/sp0049/239/outwardrestdata")
+        'Dim user_name_Production As New String("P000094")
+        'Dim password_Production As New String("JM2Fk4ZUTgWdKqkU")
+        'Dim strposturlProduction = String.Format("https://api.eydigigst.com/http/sp0049/239/outwardrestdata")
+
+        Dim user_name_Production As New String("api.sail5440")
+        Dim password_Production As New String("Nfu0BvzpwHF@ZF")
+        Dim strposturlProduction = String.Format("https://prcpi.it-cpi021-rt.cfapps.in30.hana.ondemand.com/http/sp0049/239/outwardrestdata")
+
         Dim requestObjPost As New RestRequest(Method.POST)
         Dim client As New RestClient(strposturlProduction)
         requestObjPost.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(user_name_Production + ":" + password_Production)))
@@ -406,7 +417,11 @@ Public Class EinvoiceLogicClassEY
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/generateEinvoice.do")
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
+
+
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/generateEinvoice.do")
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
         requestObjPost.ContentType = "application/json"
@@ -482,7 +497,10 @@ Public Class EinvoiceLogicClassEY
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/generateEinvoice.do")
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
+
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/generateEinvoice.do")
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
         requestObjPost.ContentType = "application/json"
@@ -559,6 +577,8 @@ Public Class EinvoiceLogicClassEY
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/generateEinvoice.do")
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/v2/generateEinvoice.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
+
+        ''Need to change as per cloud migration of EY
         Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateB2cDeepLink.do")
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
@@ -632,7 +652,10 @@ Public Class EinvoiceLogicClassEY
 
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/generateEwayBill.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateEwayBill.do")
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateEwayBill.do")
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/generateEwayBill.do")
+
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
         requestObjPost.ContentType = "application/json"
@@ -716,7 +739,10 @@ Public Class EinvoiceLogicClassEY
 
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/generateEWBByIRN.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateEWBByIRN.do")
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/generateEWBByIRN.do")
+
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/generateEWBByIRN.do")
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
         requestObjPost.ContentType = "application/json"
@@ -790,7 +816,10 @@ Public Class EinvoiceLogicClassEY
 
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/updatePartBEwayBill.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/updatePartBEwayBill.do")
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/updatePartBEwayBill.do")
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/updatePartBEwayBill.do")
+
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
         requestObjPost.ContentType = "application/json"
@@ -861,10 +890,13 @@ Public Class EinvoiceLogicClassEY
     End Function
 
     Public Function CancelEInvoice(IdToken As String, IRN_No As String, Gstin As String, cnlReason As String, cnlRemarks As String)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/cancelEinvoice.do")
-        Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
+
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/cancelEinvoice.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/cancelEinvoice.do")
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/cancelEinvoice.do")
+        Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
         requestObjPost.Method = "POST"
         requestObjPost.ContentType = "application/json"
         requestObjPost.Headers.Add("idtoken", IdToken)
@@ -918,7 +950,9 @@ Public Class EinvoiceLogicClassEY
     Public Function CancelEwayBill(IdToken As String, payloadId As String, EWB_NO As String, Gstin As String, cancelRsnCode As String)
         'Dim strposturltest = String.Format("https://eapi.eydigigst.in/eybusinessapi-0.0.2-SNAPSHOT/api/cancelEwayBill.do")
         'Dim requestObjPost As WebRequest = WebRequest.Create(strposturltest)
-        Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/cancelEwayBill.do")
+        'Dim strposturlProduction = String.Format("https://eapi.eydigigst.com/eybusinessapi-0.0.2-SNAPSHOT/api/cancelEwayBill.do")
+
+        Dim strposturlProduction = String.Format("https://eapi.digigstey.com/bcappapi/cancelEwayBill.do")
         Dim requestObjPost As WebRequest = WebRequest.Create(strposturlProduction)
 
         requestObjPost.Method = "POST"

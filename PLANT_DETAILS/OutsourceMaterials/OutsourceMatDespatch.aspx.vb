@@ -1444,318 +1444,374 @@ Public Class OutsourceMatDespatch
                     cmd.Parameters.AddWithValue("@MAT_SL_NO", DropDownList4.SelectedValue)
                     cmd.ExecuteReader()
                     cmd.Dispose()
-                Next
-
-                ''search ac head
-                Dim IUCA As String = ""
-                Dim FREIGHT As String = ""
-                Dim CGST_HEAD As String = ""
-                Dim IGST_HEAD As String = ""
-                Dim VAT As String = ""
-                Dim CST_HEAD As String = ""
-                Dim TERMINAL As String = ""
-                Dim TCS As String = ""
-                Dim STOCK_HEAD As String = ""
-                Dim CESS_HEAD As String = ""
-                Dim SGST_HEAD As String = ""
-
-                Dim lcgst, lsgst, ligst, lcess, adv_pay_head, gst_exp As New String("")
-                conn.Open()
-                Dim MC5 As New SqlCommand
-                MC5.CommandText = "select work_group.TCS_OUTGOING,work_group.gst_expenditure,ORDER_DETAILS .SO_NO ,ORDER_DETAILS .ORDER_TO, dater.stock_ac_head,dater.iuca_head,work_group.adv_pay,work_group.lcgst,work_group .lsgst,work_group .ligst ,work_group .lcess,work_group.cgst,work_group.sgst,work_group.igst,work_group.cess, work_group.ed_head,work_group.vat_head,work_group.cst_head,work_group.freight_head,work_group.term_tax,work_group.tds_head,work_group.pack_head from ORDER_DETAILS join DATER on ORDER_DETAILS .PARTY_CODE=DATER.d_code JOIN work_group on ORDER_DETAILS.ORDER_TYPE =work_group.work_name and  ORDER_DETAILS.PO_TYPE  =work_group.work_type and ORDER_DETAILS.ORDER_TO  =work_group.d_type WHERE ORDER_DETAILS.SO_NO='" & TextBox124.Text & "'"
-                MC5.Connection = conn
-                dr = MC5.ExecuteReader
-                If dr.HasRows Then
-                    dr.Read()
-                    ORDER_TO = dr.Item("ORDER_TO")
-                    STOCK_HEAD = "61998"
-                    IUCA = dr.Item("iuca_head")
-                    FREIGHT = dr.Item("freight_head")
-                    CGST_HEAD = dr.Item("CGST")
-                    IGST_HEAD = dr.Item("IGST")
-                    VAT = dr.Item("vat_head")
-                    CST_HEAD = dr.Item("cst_head")
-                    TERMINAL = dr.Item("term_tax")
-                    TCS = dr.Item("TCS_OUTGOING")
-                    CESS_HEAD = dr.Item("CESS")
-                    SGST_HEAD = dr.Item("SGST")
-                    lcgst = dr.Item("lcgst")
-                    lsgst = dr.Item("lsgst")
-                    ligst = dr.Item("ligst")
-                    lcess = dr.Item("lcess")
-                    adv_pay_head = dr.Item("adv_pay")
-                    gst_exp = dr.Item("gst_expenditure")
-                    dr.Close()
-                    conn.Close()
-                Else
-                    conn.Close()
-                End If
-
-                If ORDER_TO = "I.P.T." Then
-                    If FINANCE_ARRANGE = "Book Adjustment" Or FINANCE_ARRANGE = "CREDIT" Then
-                        'save_ledger(TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox40.Text) + CDec(TextBox42.Text) + CDec(TextBox44.Text) + CDec(TextBox41.Text) + CDec(TextBox21.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox41.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, IUCA, "Dr", CDec(TextBox45.Text), "IUCA")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
-
-                    End If
-
-                ElseIf ORDER_TO = "Other" Then
-
-                    If FINANCE_ARRANGE = "ADVANCE" Then
-                        'save_ledger(TextBox124.Text, inv_for & CStr(DESPATCH_TYPE) & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox40.Text) + CDec(TextBox42.Text) + CDec(TextBox44.Text) + CDec(TextBox41.Text) + CDec(TextBox21.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
-                        'save_ledger(TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox40.Text) + CDec(TextBox42.Text) + CDec(TextBox44.Text) + CDec(TextBox41.Text) + CDec(TextBox21.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox41.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, adv_pay_head, "Dr", CDec(TextBox45.Text), "ADV_PAY")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
-                        save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
-
-                    ElseIf FINANCE_ARRANGE = "BG" Then
-
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox41.Text) - CDec(TextBox37.Text), "STOCK TRANSFOR")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "62203", "Dr", CDec(TextBox45.Text), "SUND_DEBTOR_OTHER")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
-                        save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
-
-                    End If
-
-                End If
-
-                'UPDATE SALE_RCD_VOUCHER
-                If DropDownList1.SelectedValue <> "N/A" Then
-
-                    QUARY1 = ""
-                    QUARY1 = "UPDATE SALE_RCD_VOUCHAR SET BAL_AMT =BAL_AMT- " & CDec(TextBox45.Text) & ",CGST_BAL =CGST_BAL - " & CDec(TextBox42.Text) & ",SGST_BAL =SGST_BAL- " & CDec(TextBox40.Text) & ",IGST_BAL =IGST_BAL- " & CDec(TextBox44.Text) & ",CESS_BAL =CESS_BAL- " & CDec(TextBox21.Text) & ",TT_TAX_BAL=TT_TAX_BAL - " & CDec(TextBox43.Text) & " WHERE VOUCHER_TYPE + VOUCHER_NO ='" & DropDownList1.Text & "' AND SO_NO ='" & TextBox124.Text & "' AND ITEM_SLNO ='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1) & "'"
-                    Dim cmdd As New SqlCommand(QUARY1, conn_trans, myTrans)
-                    cmdd.ExecuteReader()
-                    cmdd.Dispose()
-
-                End If
 
 
-                If transporter = "N/A" Or transporter = "PARTY" Then
-                    ''insert inv_print
+                    ''search ac head
+                    Dim IUCA As String = ""
+                    Dim FREIGHT As String = ""
+                    Dim CGST_HEAD As String = ""
+                    Dim IGST_HEAD As String = ""
+                    Dim VAT As String = ""
+                    Dim CST_HEAD As String = ""
+                    Dim TERMINAL As String = ""
+                    Dim TCS As String = ""
+                    Dim CESS_HEAD As String = ""
+                    Dim SGST_HEAD As String = ""
 
-                    QUARY1 = "Insert Into INV_PRINT(F_YEAR,INV_NO,PRINT_ORIGN,PRINT_TRANS,PRINT_ASSAE)values(@F_YEAR,@INV_NO,@PRINT_ORIGN,@PRINT_TRANS,@PRINT_ASSAE)"
-                    Dim scmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
-                    scmd1.Parameters.AddWithValue("@INV_NO", inv_for & TextBox65.Text)
-                    scmd1.Parameters.AddWithValue("@PRINT_ORIGN", "ORIGINAL")
-                    scmd1.Parameters.AddWithValue("@PRINT_TRANS", "DUPLICATE")
-                    scmd1.Parameters.AddWithValue("@PRINT_ASSAE", "TRIPLICATE")
-                    scmd1.Parameters.AddWithValue("@F_YEAR", STR1)
-                    scmd1.ExecuteReader()
-                    scmd1.Dispose()
-
-                Else
-
-                    Dim W_AU As New String("")
-
+                    Dim lcgst, lsgst, ligst, lcess, adv_pay_head, gst_exp, STOCK_TRANSFER_HEAD As New String("")
                     conn.Open()
-                    mc1.CommandText = "select MAX(W_AU) As W_AU from WO_ORDER where PO_NO='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "' and W_SLNO='" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim & "'"
-                    mc1.Connection = conn
-                    dr = mc1.ExecuteReader
+                    Dim MC5 As New SqlCommand
+                    MC5.CommandText = "select work_group.TCS_OUTGOING,work_group.gst_expenditure,ORDER_DETAILS .SO_NO ,ORDER_DETAILS .ORDER_TO, dater.stock_ac_head,dater.iuca_head,work_group.adv_pay,work_group.lcgst,work_group .lsgst,work_group .ligst ,work_group .lcess,work_group.cgst,work_group.sgst,work_group.igst,work_group.cess, work_group.ed_head,work_group.vat_head,work_group.cst_head,work_group.freight_head,work_group.term_tax,work_group.tds_head,work_group.pack_head from ORDER_DETAILS join DATER on ORDER_DETAILS .PARTY_CODE=DATER.d_code JOIN work_group on ORDER_DETAILS.ORDER_TYPE =work_group.work_name and  ORDER_DETAILS.PO_TYPE  =work_group.work_type and ORDER_DETAILS.ORDER_TO  =work_group.d_type WHERE ORDER_DETAILS.SO_NO='" & TextBox124.Text & "'"
+                    MC5.Connection = conn
+                    dr = MC5.ExecuteReader
                     If dr.HasRows Then
                         dr.Read()
-                        W_AU = dr.Item("W_AU")
+                        ORDER_TO = dr.Item("ORDER_TO")
+                        STOCK_TRANSFER_HEAD = dr.Item("stock_ac_head")
+                        IUCA = dr.Item("iuca_head")
+                        FREIGHT = dr.Item("freight_head")
+                        CGST_HEAD = dr.Item("CGST")
+                        IGST_HEAD = dr.Item("IGST")
+                        VAT = dr.Item("vat_head")
+                        CST_HEAD = dr.Item("cst_head")
+                        TERMINAL = dr.Item("term_tax")
+                        TCS = dr.Item("TCS_OUTGOING")
+                        CESS_HEAD = dr.Item("CESS")
+                        SGST_HEAD = dr.Item("SGST")
+                        lcgst = dr.Item("lcgst")
+                        lsgst = dr.Item("lsgst")
+                        ligst = dr.Item("ligst")
+                        lcess = dr.Item("lcess")
+                        adv_pay_head = dr.Item("adv_pay")
+                        gst_exp = dr.Item("gst_expenditure")
                         dr.Close()
+                        conn.Close()
                     Else
-                        dr.Close()
+                        conn.Close()
                     End If
-                    conn.Close()
-
-                    If (W_AU = "Vehicle") Then
-                        'update despatch if A/U is Vehicle
-
-                        QUARY1 = "update DESPATCH set INV_STATUS ='Pending' where INV_NO  ='" & TextBox65.Text & "'"
-                        Dim despatch As New SqlCommand(QUARY1, conn_trans, myTrans)
-                        despatch.ExecuteReader()
-                        despatch.Dispose()
-
-                    ElseIf (W_AU = "Mt" Or W_AU = "MT" Or W_AU = "MTS") Then
-
-                        Dim PROV_PRICE_FOR_TRANSPORTER As Decimal = 0.0
-                        Dim RCVD_QTY_TRANSPORTER As Decimal = 0.0
-                        i = 0
-                        For i = 0 To GridView2.Rows.Count - 1
-                            'RCVD_QTY_TRANSPORTER = RCVD_QTY_TRANSPORTER + CDec(GridView2.Rows(i).Cells(6).Text)
-                            RCVD_QTY_TRANSPORTER = RCVD_QTY_TRANSPORTER + CDec(TextBox7.Text)
-                        Next
-
-                        ''UPDATE WO_ORDER
-                        mycommand = New SqlCommand("update WO_ORDER set W_COMPLITED =W_COMPLITED + " & RCVD_QTY_TRANSPORTER & " where PO_NO='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1) & "' AND W_SLNO='" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1) & "'  and AMD_DATE =(select max(AMD_DATE) from WO_ORDER where PO_NO ='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1) & "' and W_SLNO = '" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1) & "' and AMD_DATE < ='" & working_date.Year & "-" & working_date.Month & "-" & working_date.Day & "')", conn_trans, myTrans)
-                        mycommand.ExecuteNonQuery()
 
 
-                        ''INSERT MB_BOOK FOR TRANSPORTER
+                    Dim ISSUE_HEAD, CONSUMPTION_HEAD As New String("")
+                    Dim AvgPrice, ProfitOnSales As New Decimal(0)
+                    conn.Open()
+                    mc.CommandText = "select * from Outsource_F_ITEM WITH(NOLOCK) where ITEM_CODE = '" & GridView2.Rows(lp).Cells(1).Text & "'"
+                    mc.Connection = conn
+                    dr = mc.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        ISSUE_HEAD = dr.Item("AC_ISSUE")
+                        CONSUMPTION_HEAD = dr.Item("AC_CON")
+                        AvgPrice = dr.Item("MAT_AVG")
+                        dr.Close()
+                        conn.Close()
+                    Else
+                        conn.Close()
+                    End If
+
+
+                    ProfitOnSales = CDec(TextBox54.Text) * (unit_rate - AvgPrice)
+
+
+
+
+                    If ORDER_TO = "I.P.T." Then
+                        If FINANCE_ARRANGE = "Book Adjustment" Then
+
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE ISSUE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, IUCA, "Dr", CDec(TextBox45.Text), "IUCA")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_TRANSFER_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * unit_rate), 2), "STOCK TRANSFOR")
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            Else
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
+                            End If
+
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
+
+                        End If
+
+                    ElseIf ORDER_TO = "Other" Then
+
+                        If FINANCE_ARRANGE = "ADVANCE" Then
+
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE ISSUE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, adv_pay_head, "Dr", CDec(TextBox45.Text), "ADV_PAY")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_TRANSFER_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * unit_rate), 2), "SALE OTHERS")
+
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            Else
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
+                            End If
+
+
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
+
+                        ElseIf FINANCE_ARRANGE = "BG" Or FINANCE_ARRANGE = "CREDIT" Then
+
+
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE ISSUE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "62203", "Dr", CDec(TextBox45.Text), "SUND_DEBTOR_OTHER")
+                            save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_TRANSFER_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * unit_rate), 2), "SALE OTHERS")
+
+
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            Else
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
+                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
+                            End If
+
+
+
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lsgst, "Cr", CDec(TextBox40.Text), "SGST_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ligst, "Cr", CDec(TextBox44.Text), "IGST_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcess, "Cr", CDec(TextBox21.Text), "CESS_PAYABLE")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TERMINAL, "Cr", CDec(TextBox43.Text), "TERMINAL TAX")
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, TCS, "Cr", CDec(TextBox66.Text), "TCS_OUTPUT")
+
+                        End If
+
+                    End If
+
+                    'UPDATE SALE_RCD_VOUCHER
+                    If DropDownList1.SelectedValue <> "N/A" Then
+
+                        QUARY1 = ""
+                        QUARY1 = "UPDATE SALE_RCD_VOUCHAR SET BAL_AMT =BAL_AMT- " & CDec(TextBox45.Text) & ",CGST_BAL =CGST_BAL - " & CDec(TextBox42.Text) & ",SGST_BAL =SGST_BAL- " & CDec(TextBox40.Text) & ",IGST_BAL =IGST_BAL- " & CDec(TextBox44.Text) & ",CESS_BAL =CESS_BAL- " & CDec(TextBox21.Text) & ",TT_TAX_BAL=TT_TAX_BAL - " & CDec(TextBox43.Text) & " WHERE VOUCHER_TYPE + VOUCHER_NO ='" & DropDownList1.Text & "' AND SO_NO ='" & TextBox124.Text & "' AND ITEM_SLNO ='" & DropDownList4.Text.Substring(0, DropDownList4.Text.IndexOf(",") - 1) & "'"
+                        Dim cmdd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
+                        cmdd1.ExecuteReader()
+                        cmdd1.Dispose()
+
+                    End If
+
+
+                    If transporter = "N/A" Or transporter = "PARTY" Then
+                        ''insert inv_print
+
+                        QUARY1 = "Insert Into INV_PRINT(F_YEAR,INV_NO,PRINT_ORIGN,PRINT_TRANS,PRINT_ASSAE)values(@F_YEAR,@INV_NO,@PRINT_ORIGN,@PRINT_TRANS,@PRINT_ASSAE)"
+                        Dim scmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
+                        scmd1.Parameters.AddWithValue("@INV_NO", inv_for & TextBox65.Text)
+                        scmd1.Parameters.AddWithValue("@PRINT_ORIGN", "ORIGINAL")
+                        scmd1.Parameters.AddWithValue("@PRINT_TRANS", "DUPLICATE")
+                        scmd1.Parameters.AddWithValue("@PRINT_ASSAE", "TRIPLICATE")
+                        scmd1.Parameters.AddWithValue("@F_YEAR", STR1)
+                        scmd1.ExecuteReader()
+                        scmd1.Dispose()
+
+                    Else
+
+                        Dim W_AU As New String("")
+
                         conn.Open()
-                        Dim w_qty, w_complite, w_unit_price, W_discount, mat_price As Decimal
-                        Dim WO_NAME, WO_AMD, AMD_DATE As New String("")
-                        Dim WO_AU As String = ""
-                        Dim WO_SUPL_ID As String = ""
-                        Dim MCqq As New SqlCommand
-                        Dim des_date As Date = Today.Date
-                        MCqq.CommandText = "select MAX(WO_AMD) AS WO_AMD ,MAX(AMD_DATE) AS AMD_DATE, sum(W_MATERIAL_COST) as W_MATERIAL_COST,MAX(SUPL_ID) as SUPL_ID, sum(W_QTY) as W_QTY,sum(W_COMPLITED) as W_COMPLITED,sum(W_TOLERANCE) as W_TOLERANCE,sum(W_UNIT_PRICE) as W_UNIT_PRICE,sum(W_DISCOUNT) as W_DISCOUNT,max(W_NAME) as W_NAME,max(W_AU) as W_AU from WO_ORDER WITH(NOLOCK) where PO_NO = '" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "' and w_slno=" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim & " and AMD_DATE < ='" & des_date.Year & "-" & des_date.Month & "-" & des_date.Day & "'"
-                        MCqq.Connection = conn
-                        dr = MCqq.ExecuteReader
+                        mc1.CommandText = "select MAX(W_AU) As W_AU from WO_ORDER where PO_NO='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "' and W_SLNO='" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim & "'"
+                        mc1.Connection = conn
+                        dr = mc1.ExecuteReader
                         If dr.HasRows Then
                             dr.Read()
-                            w_qty = dr.Item("W_QTY")
-                            w_complite = dr.Item("W_COMPLITED")
-                            w_unit_price = dr.Item("W_UNIT_PRICE")
-                            W_discount = dr.Item("W_DISCOUNT")
-                            mat_price = dr.Item("W_MATERIAL_COST")
-                            WO_NAME = dr.Item("W_NAME")
-                            WO_AU = dr.Item("W_AU")
-                            WO_SUPL_ID = dr.Item("SUPL_ID")
-                            WO_AMD = dr.Item("WO_AMD")
-                            AMD_DATE = dr.Item("AMD_DATE")
+                            W_AU = dr.Item("W_AU")
+                            dr.Close()
+                        Else
                             dr.Close()
                         End If
                         conn.Close()
 
-                        'update despatch
-                        'TRANSPORTER AU WISE ENTRY
+                        If (W_AU = "Vehicle") Then
+                            'update despatch if A/U is Vehicle
 
-                        'QUARY1 = "update DESPATCH set INV_STATUS ='' where INV_NO  ='" & TextBox65.Text & "'"
-                        'Dim despatch As New SqlCommand(QUARY1, conn_trans, myTrans)
-                        'despatch.ExecuteReader()
-                        'despatch.Dispose()
+                            QUARY1 = "update DESPATCH set INV_STATUS ='Pending' where INV_NO  ='" & TextBox65.Text & "'"
+                            Dim despatch As New SqlCommand(QUARY1, conn_trans, myTrans)
+                            despatch.ExecuteReader()
+                            despatch.Dispose()
 
-                        ''insert inv_print
+                        ElseIf (W_AU = "Mt" Or W_AU = "MT" Or W_AU = "MTS") Then
 
-                        QUARY1 = "Insert Into INV_PRINT(F_YEAR,INV_NO,PRINT_ORIGN,PRINT_TRANS,PRINT_ASSAE)values(@F_YEAR,@INV_NO,@PRINT_ORIGN,@PRINT_TRANS,@PRINT_ASSAE)"
-                        Dim scmd As New SqlCommand(QUARY1, conn_trans, myTrans)
-                        scmd.Parameters.AddWithValue("@INV_NO", inv_for & TextBox65.Text)
-                        scmd.Parameters.AddWithValue("@PRINT_ORIGN", "ORIGINAL")
-                        scmd.Parameters.AddWithValue("@PRINT_TRANS", "DUPLICATE")
-                        scmd.Parameters.AddWithValue("@PRINT_ASSAE", "TRIPLICATE")
-                        scmd.Parameters.AddWithValue("@F_YEAR", STR1)
-                        scmd.ExecuteReader()
-                        scmd.Dispose()
+                            Dim PROV_PRICE_FOR_TRANSPORTER As Decimal = 0.0
+                            Dim RCVD_QTY_TRANSPORTER As Decimal = 0.0
+                            i = 0
+                            For i = 0 To GridView2.Rows.Count - 1
+                                'RCVD_QTY_TRANSPORTER = RCVD_QTY_TRANSPORTER + CDec(GridView2.Rows(i).Cells(6).Text)
+                                RCVD_QTY_TRANSPORTER = RCVD_QTY_TRANSPORTER + CDec(TextBox7.Text)
+                            Next
 
-
-                        ''calculate work amount
-                        Dim base_value, discount_value, mat_rate, balance As Decimal
-                        base_value = 0
-                        discount_value = 0
-                        mat_rate = 0
-                        balance = 0
-                        base_value = w_unit_price * RCVD_QTY_TRANSPORTER
-                        discount_value = (base_value * W_discount) / 100
-                        PROV_PRICE_FOR_TRANSPORTER = FormatNumber(base_value - discount_value, 2)
+                            ''UPDATE WO_ORDER
+                            mycommand = New SqlCommand("update WO_ORDER set W_COMPLITED =W_COMPLITED + " & RCVD_QTY_TRANSPORTER & " where PO_NO='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1) & "' AND W_SLNO='" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1) & "'  and AMD_DATE =(select max(AMD_DATE) from WO_ORDER where PO_NO ='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1) & "' and W_SLNO = '" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1) & "' and AMD_DATE < ='" & working_date.Year & "-" & working_date.Month & "-" & working_date.Day & "')", conn_trans, myTrans)
+                            mycommand.ExecuteNonQuery()
 
 
-                        If (Label289.Text = "Pcs" Or Label289.Text = "PCS") Then
-                            balance = w_qty - w_complite - CInt(TextBox54.Text)
+                            ''INSERT MB_BOOK FOR TRANSPORTER
+                            conn.Open()
+                            Dim w_qty, w_complite, w_unit_price, W_discount, mat_price As Decimal
+                            Dim WO_NAME, WO_AMD, AMD_DATE As New String("")
+                            Dim WO_AU As String = ""
+                            Dim WO_SUPL_ID As String = ""
+                            Dim MCqq As New SqlCommand
+                            Dim des_date As Date = Today.Date
+                            MCqq.CommandText = "select MAX(WO_AMD) AS WO_AMD ,MAX(AMD_DATE) AS AMD_DATE, sum(W_MATERIAL_COST) as W_MATERIAL_COST,MAX(SUPL_ID) as SUPL_ID, sum(W_QTY) as W_QTY,sum(W_COMPLITED) as W_COMPLITED,sum(W_TOLERANCE) as W_TOLERANCE,sum(W_UNIT_PRICE) as W_UNIT_PRICE,sum(W_DISCOUNT) as W_DISCOUNT,max(W_NAME) as W_NAME,max(W_AU) as W_AU from WO_ORDER WITH(NOLOCK) where PO_NO = '" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "' and w_slno=" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim & " and AMD_DATE < ='" & des_date.Year & "-" & des_date.Month & "-" & des_date.Day & "'"
+                            MCqq.Connection = conn
+                            dr = MCqq.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                w_qty = dr.Item("W_QTY")
+                                w_complite = dr.Item("W_COMPLITED")
+                                w_unit_price = dr.Item("W_UNIT_PRICE")
+                                W_discount = dr.Item("W_DISCOUNT")
+                                mat_price = dr.Item("W_MATERIAL_COST")
+                                WO_NAME = dr.Item("W_NAME")
+                                WO_AU = dr.Item("W_AU")
+                                WO_SUPL_ID = dr.Item("SUPL_ID")
+                                WO_AMD = dr.Item("WO_AMD")
+                                AMD_DATE = dr.Item("AMD_DATE")
+                                dr.Close()
+                            End If
+                            conn.Close()
 
-                        Else
-                            balance = w_qty - w_complite - weight
+                            'update despatch
+                            'TRANSPORTER AU WISE ENTRY
+
+                            'QUARY1 = "update DESPATCH set INV_STATUS ='' where INV_NO  ='" & TextBox65.Text & "'"
+                            'Dim despatch As New SqlCommand(QUARY1, conn_trans, myTrans)
+                            'despatch.ExecuteReader()
+                            'despatch.Dispose()
+
+                            ''insert inv_print
+
+                            QUARY1 = "Insert Into INV_PRINT(F_YEAR,INV_NO,PRINT_ORIGN,PRINT_TRANS,PRINT_ASSAE)values(@F_YEAR,@INV_NO,@PRINT_ORIGN,@PRINT_TRANS,@PRINT_ASSAE)"
+                            Dim scmd As New SqlCommand(QUARY1, conn_trans, myTrans)
+                            scmd.Parameters.AddWithValue("@INV_NO", inv_for & TextBox65.Text)
+                            scmd.Parameters.AddWithValue("@PRINT_ORIGN", "ORIGINAL")
+                            scmd.Parameters.AddWithValue("@PRINT_TRANS", "DUPLICATE")
+                            scmd.Parameters.AddWithValue("@PRINT_ASSAE", "TRIPLICATE")
+                            scmd.Parameters.AddWithValue("@F_YEAR", STR1)
+                            scmd.ExecuteReader()
+                            scmd.Dispose()
+
+
+                            ''calculate work amount
+                            Dim base_value, discount_value, mat_rate, balance As Decimal
+                            base_value = 0
+                            discount_value = 0
+                            mat_rate = 0
+                            balance = 0
+                            base_value = w_unit_price * RCVD_QTY_TRANSPORTER
+                            discount_value = (base_value * W_discount) / 100
+                            PROV_PRICE_FOR_TRANSPORTER = FormatNumber(base_value - discount_value, 2)
+
+
+                            If (Label289.Text = "Pcs" Or Label289.Text = "PCS") Then
+                                balance = w_qty - w_complite - CInt(TextBox54.Text)
+
+                            Else
+                                balance = w_qty - w_complite - weight
+                            End If
+
+                            balance = w_qty - w_complite
+
+                            Dim Query2 As String = "Insert Into mb_book(unit_price,Entry_Date,mb_no,mb_date,po_no,supl_id,wo_slno,w_name,w_au,from_date,to_date,work_qty,rqd_qty,bal_qty,note,mb_by,ra_no,prov_amt,pen_amt,sgst,cgst,igst,cess,sgst_liab,cgst_liab,igst_liab,cess_liab,it_amt,pay_ind,fiscal_year,mat_rate,mb_clear,amd_no,amd_date)VALUES(@unit_price,@Entry_Date,@mb_no,@mb_date,@po_no,@supl_id,@wo_slno,@w_name,@w_au,@from_date,@to_date,@work_qty,@rqd_qty,@bal_qty,@note,@mb_by,@ra_no,@prov_amt,@pen_amt,@sgst,@cgst,@igst,@cess,@sgst_liab,@cgst_liab,@igst_liab,@cess_liab,@it_amt,@pay_ind,@fiscal_year,@mat_rate,@mb_clear,@amd_no,@amd_date)"
+                            Dim mbbookcmd As New SqlCommand(Query2, conn_trans, myTrans)
+                            mbbookcmd.Parameters.AddWithValue("@mb_no", inv_for & TextBox65.Text)
+                            mbbookcmd.Parameters.AddWithValue("@mb_date", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
+                            mbbookcmd.Parameters.AddWithValue("@po_no", DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim)
+                            mbbookcmd.Parameters.AddWithValue("@supl_id", WO_SUPL_ID)
+                            mbbookcmd.Parameters.AddWithValue("@wo_slno", DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim)
+                            mbbookcmd.Parameters.AddWithValue("@w_name", WO_NAME)
+                            mbbookcmd.Parameters.AddWithValue("@w_au", WO_AU)
+                            mbbookcmd.Parameters.AddWithValue("@from_date", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
+                            mbbookcmd.Parameters.AddWithValue("@to_date", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
+                            mbbookcmd.Parameters.AddWithValue("@work_qty", RCVD_QTY_TRANSPORTER)
+                            mbbookcmd.Parameters.AddWithValue("@rqd_qty", RCVD_QTY_TRANSPORTER)
+                            mbbookcmd.Parameters.AddWithValue("@bal_qty", balance)
+                            mbbookcmd.Parameters.AddWithValue("@note", "")
+                            mbbookcmd.Parameters.AddWithValue("@mb_by", Session("userName"))
+                            mbbookcmd.Parameters.AddWithValue("@ra_no", "")
+                            mbbookcmd.Parameters.AddWithValue("@prov_amt", Math.Round(PROV_PRICE_FOR_TRANSPORTER, 2))
+                            mbbookcmd.Parameters.AddWithValue("@pen_amt", 0.0)
+                            mbbookcmd.Parameters.AddWithValue("@sgst", 0)
+                            mbbookcmd.Parameters.AddWithValue("@cgst", 0)
+                            mbbookcmd.Parameters.AddWithValue("@igst", 0)
+                            mbbookcmd.Parameters.AddWithValue("@cess", 0)
+                            mbbookcmd.Parameters.AddWithValue("@sgst_liab", 0)
+                            mbbookcmd.Parameters.AddWithValue("@cgst_liab", 0)
+                            mbbookcmd.Parameters.AddWithValue("@igst_liab", 0)
+                            mbbookcmd.Parameters.AddWithValue("@cess_liab", 0)
+                            mbbookcmd.Parameters.AddWithValue("@it_amt", 0)
+                            mbbookcmd.Parameters.AddWithValue("@pay_ind", "")
+                            mbbookcmd.Parameters.AddWithValue("@fiscal_year", STR1)
+                            mbbookcmd.Parameters.AddWithValue("@mat_rate", 0)
+                            mbbookcmd.Parameters.AddWithValue("@mb_clear", "I.R. CLEAR")
+                            mbbookcmd.Parameters.AddWithValue("@AMD_NO", WO_AMD)
+                            mbbookcmd.Parameters.AddWithValue("@AMD_DATE", Date.ParseExact(CDate(AMD_DATE), "dd-MM-yyyy", provider))
+                            mbbookcmd.Parameters.AddWithValue("@unit_price", w_unit_price)
+                            mbbookcmd.Parameters.AddWithValue("@Entry_Date", Now)
+                            mbbookcmd.ExecuteReader()
+                            mbbookcmd.Dispose()
+
+
+
+                            ''SEARCH AC HEAD
+                            conn.Open()
+                            Dim TRANS_PROV, TRANS_PUR As String
+                            TRANS_PROV = ""
+                            TRANS_PUR = ""
+                            MCqq.CommandText = "select * from work_group where work_name = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "') and work_type=(select distinct wo_type from wo_order WITH(NOLOCK) where po_no='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "' and w_slno='" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim & "')"
+                            MCqq.Connection = conn
+                            dr = MCqq.ExecuteReader
+                            If dr.HasRows Then
+                                dr.Read()
+                                TRANS_PROV = dr.Item("PROV_HEAD")
+                                TRANS_PUR = dr.Item("PUR_HEAD")
+                                dr.Close()
+                                conn.Close()
+                            Else
+                                conn.Close()
+                            End If
+                            'INSERT TRANSPORTER LEDGER PROV AND PUR
+                            save_ledger("", DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim, inv_for & TextBox65.Text, WO_SUPL_ID, TRANS_PUR, "Dr", PROV_PRICE_FOR_TRANSPORTER, "PUR")
+                            save_ledger("", DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim, inv_for & TextBox65.Text, WO_SUPL_ID, TRANS_PROV, "Cr", PROV_PRICE_FOR_TRANSPORTER, "PROV")
                         End If
 
-                        balance = w_qty - w_complite
 
-                        Dim Query As String = "Insert Into mb_book(unit_price,Entry_Date,mb_no,mb_date,po_no,supl_id,wo_slno,w_name,w_au,from_date,to_date,work_qty,rqd_qty,bal_qty,note,mb_by,ra_no,prov_amt,pen_amt,sgst,cgst,igst,cess,sgst_liab,cgst_liab,igst_liab,cess_liab,it_amt,pay_ind,fiscal_year,mat_rate,mb_clear,amd_no,amd_date)VALUES(@unit_price,@Entry_Date,@mb_no,@mb_date,@po_no,@supl_id,@wo_slno,@w_name,@w_au,@from_date,@to_date,@work_qty,@rqd_qty,@bal_qty,@note,@mb_by,@ra_no,@prov_amt,@pen_amt,@sgst,@cgst,@igst,@cess,@sgst_liab,@cgst_liab,@igst_liab,@cess_liab,@it_amt,@pay_ind,@fiscal_year,@mat_rate,@mb_clear,@amd_no,@amd_date)"
-                        Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
-                        cmd.Parameters.AddWithValue("@mb_no", inv_for & TextBox65.Text)
-                        cmd.Parameters.AddWithValue("@mb_date", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
-                        cmd.Parameters.AddWithValue("@po_no", DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim)
-                        cmd.Parameters.AddWithValue("@supl_id", WO_SUPL_ID)
-                        cmd.Parameters.AddWithValue("@wo_slno", DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim)
-                        cmd.Parameters.AddWithValue("@w_name", WO_NAME)
-                        cmd.Parameters.AddWithValue("@w_au", WO_AU)
-                        cmd.Parameters.AddWithValue("@from_date", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
-                        cmd.Parameters.AddWithValue("@to_date", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
-                        cmd.Parameters.AddWithValue("@work_qty", RCVD_QTY_TRANSPORTER)
-                        cmd.Parameters.AddWithValue("@rqd_qty", RCVD_QTY_TRANSPORTER)
-                        cmd.Parameters.AddWithValue("@bal_qty", balance)
-                        cmd.Parameters.AddWithValue("@note", "")
-                        cmd.Parameters.AddWithValue("@mb_by", Session("userName"))
-                        cmd.Parameters.AddWithValue("@ra_no", "")
-                        cmd.Parameters.AddWithValue("@prov_amt", Math.Round(PROV_PRICE_FOR_TRANSPORTER, 2))
-                        cmd.Parameters.AddWithValue("@pen_amt", 0.0)
-                        cmd.Parameters.AddWithValue("@sgst", 0)
-                        cmd.Parameters.AddWithValue("@cgst", 0)
-                        cmd.Parameters.AddWithValue("@igst", 0)
-                        cmd.Parameters.AddWithValue("@cess", 0)
-                        cmd.Parameters.AddWithValue("@sgst_liab", 0)
-                        cmd.Parameters.AddWithValue("@cgst_liab", 0)
-                        cmd.Parameters.AddWithValue("@igst_liab", 0)
-                        cmd.Parameters.AddWithValue("@cess_liab", 0)
-                        cmd.Parameters.AddWithValue("@it_amt", 0)
-                        cmd.Parameters.AddWithValue("@pay_ind", "")
-                        cmd.Parameters.AddWithValue("@fiscal_year", STR1)
-                        cmd.Parameters.AddWithValue("@mat_rate", 0)
-                        cmd.Parameters.AddWithValue("@mb_clear", "I.R. CLEAR")
-                        cmd.Parameters.AddWithValue("@AMD_NO", WO_AMD)
-                        cmd.Parameters.AddWithValue("@AMD_DATE", Date.ParseExact(CDate(AMD_DATE), "dd-MM-yyyy", provider))
-                        cmd.Parameters.AddWithValue("@unit_price", w_unit_price)
-                        cmd.Parameters.AddWithValue("@Entry_Date", Now)
-                        cmd.ExecuteReader()
-                        cmd.Dispose()
-
-
-
-                        ''SEARCH AC HEAD
-                        conn.Open()
-                        Dim TRANS_PROV, TRANS_PUR As String
-                        TRANS_PROV = ""
-                        TRANS_PUR = ""
-                        MCqq.CommandText = "select * from work_group where work_name = (SELECT PO_TYPE FROM ORDER_DETAILS WHERE SO_NO='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "') and work_type=(select distinct wo_type from wo_order WITH(NOLOCK) where po_no='" & DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim & "' and w_slno='" & DropDownList27.Text.Substring(0, DropDownList27.Text.IndexOf(",") - 1).Trim & "')"
-                        MCqq.Connection = conn
-                        dr = MCqq.ExecuteReader
-                        If dr.HasRows Then
-                            dr.Read()
-                            TRANS_PROV = dr.Item("PROV_HEAD")
-                            TRANS_PUR = dr.Item("PUR_HEAD")
-                            dr.Close()
-                            conn.Close()
-                        Else
-                            conn.Close()
-                        End If
-                        'INSERT TRANSPORTER LEDGER PROV AND PUR
-                        save_ledger("", DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim, inv_for & TextBox65.Text, WO_SUPL_ID, TRANS_PUR, "Dr", PROV_PRICE_FOR_TRANSPORTER, "PUR")
-                        save_ledger("", DropDownList6.Text.Substring(0, DropDownList6.Text.IndexOf(",") - 1).Trim, inv_for & TextBox65.Text, WO_SUPL_ID, TRANS_PROV, "Cr", PROV_PRICE_FOR_TRANSPORTER, "PROV")
                     End If
 
+                    Dim dt7 As New DataTable()
+                    dt7.Columns.AddRange(New DataColumn(8) {New DataColumn("mat_sl_no"), New DataColumn("ITEM_CODE"), New DataColumn("MAT_NAME"), New DataColumn("ITEM_AU"), New DataColumn("ITEM_QTY_PCS"), New DataColumn("UNIT_WEIGHT"), New DataColumn("TOTAL_WEIGHT"), New DataColumn("Packing Details"), New DataColumn("ASS_VALUE")})
+                    ViewState("despatch") = dt7
+                    BINDGRID()
+                    TextBox55.Text = ""
+                    TextBox69.Text = ""
+                    DropDownList7.SelectedValue = "N/A"
+                    TextBox37.Text = "0.00"
+                    TextBox38.Text = "0.00"
+                    TextBox39.Text = "0.00"
+                    TextBox40.Text = "0.00"
+                    TextBox41.Text = "0.00"
+                    TextBox42.Text = "0.00"
+                    TextBox43.Text = "0.00"
+                    TextBox44.Text = "0.00"
+                    TextBox66.Text = "0.00"
+                    TextBox45.Text = "0.00"
+                    TextBox21.Text = "0.00"
+                    TextBox54.Text = ""
+                    TextBox56.Text = ""
 
-                End If
 
-                Dim dt7 As New DataTable()
-                dt7.Columns.AddRange(New DataColumn(8) {New DataColumn("mat_sl_no"), New DataColumn("ITEM_CODE"), New DataColumn("MAT_NAME"), New DataColumn("ITEM_AU"), New DataColumn("ITEM_QTY_PCS"), New DataColumn("UNIT_WEIGHT"), New DataColumn("TOTAL_WEIGHT"), New DataColumn("Packing Details"), New DataColumn("ASS_VALUE")})
-                ViewState("despatch") = dt7
-                BINDGRID()
-                TextBox55.Text = ""
-                TextBox69.Text = ""
-                DropDownList7.SelectedValue = "N/A"
-                TextBox37.Text = "0.00"
-                TextBox38.Text = "0.00"
-                TextBox39.Text = "0.00"
-                TextBox40.Text = "0.00"
-                TextBox41.Text = "0.00"
-                TextBox42.Text = "0.00"
-                TextBox43.Text = "0.00"
-                TextBox44.Text = "0.00"
-                TextBox66.Text = "0.00"
-                TextBox45.Text = "0.00"
-                TextBox21.Text = "0.00"
-                TextBox54.Text = ""
-                TextBox56.Text = ""
+                Next
 
                 Dim tcsFlag As String
                 If (CDec(TextBox66.Text) > 0) Then
@@ -1764,76 +1820,7 @@ Public Class OutsourceMatDespatch
                     tcsFlag = "N"
                 End If
 
-                'myTrans.Commit()
-                'Label308.Text = "All records are written to database."
 
-                ''===========================Generate E-Invoice Start=======================''
-
-                'If gst_code = my_gst_code Then
-                '    'e-invoice is not required
-                'Else
-                '    Dim logicclassobj = New EinvoiceLogicClass
-                '    Dim autherrordata As List(Of AuthenticationErrorDetailsClass) = logicclassobj.EinvoiceAuthentication(TextBox177.Text + TextBox65.Text, TextBox125.Text)
-                '    If (autherrordata.Item(0).status = "1") Then
-
-                '        Dim einverrordata As List(Of EinvoiceErrorDetailsClass) = logicclassobj.GenerateEInvoice(autherrordata.Item(0).client_id, autherrordata.Item(0).client_secret, autherrordata.Item(0).gst_no, autherrordata.Item(0).user_name, autherrordata.Item(0).AuthToken, autherrordata.Item(0).Sek, autherrordata.Item(0).appKey, autherrordata.Item(0).systemInvoiceNo, autherrordata.Item(0).buyerPartyCode, "no")
-                '        If (einverrordata.Item(0).status = "1") Then
-                '            TextBox6.Text = einverrordata.Item(0).IRN
-
-                '            Dim sqlquery As String = ""
-                '            sqlquery = "update despatch set irn_no ='" & einverrordata.Item(0).IRN & "',qr_code ='" & einverrordata.Item(0).QRCode & "' where d_type+inv_no  ='" & TextBox177.Text + TextBox65.Text & "' and fiscal_year='" & STR1 & "'"
-                '            Dim despatch As New SqlCommand(sqlquery, conn_trans, myTrans)
-                '            despatch.ExecuteReader()
-                '            despatch.Dispose()
-
-                '            goAheadFlag = True
-                '        ElseIf (einverrordata.Item(0).status = "2") Then
-                '            Label31.Visible = True
-                '            Label42.Visible = True
-                '            txtEinvoiceErrorCode.Visible = True
-                '            txtEinvoiceErrorMessage.Visible = True
-                '            txtEinvoiceErrorCode.Text = einverrordata.Item(0).errorCode
-                '            txtEinvoiceErrorMessage.Text = einverrordata.Item(0).errorMessage
-                '            goAheadFlag = False
-                '            Label308.Text = "there is some response error in e-invoice generation."
-                '        End If
-
-                '    ElseIf (autherrordata.Item(0).status = "2") Then
-
-                '        Label31.Visible = True
-                '        Label42.Visible = True
-                '        txtEinvoiceErrorCode.Visible = True
-                '        txtEinvoiceErrorMessage.Visible = True
-                '        txtEinvoiceErrorCode.Text = autherrordata.Item(0).errorCode
-                '        txtEinvoiceErrorMessage.Text = autherrordata.Item(0).errorMessage
-                '        goAheadFlag = False
-                '        Label308.Text = "there is some response error in e-invoice authentication."
-                '    Else
-                '        goAheadFlag = False
-                '        Label308.Text = "there is some response error in e-invoice authentication."
-                '    End If
-
-
-                'End If
-
-                'If (goAheadFlag = True) Then
-                '    myTrans.Commit()
-                '    Label308.Text = "all records are written to database."
-                '    Label31.Visible = False
-                '    Label42.Visible = False
-                '    txtEinvoiceErrorCode.Visible = False
-                '    txtEinvoiceErrorMessage.Visible = False
-                'Else
-                '    myTrans.Rollback()
-                '    conn.Close()
-                '    conn_trans.Close()
-                '    TextBox65.Text = ""
-                '    TextBox177.Text = ""
-                '    TextBox6.Text = ""
-
-                'End If
-
-                ''===========================Generate E-Invoice End=======================''
 
                 ''===========================Generate E-Invoice Through EY Start=======================''
                 If (TextBox125.Text <> "D8888") Then
@@ -2046,7 +2033,7 @@ Public Class OutsourceMatDespatch
         Dim working_date As Date
 
         working_date = Today.Date
-        If price > 0 Then
+        If Math.Round(price, 2) > 0 Then
             Dim STR1 As String = ""
             If working_date.Month > 3 Then
                 STR1 = working_date.Year

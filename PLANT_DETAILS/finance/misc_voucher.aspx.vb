@@ -381,7 +381,7 @@ Public Class misc_voucher
                         For i = 0 To jpay_GridView9.Rows.Count - 1
 
                             Dim acHead As String = jpay_GridView9.Rows(i).Cells(0).Text
-                            Query1 = "Insert Into LEDGER(AGING_FLAG,Journal_ID,VOUCHER_NO,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG,@Journal_ID,@VOUCHER_NO,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+                            Query1 = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,Journal_ID,VOUCHER_NO,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@Journal_ID,@VOUCHER_NO,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
                             cmd = New SqlCommand(Query1, conn_trans, myTrans)
                             cmd.Parameters.AddWithValue("@PO_NO", pay_po_wo_TextBox96.Text)
                             cmd.Parameters.AddWithValue("@Journal_ID", "JE")
@@ -401,6 +401,7 @@ Public Class misc_voucher
                             cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", i + pay_GridView8.Rows.Count)
                             cmd.Parameters.AddWithValue("@VOUCHER_NO", pay_vou_TextBox76.Text)
                             cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox177.Text)
+                            cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox177.Text)
                             cmd.ExecuteReader()
                             cmd.Dispose()
 
@@ -560,7 +561,7 @@ Public Class misc_voucher
             End If
 
             Dim cmd As New SqlCommand
-            Dim Query As String = "Insert Into LEDGER(AGING_FLAG,VOUCHER_NO,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG,@VOUCHER_NO,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,VOUCHER_NO,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@VOUCHER_NO,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
             cmd = New SqlCommand(Query, conn_trans, myTrans)
             cmd.Parameters.AddWithValue("@PO_NO", so_no)
             cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", garn_mb)
@@ -579,6 +580,7 @@ Public Class misc_voucher
             cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", line_no)
             cmd.Parameters.AddWithValue("@VOUCHER_NO", voucher)
             cmd.Parameters.AddWithValue("@AGING_FLAG", inv_no)
+            cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", inv_no)
             cmd.ExecuteReader()
             cmd.Dispose()
 

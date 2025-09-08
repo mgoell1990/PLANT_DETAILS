@@ -39,6 +39,7 @@
                                 <asp:ListItem>Mat. Transaction</asp:ListItem>
                                 <asp:ListItem>CRR</asp:ListItem>
                                 <asp:ListItem>Non-Moving Items</asp:ListItem>
+                                <asp:ListItem>Insured Items</asp:ListItem>
                                 <asp:ListItem>Store Inventory Detail</asp:ListItem>
                                 <asp:ListItem>View Materials Group Wise</asp:ListItem>
                             </asp:DropDownList>
@@ -600,7 +601,7 @@
                                                     <asp:BoundField DataField="UNIT_PRICE" HeaderText="UNIT PRICE" />
                                                     <asp:BoundField DataField="Value" HeaderText="VALUE" />
                                                     <asp:BoundField DataField="PURPOSE" HeaderText="PURPOSE" />
-                                                    <asp:BoundField DataField="REMARKS" HeaderText="REMARKS" />
+                                                    <asp:BoundField DataField="MATERIAL_TYPE" HeaderText="MATERIAL TYPE" />
                                                 </Columns>
                                             </asp:GridView>
                                         </asp:Panel>
@@ -747,6 +748,53 @@
                                                     <asp:BoundField DataField="MAT_BALANCE" HeaderText="STOCK" />
                                                     <asp:BoundField DataField="UNIT_PRICE" HeaderText="UNIT PRICE" />
                                                     <asp:BoundField DataField="TOTAL_VALUE" HeaderText="VALUE" />
+                                                </Columns>
+                                            </asp:GridView>
+                                        </asp:Panel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:View>
+
+                    <%--=============View 9 Store Insured Items Details Stated==============--%>
+                    <asp:View ID="View9" runat="server">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
+                                <div class="row justify-content-center">
+                                    <div class="col-5 text-center">
+                                        <div class="row align-items-center">
+                                            <div class="col text-center">
+                                                <asp:Label ID="Label24" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Store Insured Items" Font-Underline="True"></asp:Label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center">
+                                            <div class="col text-center">
+                                                <asp:Button ID="Button22" runat="server" Text="Download" CssClass="btn btn-primary" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row align-items-center mt-1">
+                                    <div class="col g-0">
+                                        <asp:Panel ID="Panel1" runat="server" ScrollBars="Auto" Width="100%">
+                                            <asp:GridView ID="GridView8" CssClass="table table-bordered border-2 table-responsive text-center" Style="font-size: 15px" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                <Columns>
+                                                    <asp:BoundField DataField="ROW_NO" HeaderText="SL NO" />
+                                                    <asp:BoundField DataField="MAT_CODE" HeaderText="MAT CODE" />
+                                                    <asp:BoundField DataField="MAT_NAME" HeaderText="MAT NAME" />
+                                                    <asp:BoundField DataField="MAT_AU" HeaderText="A/U" />
+                                                    <asp:BoundField DataField="MAT_LASTPUR_DATE" HeaderText="LAST PURCHASE DATE" DataFormatString="{0:dd/MM/yyyy}" />
+                                                    <asp:BoundField DataField="LAST_ISSUE_DATE" HeaderText="LAST ISSUE DATE" DataFormatString="{0:dd/MM/yyyy}" />
+                                                    <asp:BoundField DataField="MAT_STOCK" HeaderText="STOCK" />
+                                                    <asp:BoundField DataField="MAT_AVG" HeaderText="UNIT PRICE" />
+                                                    <asp:BoundField DataField="Value" HeaderText="VALUE" />
+                                                    <asp:BoundField DataField="PURPOSE" HeaderText="PURPOSE" />
+                                                    <asp:BoundField DataField="MATERIAL_TYPE" HeaderText="MATERIAL TYPE" />
                                                 </Columns>
                                             </asp:GridView>
                                         </asp:Panel>

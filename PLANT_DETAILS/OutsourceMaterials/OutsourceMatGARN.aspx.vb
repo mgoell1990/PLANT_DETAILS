@@ -910,6 +910,7 @@ Public Class OutsourceMatGARN
                     'conn.Close()
                     ''UPDATE Outsource_F_ITEM STOCK AND AVG PRICEING
                     Dim STOCK_QTY, AVG_PRICE As Decimal
+                    Dim PURCHASE_HEAD As String = ""
                     conn.Open()
                     mc.CommandText = "select * from Outsource_F_ITEM where ITEM_CODE = '" & imp_GridView3.Rows(I).Cells(4).Text & "'"
                     mc.Connection = conn
@@ -918,6 +919,7 @@ Public Class OutsourceMatGARN
                         dr.Read()
                         STOCK_QTY = dr.Item("ITEM_F_STOCK")
                         AVG_PRICE = dr.Item("MAT_AVG")
+                        PURCHASE_HEAD = dr.Item("AC_PUR")
                         dr.Close()
                         conn.Close()
                     Else
@@ -976,12 +978,12 @@ Public Class OutsourceMatGARN
                     'conn.Close()
 
                     ''LEDGER POSTING PURCHASE
-                    Dim PURCHASE As String = "61997"
+
                     Dim SIT_HEAD As String = "51222"
 
 
                     ''SAVE LEDGER PURCHASE
-                    LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, PURCHASE, "Dr", FormatNumber(PURCHASE_VALUE, 2), "PUR", 1, "", imp_GridView3.Rows(I).Cells(24).Text)
+                    LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, PURCHASE_HEAD, "Dr", FormatNumber(PURCHASE_VALUE, 2), "PUR", 1, "", imp_GridView3.Rows(I).Cells(24).Text)
                     'sit credit
                     LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, SIT_HEAD, "Cr", FormatNumber(PARTY_VALUE, 2), "PROV. CRED. FOR RM(FOR.)", 3, "", imp_GridView3.Rows(I).Cells(24).Text)
                     'CUSTOM DUTY credit
@@ -2082,13 +2084,14 @@ Public Class OutsourceMatGARN
                 If dr.HasRows Then
                     dr.Read()
                     PROV_HEAD = dr.Item("PROV_HEAD")
-                    PURCHASE_HEAD = dr.Item("PUR_HEAD")
+
                     dr.Close()
                     conn.Close()
                 Else
                     conn.Close()
                 End If
                 conn.Close()
+
 
                 Dim MC As New SqlCommand
 
@@ -2186,6 +2189,7 @@ Public Class OutsourceMatGARN
                         dr.Read()
                         STOCK_QTY = dr.Item("ITEM_F_STOCK")
                         AVG_PRICE = dr.Item("MAT_AVG")
+                        PURCHASE_HEAD = dr.Item("AC_PUR")
                         dr.Close()
                         conn.Close()
                     Else
@@ -2242,9 +2246,6 @@ Public Class OutsourceMatGARN
                     'conn.Close()
 
 
-
-
-
                     'SAVE LEDGER PURCHASE
                     'conn.Open()
                     query = "Insert Into LEDGER(Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
@@ -2267,16 +2268,7 @@ Public Class OutsourceMatGARN
                     cmd.Dispose()
                     'conn.Close()
 
-
-                    ''SAVE LEDGER PURCHASE
-                    'LEDGER_SAVE_PUR(Label398.Text, GridView2.Rows(I).Cells(3).Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), GARN_NO_TextBox.Text, "61997", "Dr", FormatNumber(NEW_MAT_VALUE, 2), "PUR", 1, "", "")
-                    'LEDGER_SAVE_PUR(Label398.Text, GridView2.Rows(I).Cells(3).Text, "", GARN_NO_TextBox.Text, "64813", "Dr", FormatNumber(CDec(GridView2.Rows(I).Cells(19).Text), 2), "SGST", 2, "", "")
-                    'LEDGER_SAVE_PUR(Label398.Text, GridView2.Rows(I).Cells(3).Text, "", GARN_NO_TextBox.Text, "64812", "Dr", FormatNumber(CDec(GridView2.Rows(I).Cells(20).Text), 2), "CGST", 2, "", "")
-                    'LEDGER_SAVE_PUR(Label398.Text, GridView2.Rows(I).Cells(3).Text, "", GARN_NO_TextBox.Text, "64811", "Dr", FormatNumber(CDec(GridView2.Rows(I).Cells(21).Text), 2), "IGST", 2, "", "")
-                    'LEDGER_SAVE_PUR(Label398.Text, GridView2.Rows(I).Cells(3).Text, Label396.Text.Substring(0, Label396.Text.IndexOf(",") - 1), GARN_NO_TextBox.Text, "67008", "Cr", FormatNumber((NEW_MAT_VALUE + CDec(GridView2.Rows(I).Cells(19).Text) + CDec(GridView2.Rows(I).Cells(20).Text) + CDec(GridView2.Rows(I).Cells(21).Text)), 2), "IUCA", 6, "", "")
-
                 Next
-
 
 
                 Dim C As Integer
@@ -2447,6 +2439,25 @@ Public Class OutsourceMatGARN
                 myTrans.Commit()
                 GARN_ERR_LABLE.Visible = True
                 GARN_ERR_LABLE.Text = "All records are written to database."
+
+
+                Dim ds5 As New DataSet
+                conn.Open()
+                da = New SqlDataAdapter("select distinct PO_RCD_MAT.CRR_NO from PO_RCD_MAT JOIN ORDER_DETAILS ON PO_RCD_MAT.PO_NO=ORDER_DETAILS.SO_NO where PO_RCD_MAT.GARN_NO='PENDING' AND PO_RCD_MAT.MAT_RCD_QTY > PO_RCD_MAT.MAT_REJ_QTY AND PO_RCD_MAT.INSP_EMP IS NOT NULL AND ORDER_DETAILS.PO_TYPE='" & type_DropDown.SelectedValue & "' ORDER BY CRR_NO", conn)
+                da.Fill(ds5, "PO_RCD_MAT")
+                garn_crrnoDropDownList.DataSource = ds5.Tables("PO_RCD_MAT")
+                garn_crrnoDropDownList.DataValueField = "CRR_NO"
+                garn_crrnoDropDownList.DataBind()
+                garn_crrnoDropDownList.Items.Insert(0, "Select")
+                garn_crrnoDropDownList.SelectedValue = "Select"
+                ds5.Tables.Clear()
+                MultiView1.ActiveViewIndex = 0
+                Panel16.Visible = False
+                ''Dim dt2 As New DataTable()
+                dt2.Columns.AddRange(New DataColumn(12) {New DataColumn("PO No"), New DataColumn("Mat Sl No"), New DataColumn("Mat Code"), New DataColumn("Mat Name"), New DataColumn("A/U"), New DataColumn("Ord Qty"), New DataColumn("Chln Qty"), New DataColumn("Rcvd Qty"), New DataColumn("Rej Qty"), New DataColumn("Acept Qty"), New DataColumn("Exces Qty"), New DataColumn("Bal Qty"), New DataColumn("Note")})
+                ViewState("mat2") = dt2
+                Me.BINDGRID2()
+
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()

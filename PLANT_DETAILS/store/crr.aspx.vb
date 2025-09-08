@@ -826,7 +826,7 @@ Public Class crr
                     End If
                     ''SAVE LEDGER PURCHASE
                     'conn.Open()
-                    Dim Query As String = "Insert Into LEDGER(JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+                    Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
                     Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
 
                     cmd.Parameters.AddWithValue("@PO_NO", TRANS_WO_NO)
@@ -843,6 +843,7 @@ Public Class crr
                     cmd.Parameters.AddWithValue("@POST_INDICATION", "PUR")
                     cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                     cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", 1)
+                    cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", CRR_NO)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()
@@ -865,7 +866,7 @@ Public Class crr
 
                     ''INSERT LEDGER prov for transport
                     'conn.Open()
-                    Query = "Insert Into LEDGER(JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+                    Query = "Insert Into LEDGER(AGING_FLAG_NEW,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
                     cmd = New SqlCommand(Query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", TRANS_WO_NO)
                     cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", CRR_NO)
@@ -880,6 +881,7 @@ Public Class crr
                     cmd.Parameters.AddWithValue("@POST_INDICATION", "PROV")
                     cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                     cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", 3)
+                    cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", CRR_NO)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()
@@ -1253,7 +1255,7 @@ Public Class crr
 
             'conn.Open()
             Dim QUARY1 As String
-            QUARY1 = "Insert Into LEDGER(BE_NO,Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@BE_NO,@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            QUARY1 = "Insert Into LEDGER(AGING_FLAG_NEW,BE_NO,Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@BE_NO,@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
             Dim cmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
             cmd1.Parameters.AddWithValue("@PO_NO", PO_NO)
             cmd1.Parameters.AddWithValue("@Journal_ID", MAT_SLNO)
@@ -1270,6 +1272,7 @@ Public Class crr
             cmd1.Parameters.AddWithValue("@PAYMENT_INDICATION", PAY_IND)
             cmd1.Parameters.AddWithValue("@JURNAL_LINE_NO", J_LINE_NO)
             cmd1.Parameters.AddWithValue("@BE_NO", BE_NO)
+            cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", GARN_NO)
             cmd1.ExecuteReader()
             cmd1.Dispose()
             'conn.Close()

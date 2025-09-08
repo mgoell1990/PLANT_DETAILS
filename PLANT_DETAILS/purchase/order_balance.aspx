@@ -142,12 +142,23 @@
                                 <asp:Panel ID="Panel14" runat="server" BackColor="#AAEEFF" Style="text-align: left" Visible="False" BorderColor="#AAEEFF" BorderStyle="Groove">
 
                                     <div class="row align-items-start mt-1">
-                                        <div class="col-2 text-start">
-                                            <asp:Label ID="Label447" runat="server" Font-Bold="True" ForeColor="#000099">Party Name</asp:Label>
+                                        <div class="col-1 text-start">
+                                            <asp:Label ID="Label447" runat="server" Font-Bold="True" ForeColor="#000099">Party Name = </asp:Label>
                                         </div>
                                         <div class="col text-start">
                                             <asp:Label ID="Label57" runat="server" Font-Bold="True" ForeColor="#000099"></asp:Label>
                                         </div>
+                                    </div>
+
+                                    <div class="row align-items-start mt-1">
+                                        <div class="col-2 text-start">
+                                            <asp:Label ID="Label3" runat="server" Font-Bold="True" ForeColor="#000099" Visible="False"></asp:Label>
+                                        </div>
+                                        
+                                        <div class="col-3 text-start">
+                                            <asp:Label ID="Label5" runat="server" Font-Bold="True" ForeColor="#000099" Visible="False"></asp:Label>
+                                        </div>
+                                        
                                     </div>
 
 
@@ -219,8 +230,8 @@
                                                     <asp:ListItem>Select</asp:ListItem>
                                                     <asp:ListItem>Purchase Order</asp:ListItem>
                                                     <%--<asp:ListItem>Work Order</asp:ListItem>
-                                                    <asp:ListItem>Rate Contract</asp:ListItem>
-                                                    <asp:ListItem>Sale Order</asp:ListItem>--%>
+                                                    <asp:ListItem>Rate Contract</asp:ListItem>--%>
+                                                    <asp:ListItem>Sale Order</asp:ListItem>
                                                 </asp:DropDownList>
                                             </div>
 
@@ -255,6 +266,35 @@
                                             <asp:BoundField DataField="W_QTY" HeaderText="Order Qty." />
                                             <asp:BoundField DataField="W_COMPLETED" HeaderText="Completed Qty." />
                                             <asp:BoundField DataField="ORDER_BALANCE" HeaderText="Balance Qty." />
+                                        </Columns>
+
+                                    </asp:GridView>
+                                </asp:Panel>
+                            </div>
+
+                        </div>
+
+                        <div class="row align-items-center mt-1">
+                            <div class="col g-0">
+                                <asp:Panel ID="Panel1" runat="server" ScrollBars="Auto" Width="100%">
+                                    <asp:GridView ID="GridView3" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                        <Columns>
+                                            <asp:BoundField DataField="ACTUAL_PO_NO" HeaderText="Actual Order No" />
+                                            <asp:BoundField DataField="SO_ACTUAL_DATE" HeaderText="Actual Order Date" DataFormatString="{0:dd/MM/yyyy}"/>
+                                            <asp:BoundField DataField="PO_NO" HeaderText="System Order No" />
+                                            <asp:BoundField DataField="PARTY_CODE" HeaderText="Party Code" />
+                                            <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
+                                            <asp:BoundField DataField="W_SLNO" HeaderText="Order Sl. No." />
+                                            <asp:BoundField DataField="f_name" HeaderText="Mat Code" />
+                                            <asp:BoundField DataField="MAT_NAME" HeaderText="Mat Name" />
+                                            <asp:BoundField DataField="W_weight" HeaderText="Unit Weight" />
+                                            <asp:BoundField DataField="W_AU" HeaderText="A/U" />
+                                            <asp:BoundField DataField="Order_Qty" HeaderText="Order Qty." />
+                                            <asp:BoundField DataField="ORDER_QTY_MT" HeaderText="Order Qty.(MT)" />
+                                            <asp:BoundField DataField="Completed_Qty" HeaderText="Completed Qty." />
+                                            <asp:BoundField DataField="completed_mt" HeaderText="Completed Qty.(MT)" />
+                                            <asp:TemplateField HeaderText="Bal. Qty."></asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Bal. Qty.(MT)"></asp:TemplateField>
                                         </Columns>
 
                                     </asp:GridView>

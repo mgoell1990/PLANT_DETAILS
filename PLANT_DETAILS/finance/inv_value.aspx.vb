@@ -1083,15 +1083,15 @@ Public Class inv_value
                         Next
 
 
-                        For L = 0 To GridView6.Rows.Count - 1
+                        'For L = 0 To GridView6.Rows.Count - 1
 
-                            ''update ledger
-                            Dim cmd12 As New SqlCommand
-                            Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                            cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                            cmd12.ExecuteReader()
-                            cmd12.Dispose()
-                        Next
+                        '    ''update ledger
+                        '    Dim cmd12 As New SqlCommand
+                        '    Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                        '    cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                        '    cmd12.ExecuteReader()
+                        '    cmd12.Dispose()
+                        'Next
 
 
                         If (DropDownList4.SelectedValue = "Yes") Then
@@ -1370,7 +1370,7 @@ Public Class inv_value
             End If
 
             Dim cmd As New SqlCommand
-            Dim Query As String = "Insert Into LEDGER(Journal_ID,AGING_FLAG,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID, @AGING_FLAG,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,Journal_ID,AGING_FLAG,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@Journal_ID, @AGING_FLAG,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
             cmd = New SqlCommand(Query, conn_trans_Transporter, myTransactionForTransport)
             cmd.Parameters.AddWithValue("@Journal_ID", ItemSlNo)
             cmd.Parameters.AddWithValue("@PO_NO", so_no)
@@ -1393,6 +1393,7 @@ Public Class inv_value
             Else
                 cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox57.Text)
             End If
+            cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", garn_mb)
 
             cmd.ExecuteReader()
             cmd.Dispose()
@@ -1479,7 +1480,7 @@ Public Class inv_value
             End If
 
             Dim cmd As New SqlCommand
-            Dim Query As String = "Insert Into LEDGER(Journal_ID,AGING_FLAG,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID, @AGING_FLAG,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,Journal_ID,AGING_FLAG,JURNAL_LINE_NO,BILL_TRACK_ID,INVOICE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@Journal_ID, @AGING_FLAG,@JURNAL_LINE_NO,@BILL_TRACK_ID,@INVOICE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
             cmd = New SqlCommand(Query, conn_trans, myTrans)
             cmd.Parameters.AddWithValue("@Journal_ID", ItemSlNo)
             cmd.Parameters.AddWithValue("@PO_NO", so_no)
@@ -1502,6 +1503,7 @@ Public Class inv_value
             Else
                 cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox57.Text)
             End If
+            cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", garn_mb)
 
             cmd.ExecuteReader()
             cmd.Dispose()
@@ -2560,11 +2562,11 @@ Public Class inv_value
                                 End If
 
                                 ''update ledger
-                                Dim cmd12 As New SqlCommand
-                                Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                                cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                                cmd12.ExecuteReader()
-                                cmd12.Dispose()
+                                'Dim cmd12 As New SqlCommand
+                                'Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & M_Label398.Text & "' and GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                                'cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                'cmd12.ExecuteReader()
+                                'cmd12.Dispose()
 
 
                             End If
@@ -3515,9 +3517,9 @@ Public Class inv_value
                                         conn.Close()
                                     End If
 
-                                    If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
-                                        PROV_HEAD = "5110B"
-                                    End If
+                                    'If (PARTY_TYPE = "MSME" Or PARTY_TYPE = "SSI") Then
+                                    '    PROV_HEAD = "5110B"
+                                    'End If
 
 
                                     If (Left(row.Cells(1).Text, 2) = "DC" Or Left(row.Cells(1).Text, 2) = "OS") Then

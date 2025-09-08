@@ -142,7 +142,7 @@ Public Class ind_garn
 
 
             Dim QUARY1 As String
-            QUARY1 = "Insert Into LEDGER(BE_NO,Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@BE_NO,@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            QUARY1 = "Insert Into LEDGER(AGING_FLAG_NEW,BE_NO,Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@BE_NO,@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
 
             Dim cmd1 As New SqlCommand(QUARY1, conn_trans, myTrans)
             cmd1.Parameters.AddWithValue("@PO_NO", PO_NO)
@@ -160,6 +160,7 @@ Public Class ind_garn
             cmd1.Parameters.AddWithValue("@PAYMENT_INDICATION", PAY_IND)
             cmd1.Parameters.AddWithValue("@JURNAL_LINE_NO", J_LINE_NO)
             cmd1.Parameters.AddWithValue("@BE_NO", BE_NO)
+            cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", GARN_NO)
             cmd1.ExecuteReader()
             cmd1.Dispose()
 
@@ -1042,7 +1043,7 @@ Public Class ind_garn
                     'STATUTORY CHARGES credit
                     LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, "51746", "Cr", FormatNumber(STAT_CHARGES, 2), "STATUTORY CHARGES", 5, "", imp_GridView3.Rows(I).Cells(24).Text)
                     'INSURANCE credit
-                    LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, Label18.Text, imp_garn_no_TextBox1.Text, "51207", "Cr", FormatNumber(INSURANCE, 2), "INSURANCE", 6, "", imp_GridView3.Rows(I).Cells(24).Text)
+                    LEDGER_SAVE_PUR(po_no, imp_GridView3.Rows(I).Cells(3).Text, "P00000", imp_garn_no_TextBox1.Text, "51207", "Cr", FormatNumber(INSURANCE, 2), "INSURANCE", 6, "", imp_GridView3.Rows(I).Cells(24).Text)
 
 
                     ''INSERTING DATA INTO TAXABLE VALUES TABLE
@@ -2149,11 +2150,6 @@ Public Class ind_garn
                     cmd.Parameters.AddWithValue("@MAT_SL_NO", GridView2.Rows(I).Cells(3).Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
-                    'conn.Close()
-
-
-
-
 
 
                     ''LEDGER POSTING PURCHASE
@@ -2175,7 +2171,7 @@ Public Class ind_garn
                     End If
                     ''SAVE LEDGER PURCHASE
                     'conn.Open()
-                    query = "Insert Into LEDGER(Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+                    query = "Insert Into LEDGER(AGING_FLAG_NEW,Journal_ID,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@Journal_ID,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
                     cmd = New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", Label398.Text)
                     cmd.Parameters.AddWithValue("@Journal_ID", GridView2.Rows(I).Cells(3).Text)
@@ -2191,6 +2187,7 @@ Public Class ind_garn
                     cmd.Parameters.AddWithValue("@POST_INDICATION", "PUR")
                     cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                     cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", 1)
+                    cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", GARN_NO_TextBox.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()
@@ -2242,7 +2239,7 @@ Public Class ind_garn
                 Next
                 ''INSERT LEDGER PROV SUPL
                 'conn.Open()
-                Dim QUERY1 As String = "Insert Into LEDGER(JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+                Dim QUERY1 As String = "Insert Into LEDGER(AGING_FLAG_NEW,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
                 Dim cmd1 As New SqlCommand(QUERY1, conn_trans, myTrans)
                 cmd1.Parameters.AddWithValue("@PO_NO", Label398.Text)
                 cmd1.Parameters.AddWithValue("@GARN_NO_MB_NO", GARN_NO_TextBox.Text)
@@ -2257,6 +2254,7 @@ Public Class ind_garn
                 cmd1.Parameters.AddWithValue("@POST_INDICATION", "PROV")
                 cmd1.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                 cmd1.Parameters.AddWithValue("@JURNAL_LINE_NO", 2)
+                cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", GARN_NO_TextBox.Text)
                 cmd1.ExecuteReader()
                 cmd1.Dispose()
                 'conn.Close()
