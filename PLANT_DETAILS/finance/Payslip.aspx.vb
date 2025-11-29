@@ -777,7 +777,8 @@ Public Class WebForm4
 
         conn.Open()
         Dim mc1 As New SqlCommand
-        mc1.CommandText = "select PERNO from emp_master order by PERNO"
+        ''mc1.CommandText = "select PERNO from emp_master order by PERNO"
+        mc1.CommandText = "select PERNO from EPFO order by PERNO"
         mc1.Connection = conn
         dr = mc1.ExecuteReader
         If dr.HasRows = True Then
@@ -896,7 +897,8 @@ Public Class WebForm4
 
     Private Sub SplipPFSlip(pno As String, fiscal_year As String)
         Dim outputStream As Stream = Nothing
-        Dim reader As PdfReader = New PdfReader("D:/PFSlip/" + fiscal_year + "/PF_SLIP_" + fiscal_year + ".pdf")
+        ''Dim reader As PdfReader = New PdfReader("D:/PFSlip/" + fiscal_year + "/PF_SLIP_" + fiscal_year + ".pdf")
+        Dim reader As PdfReader = New PdfReader("D:/PFSlipForEPFO/" + fiscal_year + "/PF_SLIP_" + fiscal_year + ".pdf")
         If (PdfReader.unethicalreading) Then
 
         End If
@@ -920,7 +922,7 @@ Public Class WebForm4
                 Try
 
                     doc = New Document(reader.GetPageSizeWithRotation(1))
-                    pdfCpy = New PdfCopy(doc, New IO.FileStream("D:/PFSlip/" + fiscal_year + "/PF_SLIP_" + pno + "_" + fiscal_year + ".pdf", IO.FileMode.Create))
+                    pdfCpy = New PdfCopy(doc, New IO.FileStream("D:/PFSlipForEPFO/" + fiscal_year + "/PF_SLIP_" + pno + "_" + fiscal_year + ".pdf", IO.FileMode.Create))
                     doc.Open()
                     page = pdfCpy.GetImportedPage(reader, currentPage)
                     pdfCpy.AddPage(page)

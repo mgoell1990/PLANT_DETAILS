@@ -50,6 +50,33 @@ Partial Public Class Reports
     Protected WithEvents DropDownList9 As Global.System.Web.UI.WebControls.DropDownList
     
     '''<summary>
+    '''Label24 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label24 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList8 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList8 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''Button30 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button30 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
     '''MultiView1 control.
     '''</summary>
     '''<remarks>
@@ -66,15 +93,6 @@ Partial Public Class Reports
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents View1 As Global.System.Web.UI.WebControls.View
-    
-    '''<summary>
-    '''Button30 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents Button30 As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
     '''Panel16 control.

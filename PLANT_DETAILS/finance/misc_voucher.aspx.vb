@@ -36,6 +36,19 @@ Public Class misc_voucher
             ViewState("ext_pmt") = DT7
             Me.BINDGRID12()
             TextBox2.Text = "0.00"
+
+            conn.Open()
+            ddlBillTrackID.Items.Clear()
+            dt.Clear()
+            da = New SqlDataAdapter("select bill_id from inv_data where InvType='Miscellaneous' and PaymentStatus='INVOICE REGISTERED' ORDER BY bill_id", conn)
+            da.Fill(dt)
+            ddlBillTrackID.DataSource = dt
+            ddlBillTrackID.DataValueField = "bill_id"
+            ddlBillTrackID.DataBind()
+            conn.Close()
+            ddlBillTrackID.Items.Insert(0, "Select")
+            ddlBillTrackID.SelectedValue = ("Select")
+
         End If
         CalendarExtender1.EndDate = DateTime.Now.Date
         pay_date_TextBox78_CalendarExtender.EndDate = DateTime.Now.Date
@@ -47,6 +60,8 @@ Public Class misc_voucher
             Page.ClientScript.RegisterStartupScript(Me.[GetType](), Guid.NewGuid().ToString(), "alert('Sorry permission denied!!');window.location.href='../Default.aspx';", True)
 
         End If
+
+
 
     End Sub
     Protected Sub BINDGRID13()
@@ -479,6 +494,26 @@ Public Class misc_voucher
 
                         End If
 
+
+                        ''UPDATE BILL TRACK ID STATUS
+                        Dim query115 As String = "update inv_data set PaymentStatus='Bill Passed' WHERE bill_id='" & ddlBillTrackID.SelectedValue & "'"
+                        Dim cmd115 As New SqlCommand(query115, conn_trans, myTrans)
+                        cmd115.ExecuteReader()
+                        cmd115.Dispose()
+
+
+                        conn.Open()
+                        ddlBillTrackID.Items.Clear()
+                        dt.Clear()
+                        da = New SqlDataAdapter("select bill_id from inv_data where InvType='Miscellaneous' and PaymentStatus='INVOICE REGISTERED' ORDER BY bill_id", conn)
+                        da.Fill(dt)
+                        ddlBillTrackID.DataSource = dt
+                        ddlBillTrackID.DataValueField = "bill_id"
+                        ddlBillTrackID.DataBind()
+                        conn.Close()
+                        ddlBillTrackID.Items.Insert(0, "Select")
+                        ddlBillTrackID.SelectedValue = ("Select")
+
                         Dim DT8 As New DataTable
                         DT8.Columns.AddRange(New DataColumn(3) {New DataColumn("SUPL_ID"), New DataColumn("AC_HEAD"), New DataColumn("AC_DESC"), New DataColumn("AMOUNT")})
                         ViewState("ext_pmt1") = DT8
@@ -493,6 +528,9 @@ Public Class misc_voucher
                         Label627.Visible = True
                         Label627.ForeColor = Drawing.Color.Red
                         Label627.Text = "All records are written to database."
+
+                        MultiView1.ActiveViewIndex = -1
+
                     End If
 
 
@@ -1007,5 +1045,9 @@ Public Class misc_voucher
         JNL_Panel23.Visible = False
         PAY_Panel22.Visible = True
         Label638.Text = ""
+    End Sub
+
+    Protected Sub ddlBillTrackID_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlBillTrackID.SelectedIndexChanged
+        MultiView1.ActiveViewIndex = 0
     End Sub
 End Class

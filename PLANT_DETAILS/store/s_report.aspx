@@ -427,6 +427,7 @@
                                                     <asp:BoundField DataField="UNIT_PRICE" HeaderText="UNIT PRICE" />
                                                     <asp:BoundField DataField="Total_PRICE" HeaderText="TOTAL PRICE" />
                                                     <asp:BoundField DataField="MAT_BALANCE" HeaderText="STOCK BALANCE" />
+                                                    <asp:BoundField DataField="PURPOSE" HeaderText="PURPOSE" />
                                                 </Columns>
                                             </asp:GridView>
                                         </asp:Panel>

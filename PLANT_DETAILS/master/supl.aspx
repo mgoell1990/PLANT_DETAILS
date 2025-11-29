@@ -198,26 +198,26 @@
                 <div class="row">
                     <div class="col-8" style="border-right: 5px groove #FF0066;">
                         <div class="row align-items-center mt-2">
-                            <div class="col-4 text-end">
+                            <div class="col-2 text-end">
                                 <asp:Label ID="Label307" runat="server" ForeColor="Blue" Text="Supl Code"></asp:Label>
                             </div>
-                            <div class="col-8 text-start">
+                            <div class="col text-start">
                                 <asp:TextBox class="form-control" ID="TextBox84" runat="server"></asp:TextBox>
                             </div>
                         </div>
                         <div class="row align-items-center">
-                            <div class="col-4 text-end">
+                            <div class="col-2 text-end">
                                 <asp:Label ID="Label308" runat="server" ForeColor="Blue" Text="Company Name"></asp:Label>
                             </div>
-                            <div class="col-8 text-start">
+                            <div class="col text-start">
                                 <asp:TextBox class="form-control" ID="TextBox85" runat="server"></asp:TextBox>
                             </div>
                         </div>
                         <div class="row align-items-center">
-                            <div class="col-4 text-end">
+                            <div class="col-2 text-end">
                                 <asp:Label ID="Label309" runat="server" ForeColor="Blue" Text="Contact Person"></asp:Label>
                             </div>
-                            <div class="col-8 text-start">
+                            <div class="col text-start">
                                 <asp:TextBox class="form-control" ID="TextBox86" runat="server"></asp:TextBox>
                             </div>
                         </div>
@@ -225,10 +225,10 @@
 
 
                         <div class="row align-items-center">
-                            <div class="col-4 text-end">
+                            <div class="col-2 text-end">
                                 <asp:Label ID="Label310" runat="server" ForeColor="Blue" Text="Supl Type"></asp:Label>
                             </div>
-                            <div class="col-8 text-start">
+                            <div class="col text-start">
                                 <asp:DropDownList class="form-select" ID="SUPLDropDownList17" runat="server" AutoPostBack="True">
                                     <asp:ListItem>Select</asp:ListItem>
                                     <asp:ListItem>Within State</asp:ListItem>
@@ -241,31 +241,40 @@
 
 
                         <div class="row align-items-center">
-                            <div class="col-4 text-end">
-                                <asp:Label ID="Label2" runat="server" ForeColor="Blue" Text="Party Type"></asp:Label>
+                            <div class="col-2 text-end">
+                                <asp:Label ID="Label2" runat="server" ForeColor="Blue" Text="MSME Status"></asp:Label>
                             </div>
-                            <div class="col-3 text-start">
+                            <div class="col-2 text-start">
                                 <asp:DropDownList class="form-select" ID="DropDownList2" runat="server" AutoPostBack="True">
                                     <asp:ListItem>NA</asp:ListItem>
                                     <asp:ListItem>MSME</asp:ListItem>
                                     <asp:ListItem>SSI</asp:ListItem>
-                                    
                                 </asp:DropDownList>
                             </div>
 
                             <div class="col-2 text-end">
                                 <asp:Label ID="Label5" runat="server" ForeColor="Blue" Text="MSME NO."></asp:Label>
                             </div>
-                            <div class="col-3 text-start">
+                            <div class="col-2 text-start">
                                 <asp:TextBox class="form-control" ID="TextBox1" runat="server"></asp:TextBox>
+                            </div>
+
+                            <div class="col-2 text-end">
+                                <asp:Label ID="Label11" runat="server" ForeColor="Blue" Text="Party Type"></asp:Label>
+                            </div>
+                            <div class="col-2 text-start">
+                                <asp:DropDownList class="form-select" ID="DropDownList4" runat="server" AutoPostBack="True">
+                                    <asp:ListItem>OTHERS</asp:ListItem>
+                                    <asp:ListItem>IPT</asp:ListItem>
+                                </asp:DropDownList>
                             </div>
                         </div>
 
                         <div class="row align-items-center">
-                            <div class="col-4 text-end">
+                            <div class="col-2 text-end">
                                 <asp:Label ID="Label9" runat="server" ForeColor="Blue" Text="Status"></asp:Label>
                             </div>
-                            <div class="col-3 text-start">
+                            <div class="col-2 text-start">
                                 <asp:DropDownList class="form-select" ID="DropDownList3" runat="server" AutoPostBack="True">
                                     <asp:ListItem>Select</asp:ListItem>
                                     <asp:ListItem>ACTIVE</asp:ListItem>
@@ -277,7 +286,7 @@
                             <div class="col-2 text-end">
                                 <asp:Label ID="Label10" runat="server" ForeColor="Blue" Text="Validity"></asp:Label>
                             </div>
-                            <div class="col-3 text-start">
+                            <div class="col-2 text-start">
                                 <asp:TextBox class="form-control" ID="TextBox2" runat="server"></asp:TextBox>
                                 <cc1:CalendarExtender ID="TextBox2_CalendarExtender" runat="server" CssClass="red" Enabled="True" Format="dd-MM-yyyy" TargetControlID="TextBox2" />
                             </div>

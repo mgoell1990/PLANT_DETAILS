@@ -125,15 +125,18 @@ Public Class bill_pass1
         Dim dt2 As DataTable = DirectCast(ViewState("mat1"), DataTable)
         da.Fill(dt2)
         conn.Close()
-        ViewState("mat1") = dt2
-        BINDGRID1()
+        'ViewState("mat1") = dt2
+        'BINDGRID1()
+        GridView5.DataSource = dt2
+        GridView5.DataBind()
+
         garn_dropdown.Items.Clear()
         garn_dropdown.DataSource = dt2
         garn_dropdown.DataValueField = "GARN_NO_MB_NO"
         garn_dropdown.DataBind()
         conn.Open()
         Dim mc1 As New SqlCommand
-        mc1.CommandText = "select  * FROM inv_data WHERE BILL_ID=" & DropDownList15.SelectedValue
+        mc1.CommandText = "select * FROM inv_data WHERE BILL_ID=" & DropDownList15.SelectedValue
         mc1.Connection = conn
         dr = mc1.ExecuteReader
         If dr.HasRows = True Then
@@ -148,7 +151,7 @@ Public Class bill_pass1
         conn.Close()
         conn.Open()
         Dim mc2 As New SqlCommand
-        mc2.CommandText = "select  (SUPL_ID + ' , ' +SUPL_NAME ) AS SUPL_DETAIL  from SUPL join ORDER_DETAILS on ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID JOIN inv_data ON inv_data .PO_NO = ORDER_DETAILS .SO_NO WHERE inv_data.BILL_ID=" & DropDownList15.SelectedValue
+        mc2.CommandText = "select  (SUPL.SUPL_ID + ' , ' +SUPL_NAME ) AS SUPL_DETAIL  from SUPL join ORDER_DETAILS on ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID JOIN inv_data ON inv_data .PO_NO = ORDER_DETAILS .SO_NO WHERE inv_data.BILL_ID=" & DropDownList15.SelectedValue
         mc2.Connection = conn
         dr = mc2.ExecuteReader
         If dr.HasRows = True Then
@@ -752,9 +755,9 @@ Public Class bill_pass1
                             ledger_billpass(TextBox55.Text, "PSC_AT_BILL_PASS", TextBox169.Text, TextBox35.Text.Substring(0, TextBox35.Text.IndexOf(",") - 1), "84222", "Dr", CDec(TextBox36.Text) - CDec(TextBox37.Text), "PSC", DropDownList15.SelectedValue, 10, "X", TextBox53.Text)
                         End If
 
-                        ''UPDATE BILL TRACK ID STATUS
 
-                        query = "update inv_data set V_IND ='V' WHERE bill_id='" & DropDownList15.SelectedValue & "'"
+                        ''UPDATE BILL TRACK ID STATUS
+                        query = "update inv_data set V_IND ='V',PaymentStatus='Bill Passed',VoucherNo='" & TextBox53.Text & "' WHERE bill_id='" & DropDownList15.SelectedValue & "'"
                         cmd = New SqlCommand(query, conn_trans, myTrans)
                         cmd.ExecuteReader()
                         cmd.Dispose()

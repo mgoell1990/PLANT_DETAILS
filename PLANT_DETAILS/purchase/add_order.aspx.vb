@@ -1102,8 +1102,6 @@ Public Class add_order
                         Dim IGST As String = GridView3.Rows(I).Cells(14).Text
                         Dim ANAL As Decimal = GridView3.Rows(I).Cells(15).Text
                         Dim CESS As Decimal = GridView3.Rows(I).Cells(16).Text
-
-
                         Dim ddate As String = CDate(GridView3.Rows(I).Cells(17).Text.Trim)
                         Dim mat_details As String = GridView3.Rows(I).Cells(18).Text.Trim
                         Dim mat_qty_rcvd As Decimal = CDec(GridView3.Rows(I).Cells(19).Text.Trim)
@@ -1127,7 +1125,7 @@ Public Class add_order
                         End If
 
                         'conn.Open()
-                        Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                        Dim query As String = "Insert Into PO_ORD_MAT(MAT_AU,HSN_CODE,PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@MAT_AU,@HSN_CODE,@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                         Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                         cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -1157,6 +1155,7 @@ Public Class add_order
                         cmd.Parameters.AddWithValue("@TDS_CGST", TDS_CGST)
                         cmd.Parameters.AddWithValue("@TDS_IGST", TDS_IGST)
                         cmd.Parameters.AddWithValue("@HSN_CODE", TextBox57.Text)
+                        cmd.Parameters.AddWithValue("@MAT_AU", TextBox815.Text)
 
                         cmd.ExecuteReader()
                         cmd.Dispose()
@@ -1264,7 +1263,7 @@ Public Class add_order
                             End If
 
                             'conn.Open()
-                            Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                            Dim query As String = "Insert Into PO_ORD_MAT(SUPL_ID,MAT_AU,HSN_CODE,PO_NO,MAT_SLNO,MAT_CODE,MAT_NAME,MAT_DESC,MAT_QTY,MAT_QTY_RCVD,MAT_UNIT_RATE,MAT_DISCOUNT,DISC_TYPE,MAT_PACK,PF_TYPE,MAT_FREIGHT_PU,FREIGHT_TYPE,SGST,CGST,IGST,CESS,ANAL_TAX,MAT_STATUS,AMD_NO,AMD_DATE,MAT_DELIVERY,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@SUPL_ID,@MAT_AU,@HSN_CODE,@PO_NO,@MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_DESC,@MAT_QTY,@MAT_QTY_RCVD,@MAT_UNIT_RATE,@MAT_DISCOUNT,@DISC_TYPE,@MAT_PACK,@PF_TYPE,@MAT_FREIGHT_PU,@FREIGHT_TYPE,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@MAT_STATUS,@AMD_NO,@AMD_DATE,@MAT_DELIVERY,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                             Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                             cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                             cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -1294,7 +1293,8 @@ Public Class add_order
                             cmd.Parameters.AddWithValue("@TDS_CGST", TDS_CGST)
                             cmd.Parameters.AddWithValue("@TDS_IGST", TDS_IGST)
                             cmd.Parameters.AddWithValue("@HSN_CODE", TextBox57.Text)
-
+                            cmd.Parameters.AddWithValue("@MAT_AU", TextBox815.Text)
+                            cmd.Parameters.AddWithValue("@SUPL_ID", TextBox105.Text)
                             cmd.ExecuteReader()
                             cmd.Dispose()
 
@@ -2139,7 +2139,7 @@ Public Class add_order
 
 
 
-                    Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                    Dim query As String = "Insert Into PO_ORD_MAT(SUPL_ID,MAT_AU,HSN_CODE,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@SUPL_ID,@MAT_AU,@HSN_CODE,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                     cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -2169,6 +2169,8 @@ Public Class add_order
                     cmd.Parameters.AddWithValue("@TDS_CGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_IGST", 0.00)
                     cmd.Parameters.AddWithValue("@HSN_CODE", TextBox58.Text)
+                    cmd.Parameters.AddWithValue("@MAT_AU", TextBox821.Text)
+                    cmd.Parameters.AddWithValue("@SUPL_ID", TextBox819.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
 
@@ -3648,7 +3650,7 @@ Public Class add_order
                         mat_details = ""
                     End If
 
-                    Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                    Dim query As String = "Insert Into PO_ORD_MAT(SUPL_ID,MAT_AU,HSN_CODE,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@SUPL_ID,@MAT_AU,@HSN_CODE,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                     cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -3678,6 +3680,8 @@ Public Class add_order
                     cmd.Parameters.AddWithValue("@TDS_CGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_IGST", 0.00)
                     cmd.Parameters.AddWithValue("@HSN_CODE", TextBox66.Text)
+                    cmd.Parameters.AddWithValue("@MAT_AU", TextBox26.Text)
+                    cmd.Parameters.AddWithValue("@SUPL_ID", TextBox23.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
 
@@ -4240,7 +4244,7 @@ Public Class add_order
                     End If
 
 
-                    Dim query As String = "Insert Into PO_ORD_MAT(HSN_CODE,MAT_AU,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@HSN_CODE,@MAT_AU,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
+                    Dim query As String = "Insert Into PO_ORD_MAT(SUPL_ID,HSN_CODE,MAT_AU,MAT_DESC,PO_NO, MAT_SLNO,MAT_CODE,MAT_NAME,MAT_QTY,MAT_UNIT_RATE,PF_TYPE,MAT_PACK,DISC_TYPE,MAT_DISCOUNT,SGST,CGST,IGST,CESS,ANAL_TAX,FREIGHT_TYPE,MAT_FREIGHT_PU,MAT_DELIVERY,MAT_QTY_RCVD,MAT_STATUS,AMD_NO,AMD_DATE,TOTAL_WT,TDS_SGST,TDS_CGST,TDS_IGST) values (@SUPL_ID,@HSN_CODE,@MAT_AU,@MAT_DESC,@PO_NO, @MAT_SLNO,@MAT_CODE,@MAT_NAME,@MAT_QTY,@MAT_UNIT_RATE,@PF_TYPE,@MAT_PACK,@DISC_TYPE,@MAT_DISCOUNT,@SGST,@CGST,@IGST,@CESS,@ANAL_TAX,@FREIGHT_TYPE,@MAT_FREIGHT_PU,@MAT_DELIVERY,@MAT_QTY_RCVD,@MAT_STATUS,@AMD_NO,@AMD_DATE,@TOTAL_WT,@TDS_SGST,@TDS_CGST,@TDS_IGST)"
                     Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@PO_NO", po_slno)
                     cmd.Parameters.AddWithValue("@MAT_SLNO", sno)
@@ -4272,11 +4276,11 @@ Public Class add_order
                         cmd.Parameters.AddWithValue("@TOTAL_WT", 0)
                     End If
 
-
                     cmd.Parameters.AddWithValue("@TDS_SGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_CGST", 0.00)
                     cmd.Parameters.AddWithValue("@TDS_IGST", 0.00)
                     cmd.Parameters.AddWithValue("@HSN_CODE", TextBox61.Text)
+                    cmd.Parameters.AddWithValue("@SUPL_ID", TextBox38.Text)
                     cmd.ExecuteReader()
                     cmd.Dispose()
 

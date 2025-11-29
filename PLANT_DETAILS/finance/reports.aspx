@@ -571,9 +571,13 @@
                                                     <asp:BoundField DataField="inv_no" HeaderText="Inv. No" />
                                                     <asp:BoundField DataField="inv_date" HeaderText="Inv. Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                     <asp:TemplateField HeaderText="GARN/MB Date"></asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Payment Date"></asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Cheque No."></asp:TemplateField>
+                                                    <asp:BoundField DataField="VoucherNo" HeaderText="Voucher No" />
+                                                    <asp:BoundField DataField="PAYMENT_DATE" HeaderText="Payment Date" />
+                                                    <asp:BoundField DataField="CHEQUE_NO" HeaderText="Cheque No." />
+                                                    <%--<asp:TemplateField HeaderText="Payment Date"></asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Cheque No."></asp:TemplateField>--%>
                                                     <asp:BoundField DataField="inv_amount" HeaderText="Invoice Amount" />
+                                                    <asp:BoundField DataField="PARTY_TYPE" HeaderText="Party Type" />
 
                                                 </Columns>
 
@@ -1462,7 +1466,6 @@
                                                                     <asp:BoundField DataField="GrossBlock" HeaderText="Original Value" />
                                                                     <asp:BoundField DataField="CummulativeDepriciation" HeaderText="Cummulative Depriciation" />
                                                                     <%--<asp:BoundField DataField="Remarks" HeaderText="Remarks" />--%>
-
                                                                 </Columns>
 
                                                             </asp:GridView>
@@ -1481,6 +1484,7 @@
                                                     <div class="col-2 text-start">
                                                         <asp:DropDownList class="form-select" ID="DropDownList6" runat="server">
                                                             <asp:ListItem>Select</asp:ListItem>
+                                                            <asp:ListItem>2526</asp:ListItem>
                                                             <asp:ListItem>2425</asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
@@ -1509,16 +1513,12 @@
                                                                     <asp:BoundField DataField="Quarter1" HeaderText="Quarter" />
                                                                     <asp:BoundField DataField="CummDeprBeforeQ1" HeaderText="Cumm. Dep. before Q1" />
                                                                     <asp:BoundField DataField="DeprValueQ1" HeaderText="Dep. for Q1" />
-
-
                                                                     <asp:BoundField DataField="Quarter2" HeaderText="Quarter" />
                                                                     <asp:BoundField DataField="CummDeprBeforeQ2" HeaderText="Cumm. Dep. before Q2" />
                                                                     <asp:BoundField DataField="DeprValueQ2" HeaderText="Dep. for Q2" />
-
                                                                     <asp:BoundField DataField="Quarter3" HeaderText="Quarter" />
                                                                     <asp:BoundField DataField="CummDeprBeforeQ3" HeaderText="Cumm. Dep. before Q3" />
                                                                     <asp:BoundField DataField="DeprValueQ3" HeaderText="Dep. for Q3" />
-
                                                                     <asp:BoundField DataField="Quarter4" HeaderText="Quarter" />
                                                                     <asp:BoundField DataField="CummDeprBeforeQ4" HeaderText="Cumm. Dep. before Q4" />
                                                                     <asp:BoundField DataField="DeprValueQ4" HeaderText="Dep. for Q4" />
@@ -1536,12 +1536,12 @@
 
                                             <asp:View ID="View27" runat="server">
                                                 <div class="row align-items-center">
-                                                    
+
 
                                                     <div class="col text-start">
-                                                        
+
                                                         <asp:Button ID="Button51" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                                        
+
                                                     </div>
                                                 </div>
                                                 <div class="row align-items-center mt-1">
@@ -1590,48 +1590,179 @@
                                     <div class="col text-center">
                                         <div class="row align-items-center">
                                             <div class="col text-center">
-                                                <asp:Label ID="Label48" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Pending Payments" Font-Underline="True"></asp:Label>
+                                                <asp:Label ID="Label48" runat="server" Font-Bold="True" Font-Names="Times New Roman" Font-Size="Large" Text="Pending Payments Report" Font-Underline="True"></asp:Label>
                                             </div>
                                         </div>
 
                                         <div class="row align-items-center mt-1">
-                                            <div class="col-3 text-end">
-                                                <asp:Label ID="Label52" runat="server" ForeColor="Blue" Style="text-align: left" Text="Date Between"></asp:Label>
-                                            </div>
+                                            <div class="col-5 text-end">
+                                                <asp:Label ID="Label65" runat="server" ForeColor="Blue" Text="Report Type"></asp:Label>
 
+                                            </div>
+                                            <div class="col-2 text-start">
+                                                <asp:DropDownList class="form-select" ID="DropDownList7" runat="server" AutoPostBack="True">
+                                                    <asp:ListItem>Select</asp:ListItem>
+                                                    <asp:ListItem>Weekly Report</asp:ListItem>
+                                                    <asp:ListItem>Monthly Report</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
                                             <div class="col text-start">
-                                                <asp:Button ID="Button46" runat="server" CssClass="btn btn-primary" Text="Go" />
-                                                <asp:Button ID="Button47" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                                <asp:Button ID="Button48" runat="server" CssClass="btn btn-success" Text="Print" />
                                             </div>
                                         </div>
 
+                                        <asp:MultiView ID="MultiView4" runat="server">
+                                            <asp:View ID="View28" runat="server">
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                        <asp:Label ID="Label59" runat="server" ForeColor="Blue" Style="text-align: left" Text="As on Date"></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-start">
+                                                        <asp:TextBox class="form-control" ID="TextBox30" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
+                                                        <asp:CalendarExtender ID="CalendarExtender26" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox30" />
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <asp:Button ID="Button46" runat="server" CssClass="btn btn-primary" Text="Go" />
+                                                        <asp:Button ID="Button47" runat="server" Text="Download" CssClass="btn btn-primary" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col g-0">
+                                                        <asp:Panel ID="Panel12" runat="server" ScrollBars="Auto" Width="100%">
+                                                            <asp:GridView ID="GridView16" Style="font-size: 15px" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+                                                                <Columns>
+                                                                    <asp:BoundField DataField="bill_id" HeaderText="Reg. No" />
+                                                                    <asp:BoundField DataField="post_date" HeaderText="Reg. Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                                    <asp:BoundField DataField="po_no" HeaderText="Order No" />
+                                                                    <asp:BoundField DataField="supl_id" HeaderText="Supl ID" />
+                                                                    <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
+                                                                    <asp:BoundField DataField="inv_no" HeaderText="Inv. No" />
+                                                                    <asp:BoundField DataField="inv_date" HeaderText="Inv. Date" DataFormatString="{0:dd/MM/yyyy}" />
+                                                                    <asp:BoundField DataField="inv_amount" HeaderText="Inv. Amount" />
+                                                                    <asp:BoundField DataField="PaymentStatus" HeaderText="Payment Status" />
+                                                                    <asp:BoundField DataField="VoucherNo" HeaderText="Voucher No" />
+                                                                    <asp:BoundField DataField="PendingDays" HeaderText="Pending Days" />
+                                                                    <asp:BoundField DataField="PendingDuration" HeaderText="PendingDuration" />
+                                                                    <asp:BoundField DataField="PARTY_TYPE" HeaderText="Party Type" />
+                                                                    <asp:BoundField DataField="MSME_NO" HeaderText="MSME No" />
+
+                                                                </Columns>
+
+                                                            </asp:GridView>
+                                                        </asp:Panel>
+                                                    </div>
+
+                                                </div>
+
+                                            </asp:View>
+                                            <asp:View ID="View29" runat="server">
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                        <asp:Label ID="Label70" runat="server" ForeColor="Blue" Style="text-align: left" Text="From Date"></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-start">
+                                                        <asp:TextBox class="form-control" ID="TextBox31" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
+                                                        <asp:CalendarExtender ID="CalendarExtender27" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox31" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                        <asp:Label ID="Label71" runat="server" ForeColor="Blue" Style="text-align: left" Text="To Date"></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-start">
+                                                        <asp:TextBox class="form-control" ID="TextBox32" runat="server" AutoCompleteType="Disabled"></asp:TextBox>
+                                                        <asp:CalendarExtender ID="CalendarExtender28" runat="server" BehaviorID="TextBox26_CalendarExtender" CssClass="red" Format="dd-MM-yyyy" TargetControlID="TextBox32" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-5 text-end">
+                                                    </div>
+                                                    <div class="col text-start">
+                                                        <asp:Button ID="Button52" runat="server" CssClass="btn btn-primary" Text="Go" />
+                                                        <%--<asp:Button ID="Button54" runat="server" Text="Download" CssClass="btn btn-primary" />--%>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col text-center">
+                                                        <asp:Label ID="Label52" runat="server" ForeColor="Blue" Text="Amount in Crs."></asp:Label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-4 text-end">
+                                                        <asp:Label ID="lblPendingBillsOpeningHeader" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblReceivedBillsHeader" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblClearedBillsHeader" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                        <asp:Label ID="lblPendingBillsClosingHeader" runat="server" ></asp:Label>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-4 text-end">
+                                                        <asp:Label ID="lblPendingBillsOpeningData" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblReceivedBillsData" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblClearedBillsData" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                        <asp:Label ID="lblPendingBillsClosingData" runat="server" ></asp:Label>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-4 text-end">
+                                                        <asp:Label ID="lblPendingBillsOpeningHeaderMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblReceivedBillsHeaderMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblClearedBillsHeaderMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                        <asp:Label ID="lblPendingBillsClosingHeaderMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center mt-1">
+                                                    <div class="col-4 text-end">
+                                                        <asp:Label ID="lblPendingBillsOpeningDataMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblReceivedBillsDataMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-2 text-center">
+                                                        <asp:Label ID="lblClearedBillsDataMSME" runat="server" ></asp:Label>
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                        <asp:Label ID="lblPendingBillsClosingDataMSME" runat="server" ></asp:Label>
+                                                    </div>
+
+                                                </div>
+
+                                            </asp:View>
+                                        </asp:MultiView>
+
                                     </div>
                                 </div>
-                                <div class="row align-items-center mt-1">
-                                    <div class="col g-0">
-                                        <asp:Panel ID="Panel12" runat="server" ScrollBars="Auto" Width="100%">
-                                            <asp:GridView ID="GridView16" Style="font-size: 15px" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
-                                                <Columns>
-                                                    <asp:BoundField DataField="bill_id" HeaderText="Reg. No" />
-                                                    <asp:BoundField DataField="post_date" HeaderText="Reg. Date" DataFormatString="{0:dd/MM/yyyy}" />
-                                                    <asp:BoundField DataField="po_no" HeaderText="Order No" />
-                                                    <asp:BoundField DataField="PO_TYPE" HeaderText="Order Type" />
-                                                    <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
-                                                    <asp:BoundField DataField="inv_no" HeaderText="Inv. No" />
-                                                    <asp:BoundField DataField="inv_date" HeaderText="Inv. Date" DataFormatString="{0:dd/MM/yyyy}" />
-                                                    <asp:TemplateField HeaderText="GARN/MB Date"></asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Payment Date"></asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Cheque No."></asp:TemplateField>
-                                                    <asp:BoundField DataField="inv_amount" HeaderText="Invoice Amount" />
 
-                                                </Columns>
-
-                                            </asp:GridView>
-                                        </asp:Panel>
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
 

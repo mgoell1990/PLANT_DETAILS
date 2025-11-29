@@ -165,7 +165,7 @@ Public Class PendingGSTPayment
 
         conn.Open()
         Dim mc2 As New SqlCommand
-        mc2.CommandText = "select (SUPL_ID + ' , ' +SUPL_NAME ) AS SUPL_DETAIL,SUPL_STATE_CODE from SUPL join ORDER_DETAILS on ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID JOIN inv_data ON inv_data .PO_NO = ORDER_DETAILS .SO_NO WHERE inv_data.BILL_ID=" & DropDownList15.SelectedValue
+        mc2.CommandText = "select (SUPL.SUPL_ID + ' , ' +SUPL_NAME ) AS SUPL_DETAIL,SUPL_STATE_CODE from SUPL join ORDER_DETAILS on ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID JOIN inv_data ON inv_data .PO_NO = ORDER_DETAILS .SO_NO WHERE inv_data.BILL_ID=" & DropDownList15.SelectedValue
         mc2.Connection = conn
         dr = mc2.ExecuteReader
         If dr.HasRows = True Then

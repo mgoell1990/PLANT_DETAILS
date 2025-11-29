@@ -244,7 +244,7 @@
                                                         <asp:Label ID="Label405" runat="server" Font-Bold="True" Font-Size="Medium" Text="Unit Price"></asp:Label>
                                                     </div>
                                                     <div class="col-8">
-                                                        <asp:TextBox class="form-control" ID="TextBox147" runat="server" Font-Names="Times New Roman"></asp:TextBox>
+                                                        <asp:TextBox class="form-control" ID="TextBox147" runat="server" Font-Names="Times New Roman" ReadOnly="True"></asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>

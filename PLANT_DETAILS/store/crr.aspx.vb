@@ -826,7 +826,7 @@ Public Class crr
                     End If
                     ''SAVE LEDGER PURCHASE
                     'conn.Open()
-                    Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+                    Dim Query As String = "Insert Into LEDGER(Journal_ID,AGING_FLAG_NEW,JURNAL_LINE_NO,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID,@AGING_FLAG_NEW,@JURNAL_LINE_NO,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
                     Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
 
                     cmd.Parameters.AddWithValue("@PO_NO", TRANS_WO_NO)
@@ -844,6 +844,7 @@ Public Class crr
                     cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
                     cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", 1)
                     cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", CRR_NO)
+                    cmd.Parameters.AddWithValue("@Journal_ID", DropDownList21.Text.Substring(0, DropDownList21.Text.IndexOf(",") - 1).Trim())
                     cmd.ExecuteReader()
                     cmd.Dispose()
                     'conn.Close()

@@ -131,6 +131,24 @@ Partial Public Class supl
     Protected WithEvents TextBox1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
+    '''Label11 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label11 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList4 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList4 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
     '''Label9 control.
     '''</summary>
     '''<remarks>

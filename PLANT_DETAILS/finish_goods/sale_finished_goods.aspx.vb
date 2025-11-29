@@ -1765,76 +1765,7 @@ Public Class sale_finished_goods
                     tcsFlag = "N"
                 End If
 
-                'myTrans.Commit()
-                'Label308.Text = "All records are written to database."
 
-                ''===========================Generate E-Invoice Govt. portal Start=======================''
-
-                'If gst_code = my_gst_code Then
-                '    'e-invoice is not required
-                'Else
-                '    Dim logicclassobj = New EinvoiceLogicClass
-                '    Dim autherrordata As List(Of AuthenticationErrorDetailsClass) = logicclassobj.EinvoiceAuthentication(TextBox177.Text + TextBox65.Text, TextBox125.Text)
-                '    If (autherrordata.Item(0).status = "1") Then
-
-                '        Dim einverrordata As List(Of EinvoiceErrorDetailsClass) = logicclassobj.GenerateEInvoice(autherrordata.Item(0).client_id, autherrordata.Item(0).client_secret, autherrordata.Item(0).gst_no, autherrordata.Item(0).user_name, autherrordata.Item(0).AuthToken, autherrordata.Item(0).Sek, autherrordata.Item(0).appKey, autherrordata.Item(0).systemInvoiceNo, autherrordata.Item(0).buyerPartyCode, "no")
-                '        If (einverrordata.Item(0).status = "1") Then
-                '            TextBox6.Text = einverrordata.Item(0).IRN
-
-                '            Dim sqlquery As String = ""
-                '            sqlquery = "update despatch set irn_no ='" & einverrordata.Item(0).IRN & "',qr_code ='" & einverrordata.Item(0).QRCode & "' where d_type+inv_no  ='" & TextBox177.Text + TextBox65.Text & "' and fiscal_year='" & STR1 & "'"
-                '            Dim despatch As New SqlCommand(sqlquery, conn_trans, myTrans)
-                '            despatch.ExecuteReader()
-                '            despatch.Dispose()
-
-                '            goAheadFlag = True
-                '        ElseIf (einverrordata.Item(0).status = "2") Then
-                '            Label31.Visible = True
-                '            Label42.Visible = True
-                '            txtEinvoiceErrorCode.Visible = True
-                '            txtEinvoiceErrorMessage.Visible = True
-                '            txtEinvoiceErrorCode.Text = einverrordata.Item(0).errorCode
-                '            txtEinvoiceErrorMessage.Text = einverrordata.Item(0).errorMessage
-                '            goAheadFlag = False
-                '            Label308.Text = "there is some response error in e-invoice generation."
-                '        End If
-
-                '    ElseIf (autherrordata.Item(0).status = "2") Then
-
-                '        Label31.Visible = True
-                '        Label42.Visible = True
-                '        txtEinvoiceErrorCode.Visible = True
-                '        txtEinvoiceErrorMessage.Visible = True
-                '        txtEinvoiceErrorCode.Text = autherrordata.Item(0).errorCode
-                '        txtEinvoiceErrorMessage.Text = autherrordata.Item(0).errorMessage
-                '        goAheadFlag = False
-                '        Label308.Text = "there is some response error in e-invoice authentication."
-                '    Else
-                '        goAheadFlag = False
-                '        Label308.Text = "there is some response error in e-invoice authentication."
-                '    End If
-
-
-                'End If
-
-                'If (goAheadFlag = True) Then
-                '    myTrans.Commit()
-                '    Label308.Text = "all records are written to database."
-                '    Label31.Visible = False
-                '    Label42.Visible = False
-                '    txtEinvoiceErrorCode.Visible = False
-                '    txtEinvoiceErrorMessage.Visible = False
-                'Else
-                '    myTrans.Rollback()
-                '    conn.Close()
-                '    conn_trans.Close()
-                '    TextBox65.Text = ""
-                '    TextBox177.Text = ""
-                '    TextBox6.Text = ""
-
-                'End If
-
-                ''===========================Generate E-Invoice End=======================''
 
                 ''===========================Generate E-Invoice Through EY Start=======================''
                 If (TextBox125.Text <> "D8888") Then

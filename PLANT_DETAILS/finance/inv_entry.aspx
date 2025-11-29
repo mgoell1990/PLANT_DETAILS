@@ -17,6 +17,39 @@
             window.history.replaceState(null, null, window.location.href);
         }
     </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("[id$=pay_supl_code_TextBox98]").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '<%=ResolveUrl("~/Service.asmx/supl")%>',
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item.split('^')[0],
+                                }
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                select: function (e, i) {
+                },
+                minLength: 1
+            });
+        });
+    </script>
+
     <script src="Scripts/jquery-ui.min.js" type="text/javascript"></script>
 
 
@@ -48,13 +81,13 @@
 
                             <div class="row align-items-center mt-0">
                                 <div class="col-2 text-end">
-                                    <asp:Label ID="Label98" runat="server" Text="Inv for" ForeColor="Blue"></asp:Label>
+                                    <asp:Label ID="Label8" runat="server" Text="Inv Type" ForeColor="Blue"></asp:Label>
                                 </div>
                                 <div class="col-4 text-start">
-                                    <asp:DropDownList ID="DropDownList17" class="form-select" runat="server" AutoPostBack="True">
+                                    <asp:DropDownList ID="DropDownList3" class="form-select" runat="server" AutoPostBack="True">
                                         <asp:ListItem>Select</asp:ListItem>
-                                        <asp:ListItem>Supplier</asp:ListItem>
-                                        <asp:ListItem>Contractor</asp:ListItem>
+                                        <asp:ListItem>Regular</asp:ListItem>
+                                        <asp:ListItem>Miscellaneous</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
                                 <div class="col-6 text-end">
@@ -62,64 +95,112 @@
 
                             </div>
 
-                            <div class="row align-items-center mt-1">
-                                <div class="col-2 text-end">
-                                    <asp:Label ID="Label2" runat="server" Text="Order No" ForeColor="Blue"></asp:Label>
-                                </div>
-                                <div class="col-4 text-start">
-                                    <asp:DropDownList ID="DropDownList10" class="form-select" runat="server" AutoPostBack="True">
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="col-1 text-end">
-                                    <asp:Label ID="Label89" runat="server" Text="Party" ForeColor="Blue"></asp:Label>
-                                </div>
-                                <div class="col-5 text-start">
-                                    <asp:TextBox ID="TextBox42" class="form-control" runat="server" BackColor="#559fe0" ForeColor="White" ReadOnly="True"></asp:TextBox>
-                                </div>
+                            <asp:MultiView ID="MultiView1" runat="server">
 
-                            </div>
+                                <%--=====VIEW 1 Regular invoive START=====--%>
+                                <asp:View ID="View1" runat="server">
+                                    <div class="row align-items-center mt-0">
+                                        <div class="col-2 text-end">
+                                            <asp:Label ID="Label98" runat="server" Text="Inv for" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-4 text-start">
+                                            <asp:DropDownList ID="DropDownList17" class="form-select" runat="server" AutoPostBack="True">
+                                                <asp:ListItem>Select</asp:ListItem>
+                                                <asp:ListItem>Supplier</asp:ListItem>
+                                                <asp:ListItem>Contractor</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                        </div>
 
-                            <div class="row align-items-center mt-1">
+                                    </div>
 
-                                <div class="col-2 text-end">
-                                    <asp:Label ID="Label3" runat="server" Text="Advance Voucher No" ForeColor="Blue"></asp:Label>
-                                </div>
-                                <div class="col-4 text-start">
-                                    <asp:DropDownList ID="DropDownList1" class="form-select" runat="server" AutoPostBack="True">
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="col-1 text-end">
-                                    <asp:Label ID="Label4" runat="server" Text="Amount" ForeColor="Blue"></asp:Label>
-                                </div>
-                                <div class="col-5 text-start">
-                                    <asp:TextBox ID="TextBox1" runat="server" class="form-control" BackColor="#559fe0" ForeColor="White" ReadOnly="True"></asp:TextBox>
-                                </div>
+                                    <div class="row align-items-center mt-1">
+                                        <div class="col-2 text-end">
+                                            <asp:Label ID="Label2" runat="server" Text="Order No" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-4 text-start">
+                                            <asp:DropDownList ID="DropDownList10" class="form-select" runat="server" AutoPostBack="True">
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-1 text-end">
+                                            <asp:Label ID="Label89" runat="server" Text="Party" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-5 text-start">
+                                            <asp:TextBox ID="TextBox42" class="form-control" runat="server" BackColor="#559fe0" ForeColor="White" ReadOnly="True"></asp:TextBox>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row align-items-center mt-1">
+
+                                        <div class="col-2 text-end">
+                                            <asp:Label ID="Label3" runat="server" Text="Advance Voucher No" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-4 text-start">
+                                            <asp:DropDownList ID="DropDownList1" class="form-select" runat="server" AutoPostBack="True">
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-1 text-end">
+                                            <asp:Label ID="Label4" runat="server" Text="Amount" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-2 text-start">
+                                            <asp:TextBox ID="TextBox1" runat="server" class="form-control" BackColor="#559fe0" ForeColor="White" ReadOnly="True"></asp:TextBox>
+                                        </div>
+                                        <div class="col-1 text-end">
+                                            <asp:Label ID="Label7" runat="server" Text="Party Type" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-2 text-start">
+                                            <asp:TextBox ID="TextBox3" runat="server" class="form-control" BackColor="#559fe0" ForeColor="White" ReadOnly="True"></asp:TextBox>
+                                        </div>
 
 
-                            </div>
+                                    </div>
 
-                            <div class="row align-items-center mt-1">
+                                    <div class="row align-items-center mt-1">
 
-                                <div class="col-2 text-end">
-                                    <asp:Label ID="Label5" runat="server" Text="IOC No Available" ForeColor="Blue"></asp:Label>
-                                </div>
-                                <div class="col-4 text-start">
-                                    <asp:DropDownList ID="DropDownList2" class="form-select" runat="server" AutoPostBack="True">
-                                        <asp:ListItem>Select</asp:ListItem>
-                                        <asp:ListItem>YES</asp:ListItem>
-                                        <asp:ListItem>NO</asp:ListItem>
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="col-1 text-end">
-                                    <asp:Label ID="Label6" runat="server" Text="IOC No" ForeColor="Blue"></asp:Label>
-                                </div>
-                                <div class="col-5 text-start">
-                                    <asp:TextBox ID="TextBox2" class="form-control" runat="server"></asp:TextBox>
-                                </div>
+                                        <div class="col-2 text-end">
+                                            <asp:Label ID="Label5" runat="server" Text="IOC No Available" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-4 text-start">
+                                            <asp:DropDownList ID="DropDownList2" class="form-select" runat="server" AutoPostBack="True">
+                                                <asp:ListItem>Select</asp:ListItem>
+                                                <asp:ListItem>YES</asp:ListItem>
+                                                <asp:ListItem>NO</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-1 text-end">
+                                            <asp:Label ID="Label6" runat="server" Text="IOC No" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-5 text-start">
+                                            <asp:TextBox ID="TextBox2" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+
+                                    </div>
+                                </asp:View>
+                                <%--=====VIEW 2 Miscellaneous invoive START=====--%>
+                                <asp:View ID="View2" runat="server">
+
+                                    <div class="row align-items-center mt-1">
+                                        <div class="col-2 text-end">
+                                            <asp:Label ID="Label636" runat="server" ForeColor="Blue" Text="Supl Code"></asp:Label>
+                                        </div>
+                                        <div class="col-4 text-start">
+                                            <asp:TextBox class="form-control" ID="pay_supl_code_TextBox98" runat="server" TabIndex="12"></asp:TextBox>
+                                        </div>
+                                        <div class="col-1 text-end">
+                                            <asp:Label ID="Label9" runat="server" Text="PO Number" ForeColor="Blue"></asp:Label>
+                                        </div>
+                                        <div class="col-5 text-start">
+                                            <asp:TextBox ID="TextBox4" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                </asp:View>
+                            </asp:MultiView>
 
 
 
-                            </div>
 
                             <div class="row align-items-center mt-1">
 

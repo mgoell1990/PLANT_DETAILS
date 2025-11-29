@@ -50,6 +50,42 @@ Partial Public Class inv_entry
     Protected WithEvents TextBox28 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
+    '''Label8 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label8 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList3 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''MultiView1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents MultiView1 As Global.System.Web.UI.WebControls.MultiView
+    
+    '''<summary>
+    '''View1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View1 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
     '''Label98 control.
     '''</summary>
     '''<remarks>
@@ -140,6 +176,24 @@ Partial Public Class inv_entry
     Protected WithEvents TextBox1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
+    '''Label7 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label7 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox3 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
     '''Label5 control.
     '''</summary>
     '''<remarks>
@@ -174,6 +228,51 @@ Partial Public Class inv_entry
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents TextBox2 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''View2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View2 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Label636 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label636 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''pay_supl_code_TextBox98 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pay_supl_code_TextBox98 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''Label9 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label9 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox4 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox4 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
     '''Label68 control.

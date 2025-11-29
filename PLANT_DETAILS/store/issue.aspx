@@ -190,6 +190,18 @@
                                     <div class="col-5 text-end">
                                     </div>
                                     <div class="col-7 text-start mt-2">
+                                        <asp:RadioButtonList ID="RadioButtonList1" runat="server" ForeColor="Blue">
+                                            <asp:ListItem Selected="True">Authorize</asp:ListItem>
+                                            <asp:ListItem>Cancel</asp:ListItem>
+                                        </asp:RadioButtonList>
+                                    </div>
+
+                                </div>
+
+                                <div class="row align-items-center">
+                                    <div class="col-5 text-end">
+                                    </div>
+                                    <div class="col-7 text-start mt-2">
                                         <asp:Button ID="Button45" runat="server" class="btn btn-primary fw-bold" Text="SAVE" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
                                         <asp:Button ID="Button46" runat="server" class="btn btn-danger fw-bold" Text="CANCEL" />
                                     </div>

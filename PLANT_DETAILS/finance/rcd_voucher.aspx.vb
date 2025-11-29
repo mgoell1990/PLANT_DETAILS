@@ -29,6 +29,19 @@ Public Class rcd_voucher
             DT9.Columns.AddRange(New DataColumn(7) {New DataColumn("supl_id"), New DataColumn("inst_type"), New DataColumn("inst_no"), New DataColumn("inst_date"), New DataColumn("ac_code"), New DataColumn("amount"), New DataColumn("drawn_on"), New DataColumn("nar")})
             ViewState("rcd") = DT9
             Me.BINDGRID14()
+
+            conn.Open()
+            dt.Clear()
+            da = New SqlDataAdapter("select distinct order_type  from order_details order by order_type", conn)
+            da.Fill(dt)
+            DropDownList50.Items.Clear()
+            DropDownList50.DataSource = dt
+            DropDownList50.DataValueField = "order_type"
+            DropDownList50.DataBind()
+            conn.Close()
+            DropDownList50.Items.Insert(0, "Select")
+            DropDownList50.SelectedValue = "Select"
+
         End If
 
         CalendarExtender1.EndDate = DateTime.Now.Date
@@ -204,7 +217,7 @@ Public Class rcd_voucher
 
 
                         ''SAVE LEDGER PARTY CREDIT
-                        query = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
+                        query = "Insert Into LEDGER(PO_NO,AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@PO_NO,@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
                         cmd = New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@VOUCHER_NO", TextBox59.Text)
                         cmd.Parameters.AddWithValue("@Journal_ID", TextBox56.Text)
@@ -222,6 +235,7 @@ Public Class rcd_voucher
                         cmd.Parameters.AddWithValue("@INVOICE_NO", TextBox2.Text)
                         cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
                         cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox2.Text)
+                        cmd.Parameters.AddWithValue("@PO_NO", DropDownList49.Text.Substring(0, DropDownList49.Text.IndexOf(",") - 1).Trim())
                         cmd.ExecuteReader()
                         cmd.Dispose()
 
@@ -232,7 +246,7 @@ Public Class rcd_voucher
                     Next
                     ''SAVE LEDGER BANK DEBIT
 
-                    Dim query1 As String = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
+                    Dim query1 As String = "Insert Into LEDGER(PO_NO,AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@PO_NO,@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
                     Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
                     cmd1.Parameters.AddWithValue("@VOUCHER_NO", TextBox59.Text)
                     cmd1.Parameters.AddWithValue("@Journal_ID", TextBox56.Text)
@@ -250,6 +264,7 @@ Public Class rcd_voucher
                     cmd1.Parameters.AddWithValue("@INVOICE_NO", TextBox2.Text)
                     cmd1.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
                     cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox2.Text)
+                    cmd1.Parameters.AddWithValue("@PO_NO", DropDownList49.Text.Substring(0, DropDownList49.Text.IndexOf(",") - 1).Trim())
                     cmd1.ExecuteReader()
                     cmd1.Dispose()
 
@@ -425,5 +440,45 @@ Public Class rcd_voucher
 
     Protected Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
 
+    End Sub
+
+    Protected Sub DropDownList50_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList50.SelectedIndexChanged
+        If DropDownList50.SelectedValue = "Select" Then
+            DropDownList50.Focus()
+            Return
+        End If
+
+        ''ADD FISCAL YEAR IN DROPDOWNLIST
+        conn.Open()
+        da = New SqlDataAdapter("SELECT FY FROM FISCAL_YEAR ORDER BY FY DESC", conn)
+        da.Fill(ds, "FISCAL_YEAR")
+        DropDownList1.DataSource = ds.Tables("FISCAL_YEAR")
+        DropDownList1.DataValueField = "FY"
+        DropDownList1.DataBind()
+        DropDownList1.Items.Insert(0, "Select")
+        conn.Close()
+    End Sub
+
+    Protected Sub DropDownList1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList1.SelectedIndexChanged
+        If DropDownList1.SelectedValue = "Select" Then
+            DropDownList1.Focus()
+
+            DropDownList49.Items.Clear()
+            DropDownList49.DataBind()
+            Return
+        End If
+
+        conn.Open()
+        dt.Clear()
+        da = New SqlDataAdapter("select distinct (so_no +' , '+ so_actual) as so_no from order_details where order_type='" & DropDownList50.SelectedValue & "' and FINANCE_YEAR='" & DropDownList1.SelectedValue & "' order by so_no", conn)
+        da.Fill(dt)
+        DropDownList49.Items.Clear()
+        DropDownList49.DataSource = dt
+        DropDownList49.DataValueField = "so_no"
+        DropDownList49.DataBind()
+        conn.Close()
+        DropDownList49.Items.Insert(0, "Select")
+        DropDownList49.Items.Insert(1, "NA , NA")
+        DropDownList49.SelectedValue = "Select"
     End Sub
 End Class

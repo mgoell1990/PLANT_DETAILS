@@ -23,6 +23,24 @@ Partial Public Class misc_voucher
     Protected WithEvents Label94 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
+    '''Label7 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label7 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''ddlBillTrackID control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlBillTrackID As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
     '''Label1 control.
     '''</summary>
     '''<remarks>
@@ -57,6 +75,24 @@ Partial Public Class misc_voucher
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents Panel30 As Global.System.Web.UI.WebControls.Panel
+    
+    '''<summary>
+    '''MultiView1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents MultiView1 As Global.System.Web.UI.WebControls.MultiView
+    
+    '''<summary>
+    '''View1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View1 As Global.System.Web.UI.WebControls.View
     
     '''<summary>
     '''Label626 control.

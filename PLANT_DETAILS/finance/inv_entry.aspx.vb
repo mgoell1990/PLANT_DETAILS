@@ -74,12 +74,13 @@ Public Class inv_entry
             conn.Open()
             Dim SUPL_NAME As String = ""
             Dim mc As New SqlCommand
-            mc.CommandText = "select SUPL.SUPL_NAME,SUPL.SUPL_ID from ORDER_DETAILS JOIN SUPL ON ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID where ORDER_DETAILS.so_no ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "'"
+            mc.CommandText = "select SUPL.SUPL_NAME,SUPL.SUPL_ID,SUPL.SUPL_CATEGORY from ORDER_DETAILS JOIN SUPL ON ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID where ORDER_DETAILS.so_no ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "'"
             mc.Connection = conn
             dr = mc.ExecuteReader
             If dr.HasRows Then
                 dr.Read()
                 SUPL_NAME = dr.Item("SUPL_ID") & " , " & dr.Item("SUPL_NAME")
+                TextBox3.Text = dr.Item("SUPL_CATEGORY")
                 dr.Close()
             End If
             conn.Close()
@@ -88,12 +89,13 @@ Public Class inv_entry
             conn.Open()
             Dim SUPL_NAME As String = ""
             Dim mc As New SqlCommand
-            mc.CommandText = "select SUPL.SUPL_NAME,SUPL.SUPL_ID from ORDER_DETAILS JOIN SUPL ON ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID where ORDER_DETAILS.so_no ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "'"
+            mc.CommandText = "select SUPL.SUPL_NAME,SUPL.SUPL_ID,SUPL.SUPL_CATEGORY from ORDER_DETAILS JOIN SUPL ON ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID where ORDER_DETAILS.so_no ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "'"
             mc.Connection = conn
             dr = mc.ExecuteReader
             If dr.HasRows Then
                 dr.Read()
                 SUPL_NAME = dr.Item("SUPL_ID") & " , " & dr.Item("SUPL_NAME")
+                TextBox3.Text = dr.Item("SUPL_CATEGORY")
                 dr.Close()
             End If
             conn.Close()
@@ -102,12 +104,13 @@ Public Class inv_entry
             conn.Open()
             Dim SUPL_NAME As String = ""
             Dim mc As New SqlCommand
-            mc.CommandText = "select SUPL.SUPL_NAME,SUPL.SUPL_ID from ORDER_DETAILS JOIN SUPL ON ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID where ORDER_DETAILS.so_no ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "'"
+            mc.CommandText = "select SUPL.SUPL_NAME,SUPL.SUPL_ID,SUPL.SUPL_CATEGORY from ORDER_DETAILS JOIN SUPL ON ORDER_DETAILS.PARTY_CODE=SUPL.SUPL_ID where ORDER_DETAILS.so_no ='" & DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1) & "'"
             mc.Connection = conn
             dr = mc.ExecuteReader
             If dr.HasRows Then
                 dr.Read()
                 SUPL_NAME = dr.Item("SUPL_ID") & " , " & dr.Item("SUPL_NAME")
+                TextBox3.Text = dr.Item("SUPL_CATEGORY")
                 dr.Close()
             End If
             conn.Close()
@@ -200,6 +203,25 @@ Public Class inv_entry
                         End If
 
                     End If
+
+                    Dim invType As String = ""
+
+                    If (DropDownList3.Text = "Regular") Then
+                        If (DropDownList10.Text.Substring(0, 3) = "P01") Then
+                            invType = "Store Material"
+                        ElseIf (DropDownList10.Text.Substring(0, 3) = "P02") Then
+                            invType = "Raw Material"
+                        ElseIf (DropDownList10.Text.Substring(0, 3) = "P06") Then
+                            invType = "Outsourced Material"
+                        ElseIf (DropDownList10.Text.Substring(0, 1) = "R") Then
+                            invType = "Rate Contract"
+                        ElseIf (DropDownList10.Text.Substring(0, 1) = "W") Then
+                            invType = "Contract"
+                        End If
+                    ElseIf (DropDownList3.Text = "Miscellaneous") Then
+                        invType = "Miscellaneous"
+                    End If
+
                     conn.Open()
                     dt.Clear()
                     count = 0
@@ -208,25 +230,48 @@ Public Class inv_entry
                     conn.Close()
                     TextBox28.Text = count + 1
 
-                    Dim query As String = "INSERT INTO inv_data (AGING_FLAG,bill_id,po_no,inv_no,inv_date,post_date,inv_amount,emp_id)VALUES(@AGING_FLAG,@bill_id,@po_no,@inv_no,@inv_date,@post_date,@inv_amount,@emp_id)"
-                    Dim cmd As New SqlCommand(query, conn_trans, myTrans)
-                    cmd.Parameters.AddWithValue("@bill_id", TextBox28.Text)
-                    cmd.Parameters.AddWithValue("@po_no", DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1))
-                    cmd.Parameters.AddWithValue("@inv_no", TextBox26.Text)
-                    cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox27.Text, "dd-MM-yyyy", provider))
-                    cmd.Parameters.AddWithValue("@post_date", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
-                    cmd.Parameters.AddWithValue("@inv_amount", TextBox30.Text)
-                    cmd.Parameters.AddWithValue("@emp_id", Session("userName"))
-                    If (DropDownList1.SelectedValue <> "Select" And DropDownList1.SelectedValue <> "N/A") Then
-                        cmd.Parameters.AddWithValue("@AGING_FLAG", DropDownList1.SelectedValue)
-                    ElseIf (TextBox2.Text <> "N/A") Then
-                        cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
-                    Else
+                    If (DropDownList3.Text = "Regular") Then
+                        Dim query As String = "INSERT INTO inv_data (invType,BillTractStatus,PaymentStatus,supl_id,AGING_FLAG,bill_id,po_no,inv_no,inv_date,post_date,inv_amount,emp_id)VALUES(@invType,@BillTractStatus,@PaymentStatus,@supl_id,@AGING_FLAG,@bill_id,@po_no,@inv_no,@inv_date,@post_date,@inv_amount,@emp_id)"
+                        Dim cmd As New SqlCommand(query, conn_trans, myTrans)
+                        cmd.Parameters.AddWithValue("@bill_id", TextBox28.Text)
+                        cmd.Parameters.AddWithValue("@po_no", DropDownList10.Text.Substring(0, DropDownList10.Text.IndexOf(",") - 1))
+                        cmd.Parameters.AddWithValue("@inv_no", TextBox26.Text)
+                        cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox27.Text, "dd-MM-yyyy", provider))
+                        cmd.Parameters.AddWithValue("@post_date", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
+                        cmd.Parameters.AddWithValue("@inv_amount", TextBox30.Text)
+                        cmd.Parameters.AddWithValue("@emp_id", Session("userName"))
+                        If (DropDownList1.SelectedValue <> "Select" And DropDownList1.SelectedValue <> "N/A") Then
+                            cmd.Parameters.AddWithValue("@AGING_FLAG", DropDownList1.SelectedValue)
+                        ElseIf (TextBox2.Text <> "N/A") Then
+                            cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
+                        Else
+                            cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox26.Text)
+                        End If
+                        cmd.Parameters.AddWithValue("@supl_id", TextBox42.Text.Substring(0, TextBox42.Text.IndexOf(",") - 1))
+                        cmd.Parameters.AddWithValue("@PaymentStatus", "INVOICE REGISTERED")
+                        cmd.Parameters.AddWithValue("@BillTractStatus", TextBox3.Text)
+                        cmd.Parameters.AddWithValue("@invType", invType)
+                        cmd.ExecuteReader()
+                        cmd.Dispose()
+                    ElseIf (DropDownList3.Text = "Miscellaneous") Then
+                        Dim query As String = "INSERT INTO inv_data (invType,BillTractStatus,PaymentStatus,supl_id,AGING_FLAG,bill_id,po_no,inv_no,inv_date,post_date,inv_amount,emp_id)VALUES(@invType,@BillTractStatus,@PaymentStatus,@supl_id,@AGING_FLAG,@bill_id,@po_no,@inv_no,@inv_date,@post_date,@inv_amount,@emp_id)"
+                        Dim cmd As New SqlCommand(query, conn_trans, myTrans)
+                        cmd.Parameters.AddWithValue("@bill_id", TextBox28.Text)
+                        cmd.Parameters.AddWithValue("@po_no", TextBox4.Text)
+                        cmd.Parameters.AddWithValue("@inv_no", TextBox26.Text)
+                        cmd.Parameters.AddWithValue("@inv_date", Date.ParseExact(TextBox27.Text, "dd-MM-yyyy", provider))
+                        cmd.Parameters.AddWithValue("@post_date", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
+                        cmd.Parameters.AddWithValue("@inv_amount", TextBox30.Text)
+                        cmd.Parameters.AddWithValue("@emp_id", Session("userName"))
                         cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox26.Text)
+                        cmd.Parameters.AddWithValue("@supl_id", pay_supl_code_TextBox98.Text.Substring(0, pay_supl_code_TextBox98.Text.IndexOf(",") - 1))
+                        cmd.Parameters.AddWithValue("@PaymentStatus", "INVOICE REGISTERED")
+                        cmd.Parameters.AddWithValue("@BillTractStatus", "OTHERS")
+                        cmd.Parameters.AddWithValue("@invType", invType)
+                        cmd.ExecuteReader()
+                        cmd.Dispose()
                     End If
 
-                    cmd.ExecuteReader()
-                    cmd.Dispose()
 
                     TextBox26.Text = ""
                     TextBox27.Text = ""
@@ -289,6 +334,18 @@ Public Class inv_entry
             TextBox2.ReadOnly = True
             TextBox2.Text = "N/A"
 
+        End If
+    End Sub
+
+    Protected Sub DropDownList3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList3.SelectedIndexChanged
+        If DropDownList3.SelectedValue = "Select" Then
+            DropDownList3.Focus()
+            MultiView1.ActiveViewIndex = -1
+            Return
+        ElseIf DropDownList3.SelectedValue = "Regular" Then
+            MultiView1.ActiveViewIndex = 0
+        ElseIf DropDownList3.SelectedValue = "Miscellaneous" Then
+            MultiView1.ActiveViewIndex = 1
         End If
     End Sub
 End Class

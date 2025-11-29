@@ -479,9 +479,9 @@ Public Class m_work
 
 
                             ''add ledger EXPND
-                            save_ledger(DropDownList4.SelectedValue, TextBox28.Text, TextBox13.Text.Substring(0, TextBox13.Text.IndexOf(",") - 1), EXPND_HEAD, "Dr", (base_value - discount_value) + mat_rate, "PUR")
+                            save_ledger(GridView2.Rows(i).Cells(0).Text, DropDownList4.SelectedValue, TextBox28.Text, TextBox13.Text.Substring(0, TextBox13.Text.IndexOf(",") - 1), EXPND_HEAD, "Dr", (base_value - discount_value) + mat_rate, "PUR")
                             ''add ledger PROV
-                            save_ledger(DropDownList4.SelectedValue, TextBox28.Text, TextBox13.Text.Substring(0, TextBox13.Text.IndexOf(",") - 1), PROV_HEAD, "Cr", (base_value - discount_value) + mat_rate, "PROV")
+                            save_ledger(GridView2.Rows(i).Cells(0).Text, DropDownList4.SelectedValue, TextBox28.Text, TextBox13.Text.Substring(0, TextBox13.Text.IndexOf(",") - 1), PROV_HEAD, "Cr", (base_value - discount_value) + mat_rate, "PROV")
                         Next
                         Dim dt2 As New DataTable()
                         dt2.Columns.AddRange(New DataColumn(6) {New DataColumn("wo_slno"), New DataColumn("w_name"), New DataColumn("from_date"), New DataColumn("to_date"), New DataColumn("work_qty"), New DataColumn("rqd_qty"), New DataColumn("bal_qty")})
@@ -533,7 +533,7 @@ Public Class m_work
 
 
     End Sub
-    Protected Sub save_ledger(so_no As String, inv_no As String, dt_id As String, ac_head As String, ac_term As String, price As Decimal, post_ind As String)
+    Protected Sub save_ledger(WOSlNo As String, so_no As String, inv_no As String, dt_id As String, ac_head As String, ac_term As String, price As Decimal, post_ind As String)
         Dim working_date As Date
         working_date = CDate(TextBox1.Text)
         If price > 0 Then
@@ -571,7 +571,7 @@ Public Class m_work
             End If
 
             Dim cmd As New SqlCommand
-            Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            Dim Query As String = "Insert Into LEDGER(Journal_ID, AGING_FLAG_NEW,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@Journal_ID,@AGING_FLAG_NEW,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
             cmd = New SqlCommand(Query, conn_trans, myTrans)
             cmd.Parameters.AddWithValue("@PO_NO", so_no)
             cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", inv_no)
@@ -586,6 +586,7 @@ Public Class m_work
             cmd.Parameters.AddWithValue("@POST_INDICATION", post_ind)
             cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
             cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", inv_no)
+            cmd.Parameters.AddWithValue("@Journal_ID", WOSlNo)
             cmd.ExecuteReader()
             cmd.Dispose()
 

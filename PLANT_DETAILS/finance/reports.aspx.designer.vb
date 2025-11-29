@@ -2282,13 +2282,67 @@ Partial Public Class report3
     Protected WithEvents Label48 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''Label52 control.
+    '''Label65 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label52 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label65 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList7 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList7 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''MultiView4 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents MultiView4 As Global.System.Web.UI.WebControls.MultiView
+    
+    '''<summary>
+    '''View28 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View28 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Label59 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label59 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox30 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox30 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''CalendarExtender26 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents CalendarExtender26 As Global.AjaxControlToolkit.CalendarExtender
     
     '''<summary>
     '''Button46 control.
@@ -2309,15 +2363,6 @@ Partial Public Class report3
     Protected WithEvents Button47 As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
-    '''Button48 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents Button48 As Global.System.Web.UI.WebControls.Button
-    
-    '''<summary>
     '''Panel12 control.
     '''</summary>
     '''<remarks>
@@ -2334,4 +2379,229 @@ Partial Public Class report3
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents GridView16 As Global.System.Web.UI.WebControls.GridView
+    
+    '''<summary>
+    '''View29 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents View29 As Global.System.Web.UI.WebControls.View
+    
+    '''<summary>
+    '''Label70 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label70 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox31 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox31 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''CalendarExtender27 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents CalendarExtender27 As Global.AjaxControlToolkit.CalendarExtender
+    
+    '''<summary>
+    '''Label71 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label71 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''TextBox32 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents TextBox32 As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''CalendarExtender28 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents CalendarExtender28 As Global.AjaxControlToolkit.CalendarExtender
+    
+    '''<summary>
+    '''Button52 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Button52 As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''Label52 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label52 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsOpeningHeader control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsOpeningHeader As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblReceivedBillsHeader control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblReceivedBillsHeader As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblClearedBillsHeader control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblClearedBillsHeader As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsClosingHeader control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsClosingHeader As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsOpeningData control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsOpeningData As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblReceivedBillsData control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblReceivedBillsData As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblClearedBillsData control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblClearedBillsData As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsClosingData control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsClosingData As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsOpeningHeaderMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsOpeningHeaderMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblReceivedBillsHeaderMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblReceivedBillsHeaderMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblClearedBillsHeaderMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblClearedBillsHeaderMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsClosingHeaderMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsClosingHeaderMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsOpeningDataMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsOpeningDataMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblReceivedBillsDataMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblReceivedBillsDataMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblClearedBillsDataMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblClearedBillsDataMSME As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblPendingBillsClosingDataMSME control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingBillsClosingDataMSME As Global.System.Web.UI.WebControls.Label
 End Class

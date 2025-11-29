@@ -115,7 +115,7 @@
                                 <div class="col-2 text-start">
                                     <asp:TextBox class="form-control" ID="TextBox93" runat="server" BackColor="#4686F0" ForeColor="White" ReadOnly="True"></asp:TextBox>
                                 </div>
-                                
+
                                 <div class="col text-start">
                                     <asp:Label ID="Label455" runat="server" ForeColor="Red"></asp:Label>
                                 </div>
@@ -172,10 +172,32 @@
                                     </asp:DropDownList>
                                 </div>
                                 <div class="col-1 text-start">
+                                    <asp:Label ID="Label446" runat="server" ForeColor="Blue" Text="Order Type"></asp:Label>
                                 </div>
                                 <div class="col-2 text-start">
+                                    <asp:DropDownList class="form-select" ID="DropDownList50" runat="server" AutoPostBack="True">
+                                    </asp:DropDownList>
                                 </div>
                             </div>
+
+                            <div class="row  align-items-center mt-1">
+                                <div class="col-2 text-start">
+                                    <asp:Label ID="Label1" runat="server" ForeColor="Blue" Text="Fiscal Year"></asp:Label>
+                                </div>
+                                <div class="col-2 text-start ">
+                                    <asp:DropDownList class="form-select" ID="DropDownList1" runat="server" AutoPostBack="True">
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="col-1 text-start">
+                                    <asp:Label ID="Label5" runat="server" ForeColor="Blue" Text="Order No."></asp:Label>
+                                </div>
+                                <div class="col-2 text-start">
+                                    <asp:DropDownList class="form-select" ID="DropDownList49" runat="server">
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+
 
                             <div class="row  align-items-center mt-1">
                                 <div class="col-2 text-start">
@@ -257,21 +279,13 @@
                                 <div class="col" style="overflow: scroll">
                                     <asp:GridView ID="GridView211" Width="100%" CssClass="table table-bordered table-condensed table-responsive text-center" runat="server" AutoGenerateColumns="false" ShowHeaderWhenEmpty="True">
                                         <Columns>
-                                            <asp:BoundField HeaderText="Supl. ID" DataField="supl_id">
-                                                
-                                            </asp:BoundField>
-                                            <asp:BoundField HeaderText="Inst. Type" DataField="inst_type">
-                                                
-                                            </asp:BoundField>
+                                            <asp:BoundField HeaderText="Supl. ID" DataField="supl_id"></asp:BoundField>
+                                            <asp:BoundField HeaderText="Inst. Type" DataField="inst_type"></asp:BoundField>
                                             <asp:BoundField HeaderText="Inst. No" DataField="inst_no">
                                                 <HeaderStyle />
                                             </asp:BoundField>
-                                            <asp:BoundField HeaderText="Inst. Date" DataField="inst_date">
-                                                
-                                            </asp:BoundField>
-                                            <asp:BoundField HeaderText="A/C Head" DataField="ac_code">
-                                                
-                                            </asp:BoundField>
+                                            <asp:BoundField HeaderText="Inst. Date" DataField="inst_date"></asp:BoundField>
+                                            <asp:BoundField HeaderText="A/C Head" DataField="ac_code"></asp:BoundField>
                                             <asp:BoundField HeaderText="Amount" DataField="amount">
                                                 <HeaderStyle />
                                             </asp:BoundField>
@@ -281,8 +295,8 @@
                                     </asp:GridView>
                                 </div>
                             </div>
-                            
-                            
+
+
 
 
                         </div>

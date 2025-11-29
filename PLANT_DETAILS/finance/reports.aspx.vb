@@ -155,7 +155,28 @@ Public Class report3
         conn.Open()
         dt.Clear()
         'da = New SqlDataAdapter("select inv_data .bill_id ,inv_data .post_date ,inv_data .inv_no ,inv_data .inv_date ,inv_data .inv_amount ,inv_data .emp_id ,inv_data .po_no ,SUPL .SUPL_NAME ,ORDER_DETAILS .PO_TYPE  from inv_data join ORDER_DETAILS ON inv_data .po_no =ORDER_DETAILS .SO_NO JOIN SUPL ON ORDER_DETAILS .PARTY_CODE =SUPL .SUPL_ID WHERE inv_data .v_ind IS NULL and inv_data .post_date between ' " & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & " ' and ' " & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & " ' ORDER BY bill_id", conn)
-        da = New SqlDataAdapter("select inv_data .bill_id ,inv_data .post_date ,inv_data .inv_no ,inv_data .inv_date ,inv_data .inv_amount ,inv_data .emp_id ,inv_data .po_no ,SUPL .SUPL_NAME ,ORDER_DETAILS .PO_TYPE from inv_data LEFT join ORDER_DETAILS ON inv_data .po_no =ORDER_DETAILS .SO_NO LEFT JOIN SUPL ON ORDER_DETAILS .PARTY_CODE =SUPL .SUPL_ID WHERE inv_data .inv_date between ' " & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & " ' and ' " & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND ORDER_TO='Other' ORDER BY bill_id", conn)
+        'da = New SqlDataAdapter("select inv_data.VoucherNo,inv_data .bill_id ,inv_data .post_date ,inv_data .inv_no ,inv_data .inv_date ,inv_data .inv_amount ,inv_data .emp_id ,inv_data .po_no ,SUPL .SUPL_NAME ,ORDER_DETAILS .PO_TYPE,SUPL .PARTY_TYPE from inv_data LEFT join ORDER_DETAILS ON inv_data .po_no =ORDER_DETAILS .SO_NO LEFT JOIN SUPL ON ORDER_DETAILS .PARTY_CODE =SUPL .SUPL_ID WHERE inv_data .post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & " ' and ' " & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND ORDER_TO='Other' ORDER BY bill_id", conn)
+
+        da = New SqlDataAdapter("WITH invDataFiltered AS (
+        SELECT
+            inv_data.VoucherNo,inv_data .bill_id ,inv_data .post_date ,inv_data .inv_no ,inv_data .inv_date ,inv_data .inv_amount ,inv_data .emp_id ,inv_data .po_no
+        FROM
+            inv_data
+	    where inv_data .post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & " ' and ' " & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
+        ),
+        orderDetailsFiltered AS (
+        SELECT
+            SO_NO,PARTY_CODE,PO_TYPE
+        FROM
+            ORDER_DETAILS
+	    where ORDER_TO='Other'
+        )
+        SELECT
+            invData.VoucherNo,invData .bill_id ,invData .post_date ,invData .inv_no ,invData .inv_date ,invData .inv_amount ,invData .emp_id ,invData .po_no, SUPL .SUPL_NAME ,o1 .PO_TYPE,SUPL .PARTY_TYPE,convert(varchar(30),CONVERT(varchar,v1.CHEQUE_DATE,105) , 105) As PAYMENT_DATE, v1.CHEQUE_NO
+        FROM
+            invDataFiltered AS invData left join VOUCHER as v1 on invData.bill_id=v1.BILL_TRACK and invData.VoucherNo=v1.TOKEN_NO left join orderDetailsFiltered o1 ON invData.po_no =o1.SO_NO LEFT JOIN SUPL ON o1 .PARTY_CODE =SUPL .SUPL_ID
+        ORDER BY bill_id", conn)
+
         da.Fill(dt)
         conn.Close()
         GridView5.DataSource = dt
@@ -265,30 +286,30 @@ Public Class report3
                 End If
             End If
 
-            conn.Open()
-            mc1.CommandText = "SELECT convert(varchar(30),CONVERT(varchar,CHEQUE_DATE,105) , 105) As PAYMENT_DATE, CHEQUE_NO FROM VOUCHER WHERE BILL_TRACK='" & GridView5.Rows(I).Cells(0).Text & "'"
-            mc1.Connection = conn
-            dr = mc1.ExecuteReader
-            If dr.HasRows = True Then
-                dr.Read()
-                If IsDBNull(dr.Item("PAYMENT_DATE")) Then
-                    PAYMENT_DATE = ""
-                    CHEQUE_NO = ""
-                Else
-                    PAYMENT_DATE = dr.Item("PAYMENT_DATE")
-                    CHEQUE_NO = dr.Item("CHEQUE_NO")
-                End If
+            'conn.Open()
+            'mc1.CommandText = "SELECT convert(varchar(30),CONVERT(varchar,CHEQUE_DATE,105) , 105) As PAYMENT_DATE, CHEQUE_NO FROM VOUCHER WHERE BILL_TRACK='" & GridView5.Rows(I).Cells(0).Text & "' and TOKEN_NO='" & GridView5.Rows(I).Cells(8).Text & "'"
+            'mc1.Connection = conn
+            'dr = mc1.ExecuteReader
+            'If dr.HasRows = True Then
+            '    dr.Read()
+            '    If IsDBNull(dr.Item("PAYMENT_DATE")) Then
+            '        PAYMENT_DATE = ""
+            '        CHEQUE_NO = ""
+            '    Else
+            '        PAYMENT_DATE = dr.Item("PAYMENT_DATE")
+            '        CHEQUE_NO = dr.Item("CHEQUE_NO")
+            '    End If
 
-                dr.Close()
-            Else
-                PAYMENT_DATE = ""
-                CHEQUE_NO = ""
-                dr.Close()
-            End If
-            conn.Close()
+            '    dr.Close()
+            'Else
+            '    PAYMENT_DATE = ""
+            '    CHEQUE_NO = ""
+            '    dr.Close()
+            'End If
+            'conn.Close()
 
-            GridView5.Rows(I).Cells(8).Text = PAYMENT_DATE
-            GridView5.Rows(I).Cells(9).Text = CHEQUE_NO
+            'GridView5.Rows(I).Cells(9).Text = PAYMENT_DATE
+            'GridView5.Rows(I).Cells(10).Text = CHEQUE_NO
         Next
     End Sub
 
@@ -1999,11 +2020,11 @@ Public Class report3
         dt3.Columns.Add(New DataColumn("PAYMENT DATE", GetType(String)))
         dt3.Columns.Add(New DataColumn("CHEQUE NO.", GetType(String)))
         dt3.Columns.Add(New DataColumn("AMOUNT", GetType(Double)))
-
+        dt3.Columns.Add(New DataColumn("Party Type", GetType(String)))
 
 
         For Me.count = 0 To GridView5.Rows.Count - 1
-            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, GridView5.Rows(count).Cells(3).Text, GridView5.Rows(count).Cells(4).Text, GridView5.Rows(count).Cells(5).Text, GridView5.Rows(count).Cells(6).Text, GridView5.Rows(count).Cells(7).Text, GridView5.Rows(count).Cells(8).Text, GridView5.Rows(count).Cells(9).Text, CDec(GridView5.Rows(count).Cells(10).Text))
+            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, GridView5.Rows(count).Cells(3).Text, GridView5.Rows(count).Cells(4).Text, GridView5.Rows(count).Cells(5).Text, GridView5.Rows(count).Cells(6).Text, GridView5.Rows(count).Cells(7).Text, GridView5.Rows(count).Cells(8).Text, GridView5.Rows(count).Cells(9).Text, CDec(GridView5.Rows(count).Cells(10).Text), GridView5.Rows(count).Cells(11).Text)
         Next
 
         Using wb As New XLWorkbook()
@@ -2549,7 +2570,7 @@ Public Class report3
     Protected Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
         If GridView14.Rows.Count > 0 Then
             Try
-                
+
                 Dim dt As DataTable = New DataTable()
                 For j As Integer = 0 To GridView14.Columns.Count - 1
                     dt.Columns.Add(GridView14.Columns(j).HeaderText)
@@ -2660,7 +2681,115 @@ Public Class report3
         End Using
     End Sub
 
+    Protected Sub DropDownList7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList7.SelectedIndexChanged
+        If (DropDownList7.SelectedValue = "Select") Then
+            MultiView4.ActiveViewIndex = -1
+        ElseIf (DropDownList7.SelectedValue = "Weekly Report") Then
+            MultiView4.ActiveViewIndex = 0
+        ElseIf (DropDownList7.SelectedValue = "Monthly Report") Then
+            MultiView4.ActiveViewIndex = 1
+        End If
+    End Sub
 
+    Protected Sub Button46_Click(sender As Object, e As EventArgs) Handles Button46.Click
+        If TextBox30.Text = "" Then
+            TextBox30.Focus()
+            Return
+        End If
+        Dim from_date As Date
+
+        from_date = CDate(TextBox30.Text)
+        conn.Open()
+        dt.Clear()
+
+        Dim quary As String = "select bill_id,po_no,inv_data.supl_id,SUPL.SUPL_NAME,inv_no,inv_date,inv_amount,post_date,PaymentStatus,VoucherNo,DATEDIFF(DAY, post_date, GETDATE()) AS PendingDays,(case when DATEDIFF(DAY, post_date, GETDATE())<16 THEN '0-15 Days' when (16<=DATEDIFF(DAY, post_date, GETDATE()) and DATEDIFF(DAY, post_date, GETDATE())<=30) THEN '16-30 Days' when (31<=DATEDIFF(DAY, post_date, GETDATE()) and DATEDIFF(DAY, post_date, GETDATE())<=45) THEN '31-45 Days' when (46<=DATEDIFF(DAY, post_date, GETDATE())) THEN 'More than 45 Days' end) as PendingDuration,SUPL.PARTY_TYPE,SUPL.MSME_NO from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<'" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' order by inv_data.bill_id"
+        da = New SqlDataAdapter(quary, conn)
+        da.Fill(dt)
+        conn.Close()
+        GridView16.DataSource = dt
+        GridView16.DataBind()
+
+
+    End Sub
+
+    Protected Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
+        Dim dt As DataTable = New DataTable()
+        For j As Integer = 0 To GridView16.Columns.Count - 1
+            dt.Columns.Add(GridView16.Columns(j).HeaderText)
+        Next
+        For i As Integer = 0 To GridView16.Rows.Count - 1
+            Dim dr As DataRow = dt.NewRow()
+            For j As Integer = 0 To GridView16.Columns.Count - 1
+                If (GridView16.Rows(i).Cells(j).Text <> "") Then
+                    dr(GridView16.Columns(j).HeaderText) = GridView16.Rows(i).Cells(j).Text
+                End If
+
+            Next
+            dt.Rows.Add(dr)
+        Next
+
+        Using wb As XLWorkbook = New XLWorkbook()
+            wb.Worksheets.Add(dt, "Pending Payments")
+            Response.Clear()
+            Response.Buffer = True
+            Response.Charset = ""
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            Response.AddHeader("content-disposition", "attachment;filename=PendingPayments.xlsx")
+            Using MyMemoryStream As MemoryStream = New MemoryStream()
+                wb.SaveAs(MyMemoryStream)
+                MyMemoryStream.WriteTo(Response.OutputStream)
+                Response.Flush()
+                Response.End()
+            End Using
+        End Using
+    End Sub
+
+    Protected Sub Button52_Click(sender As Object, e As EventArgs) Handles Button52.Click
+
+        Dim from_date, to_date As Date
+        from_date = CDate(TextBox31.Text)
+        to_date = CDate(TextBox32.Text)
+
+        lblPendingBillsOpeningHeader.Text = "Amount of Bills pending as on " + from_date
+        lblPendingBillsOpeningHeaderMSME.Text = "Amount of Bills pending as on " + from_date + "- MSME"
+
+        lblReceivedBillsHeader.Text = "Amount of Bills received between " + from_date + "and" + to_date
+        lblReceivedBillsHeaderMSME.Text = "Amount of Bills received between " + from_date + "and" + to_date + "- MSME"
+
+        lblClearedBillsHeader.Text = "Amount of Bills cleared between " + from_date + "and" + to_date
+        lblClearedBillsHeaderMSME.Text = "Amount of Bills cleared between " + from_date + "and" + to_date + "- MSME"
+
+        lblPendingBillsClosingHeader.Text = "Amount of Bills pending as on " + to_date
+        lblPendingBillsClosingHeaderMSME.Text = "Amount of Bills pending as on " + to_date + "- MSME"
+
+        Dim quary As String = ""
+        Dim OpeningPending, OpeningPendingMSME As New Decimal(0)
+        Dim crystalReport As New ReportDocument
+        quary = "Select (select Cast(ROUND(sum(inv_amount)/10000000,2) as float) as 'OpeningPending' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<'" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "') as OpeningPending,(select  Cast((Case when sum(inv_amount) is null THEN 0 else ROUND(sum(inv_amount)/10000000,2) end) as float) as 'OpeningPendingMSME' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where supl.PARTY_TYPE='MSME' and (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<'" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "') as OpeningPendingMSME, 
+                (select Cast(ROUND(sum(inv_amount)/10000000,2) as float) as 'ReceivedDuringMonth' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where (billtractstatus is null OR billtractstatus='OTHERS') and post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' and '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "') as ReceivedDuringMonth, (select  Cast((Case when sum(inv_amount) is null THEN 0 else ROUND(sum(inv_amount)/10000000,2) end) as float) as 'ReceivedDuringMonthMSME' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where supl.PARTY_TYPE='MSME' and (billtractstatus is null OR billtractstatus='OTHERS') and post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' and '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "') as ReceivedDuringMonthMSME,
+                (select Cast(ROUND(sum(inv_amount)/10000000,2) as float) as 'ClearedDuringMonth' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where PaymentStatus='Payment Completed' and (billtractstatus is null OR billtractstatus='OTHERS') and post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' and '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "') as ClearedDuringMonth, (select  Cast((Case when sum(inv_amount) is null THEN 0 else ROUND(sum(inv_amount)/10000000,2) end) as float) as 'ClearedDuringMonthMSME' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where PaymentStatus='Payment Completed' and supl.PARTY_TYPE='MSME' and (billtractstatus is null OR billtractstatus='OTHERS') and post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' and '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "') as ClearedDuringMonthMSME,
+                (select Cast(ROUND(sum(inv_amount)/10000000,2) as float) as 'ClosingPending' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<='" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "') as ClosingPending, (select  Cast((Case when sum(inv_amount) is null THEN 0 else ROUND(sum(inv_amount)/10000000,2) end) as float) as 'ClosingPendingMSME' from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where supl.PARTY_TYPE='MSME' and (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<='" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "') as ClosingPendingMSME"
+        conn.Open()
+        Dim mc1 As New SqlCommand
+        mc1.CommandText = quary
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows = True Then
+            dr.Read()
+            lblPendingBillsOpeningData.Text = dr.Item("OpeningPending")
+            lblPendingBillsOpeningDataMSME.Text = dr.Item("OpeningPendingMSME")
+            lblReceivedBillsData.Text = dr.Item("ReceivedDuringMonth")
+            lblReceivedBillsDataMSME.Text = dr.Item("ReceivedDuringMonthMSME")
+            lblClearedBillsData.Text = dr.Item("ClearedDuringMonth")
+            lblClearedBillsDataMSME.Text = dr.Item("ClearedDuringMonthMSME")
+            lblPendingBillsClosingData.Text = dr.Item("ClosingPending")
+            lblPendingBillsClosingDataMSME.Text = dr.Item("ClosingPendingMSME")
+            dr.Close()
+        Else
+            dr.Close()
+        End If
+        conn.Close()
+    End Sub
 
     Protected Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
 

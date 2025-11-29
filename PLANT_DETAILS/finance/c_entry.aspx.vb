@@ -172,17 +172,27 @@ Public Class c_entry
 
                             mycommand = New SqlCommand("update LEDGER set PAYMENT_INDICATION=@PAYMENT_INDICATION,EFECTIVE_DATE=@EFECTIVE_DATE,FISCAL_YEAR=@FISCAL_YEAR WHERE VOUCHER_NO='" & GridView7.Rows(I).Cells(0).Text & "' AND PAYMENT_INDICATION='X'", conn_trans, myTrans)
                             mycommand.Parameters.AddWithValue("@PAYMENT_INDICATION", "OK")
-                            'mycommand.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(CDate(GridView7.Rows(I).Cells(7).Text), "dd-MM-yyyy", provider))
-                            mycommand.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(CDate(TextBox88.Text), "dd-MM-yyyy", provider))
+                            mycommand.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(CDate(GridView7.Rows(I).Cells(7).Text), "dd-MM-yyyy", provider))
                             mycommand.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
                             mycommand.ExecuteNonQuery()
                             mycommand.Dispose()
+
+
+                            ''UPDATE BILL TRACK ID STATUS
+                            Dim query2 As String = "update inv_data set PaymentStatus=@PaymentStatus, PaymentDate=@PaymentDate WHERE VoucherNo='" & GridView7.Rows(I).Cells(0).Text & "'"
+                            Dim cmd2 As New SqlCommand(query2, conn_trans, myTrans)
+                            cmd2.Parameters.AddWithValue("@PaymentStatus", "Payment Completed")
+                            cmd2.Parameters.AddWithValue("@PaymentDate", Date.ParseExact(CDate(GridView7.Rows(I).Cells(7).Text), "dd-MM-yyyy", provider))
+                            cmd2.ExecuteReader()
+                            cmd2.Dispose()
+
 
                         Else
                             Label541.Text = "Please Add Cheque No And Date"
                             Return
                         End If
                     Next
+
                     conn.Open()
                     dt.Clear()
                     da = New SqlDataAdapter("select DISTINCT VOUCHER .TOKEN_NO from VOUCHER WITH(NOLOCK) join LEDGER WITH(NOLOCK) on VOUCHER .TOKEN_NO =LEDGER .VOUCHER_NO  where LEDGER .POST_INDICATION='BANK' AND VOUCHER .CHEQUE_NO IS NULL AND VOUCHER .VOUCHER_TYPE ='B.P.V' order by TOKEN_NO", conn)

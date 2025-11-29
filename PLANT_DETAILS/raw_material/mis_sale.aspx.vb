@@ -1806,7 +1806,7 @@ Public Class mis_sale
             End If
             'conn.Open()
             Dim cmd As New SqlCommand
-            Dim Query As String = "Insert Into LEDGER(AGING_FLAG,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
+            Dim Query As String = "Insert Into LEDGER(AGING_FLAG_NEW,AGING_FLAG,PO_NO,GARN_NO_MB_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION)VALUES(@AGING_FLAG_NEW,@AGING_FLAG,@PO_NO,@GARN_NO_MB_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION)"
             cmd = New SqlCommand(Query, conn_trans, myTrans)
             cmd.Parameters.AddWithValue("@PO_NO", so_no)
             cmd.Parameters.AddWithValue("@GARN_NO_MB_NO", inv_no)
@@ -1821,6 +1821,7 @@ Public Class mis_sale
             cmd.Parameters.AddWithValue("@POST_INDICATION", post_ind)
             cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
             cmd.Parameters.AddWithValue("@AGING_FLAG", RCD_VOUCHER_NO)
+            cmd.Parameters.AddWithValue("@AGING_FLAG_NEW", RCD_VOUCHER_NO)
             cmd.ExecuteReader()
             cmd.Dispose()
             'conn.Close()

@@ -1083,15 +1083,45 @@ Public Class inv_value
                         Next
 
 
-                        'For L = 0 To GridView6.Rows.Count - 1
+                        For L = 0 To GridView6.Rows.Count - 1
 
-                        '    ''update ledger
-                        '    Dim cmd12 As New SqlCommand
-                        '    Dim Query12 As String = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "' where PO_NO='" & Label398.Text & "' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
-                        '    cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
-                        '    cmd12.ExecuteReader()
-                        '    cmd12.Dispose()
-                        'Next
+                            'updating purchase ledger entry at the time of GARN
+
+                            If (GridView6.Rows(L).Cells(13).Text <> "") Then
+
+                                Dim Query12 As New String("")
+                                If (TextBox57.Text = "N/A") Then
+
+                                    Query12 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox160.Text & "' where PO_NO='" & Label398.Text & "' AND AMOUNT_DR ='" & (CDec(GridView6.Rows(L).Cells(11).Text) + CDec(GridView6.Rows(L).Cells(12).Text)) & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL and Journal_ID='" & GridView6.Rows(L).Cells(3).Text & "'"
+
+                                Else
+                                    Query12 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & Label398.Text & "' AND AMOUNT_DR ='" & (CDec(GridView6.Rows(L).Cells(11).Text) + CDec(GridView6.Rows(L).Cells(12).Text)) & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL and Journal_ID='" & GridView6.Rows(L).Cells(3).Text & "'"
+                                End If
+
+                                Dim cmd12 As New SqlCommand
+                                cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                cmd12.ExecuteReader()
+                                cmd12.Dispose()
+
+
+                                ''updating provisional ledger entry at the time of GARN
+                                Dim Query11 As New String("")
+                                If (TextBox57.Text = "N/A") Then
+
+                                    Query11 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox160.Text & "' where PO_NO='" & Label398.Text & "' AND AMOUNT_CR ='" & (CDec(GridView6.Rows(L).Cells(11).Text) + CDec(GridView6.Rows(L).Cells(12).Text)) & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL and Journal_ID='" & GridView6.Rows(L).Cells(3).Text & "'"
+
+                                Else
+                                    Query11 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & Label398.Text & "'  AND AMOUNT_CR ='" & (CDec(GridView6.Rows(L).Cells(11).Text) + CDec(GridView6.Rows(L).Cells(12).Text)) & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL and Journal_ID='" & GridView6.Rows(L).Cells(3).Text & "'"
+                                End If
+
+                                Dim cmd11 As New SqlCommand
+                                cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
+                                cmd11.ExecuteReader()
+                                cmd11.Dispose()
+
+                            End If
+
+                        Next
 
 
                         If (DropDownList4.SelectedValue = "Yes") Then
@@ -1195,11 +1225,11 @@ Public Class inv_value
 
 
                         ''update ledger
-                        Dim cmd11 As New SqlCommand
-                        Dim Query11 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & Label398.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "'"
-                        cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
-                        cmd11.ExecuteReader()
-                        cmd11.Dispose()
+                        Dim cmd15 As New SqlCommand
+                        Dim Query15 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & Label398.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_crrnoDropDownList.SelectedValue & "'"
+                        cmd15 = New SqlCommand(Query15, conn_trans, myTrans)
+                        cmd15.ExecuteReader()
+                        cmd15.Dispose()
 
                         ''insert party amount
 
@@ -1273,10 +1303,16 @@ Public Class inv_value
 
                 End If
 
+                ''UPDATE BILL TRACK ID STATUS
+                Dim query115 As String = "update inv_data set PaymentStatus='Valuation Completed' WHERE bill_id='" & DropDownList40.SelectedValue & "'"
+                Dim cmd115 As New SqlCommand(query115, conn_trans, myTrans)
+                cmd115.ExecuteReader()
+                cmd115.Dispose()
+
                 myTrans.Commit()
-                GARN_ERR_LABLE.Visible = True
-                GARN_ERR_LABLE.Text = "All records are written to database."
-                Response.Redirect(Request.Url.AbsoluteUri)
+                ''GARN_ERR_LABLE.Visible = True
+                ''GARN_ERR_LABLE.Text = "All records are written to database."
+                Response.Redirect(Request.RawUrl.ToString() + "?status=success", False)
             Catch ee As Exception
                 ' Roll back the transaction. 
                 myTrans.Rollback()
@@ -1507,37 +1543,6 @@ Public Class inv_value
 
             cmd.ExecuteReader()
             cmd.Dispose()
-
-            ''
-
-            ''update ledger
-            Dim Query11 As New String("")
-            If (TextBox57.Text = "N/A") Then
-
-                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_CR ='" & dr_value & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
-
-            Else
-                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_CR ='" & dr_value & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
-            End If
-
-            Dim cmd11 As New SqlCommand
-            cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
-            cmd11.ExecuteReader()
-            cmd11.Dispose()
-
-            If (TextBox57.Text = "N/A") Then
-
-                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & inv_no & "' where PO_NO='" & so_no & "' AND AMOUNT_DR ='" & dr_value & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
-
-            Else
-                Query11 = "update LEDGER set BILL_TRACK_ID ='" & token_no & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & so_no & "'  AND AMOUNT_DR ='" & dr_value & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & garn_mb & "' AND BILL_TRACK_ID IS NULL"
-            End If
-
-            'Dim cmd11 As New SqlCommand
-            cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
-            cmd11.ExecuteReader()
-            cmd11.Dispose()
-
 
         End If
     End Sub
@@ -2568,6 +2573,21 @@ Public Class inv_value
                                 'cmd12.ExecuteReader()
                                 'cmd12.Dispose()
 
+                                ''updating purchase ledger entry at the time of GARN
+                                Dim Query12 As New String("")
+                                If (TextBox57.Text = "N/A") Then
+
+                                    Query12 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox160.Text & "' where PO_NO='" & M_Label398.Text & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL and Journal_ID='" & GridView210.Rows(I).Cells(3).Text & "'"
+
+                                Else
+                                    Query12 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & M_Label398.Text & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL and Journal_ID='" & GridView210.Rows(I).Cells(3).Text & "'"
+                                End If
+
+                                Dim cmd12 As New SqlCommand
+                                cmd12 = New SqlCommand(Query12, conn_trans, myTrans)
+                                cmd12.ExecuteReader()
+                                cmd12.Dispose()
+
 
                             End If
                         Next
@@ -2578,6 +2598,21 @@ Public Class inv_value
 
                         ''save ledger
                         save_ledger("0", M_Label398.Text, M_garn_crrnoDropDownList.SelectedValue, TextBox160.Text, M_Label396.Text.Substring(0, M_Label396.Text.IndexOf(",") - 1), prov_head, "Dr", prov_price, "PROV", DropDownList40.Text, 1, "")
+
+                        ''updating provisional ledger entry at the time of GARN
+                        Dim Query11 As New String("")
+                        If (TextBox57.Text = "N/A") Then
+
+                            Query11 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox160.Text & "' where PO_NO='" & M_Label398.Text & "' AND AMOUNT_CR ='" & prov_price & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+
+                        Else
+                            Query11 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & M_Label398.Text & "'  AND AMOUNT_CR ='" & prov_price & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "' AND BILL_TRACK_ID IS NULL"
+                        End If
+
+                        Dim cmd11 As New SqlCommand
+                        cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
+                        cmd11.ExecuteReader()
+                        cmd11.Dispose()
 
 
                         ''TCS ENTRY
@@ -2649,11 +2684,11 @@ Public Class inv_value
                         Else
                             save_ledger("0", M_Label398.Text, M_garn_crrnoDropDownList.SelectedValue, TextBox160.Text, M_Label396.Text.Substring(0, M_Label396.Text.IndexOf(",") - 1), sund_head, "Cr", sund_price, "SUND", DropDownList40.Text, 8, "")
 
-                            Dim cmd11 As New SqlCommand
-                            Dim Query11 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & M_Label398.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "'"
-                            cmd11 = New SqlCommand(Query11, conn_trans, myTrans)
-                            cmd11.ExecuteReader()
-                            cmd11.Dispose()
+                            Dim cmd13 As New SqlCommand
+                            Dim Query13 As String = "update LEDGER set PAYMENT_INDICATION ='P' where PO_NO='" & M_Label398.Text & "' and INVOICE_NO is null and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & M_garn_crrnoDropDownList.SelectedValue & "'"
+                            cmd13 = New SqlCommand(Query13, conn_trans, myTrans)
+                            cmd13.ExecuteReader()
+                            cmd13.Dispose()
                         End If
 
 
@@ -2710,6 +2745,12 @@ Public Class inv_value
                         Return
                     End If
                 End If
+
+                ''UPDATE BILL TRACK ID STATUS
+                Dim query2 As String = "update inv_data set PaymentStatus='Valuation Completed' WHERE bill_id='" & DropDownList40.SelectedValue & "'"
+                Dim cmd2 As New SqlCommand(query2, conn_trans, myTrans)
+                cmd2.ExecuteReader()
+                cmd2.Dispose()
 
                 myTrans.Commit()
                 M_DropDownList6.Items.Clear()
@@ -3554,6 +3595,44 @@ Public Class inv_value
 
 
 
+
+
+                                    'updating purchase ledger entry at the time of GARN
+                                    Dim Query12 As New String("")
+                                    If (TextBox57.Text = "N/A") Then
+
+                                        Query12 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox160.Text & "' where PO_NO='" & Label12.Text & "' AND AMOUNT_DR ='" & PROV_PRICE & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
+
+                                    Else
+                                        Query12 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & Label12.Text & "' AND AMOUNT_DR ='" & PROV_PRICE & "' and POST_INDICATION ='PUR' AND GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
+                                    End If
+
+                                    Dim cmd12 As New SqlCommand
+                                    cmd12 = New SqlCommand(Query12, conn_trans_Transporter, myTransactionForTransport)
+                                    cmd12.ExecuteReader()
+                                    cmd12.Dispose()
+
+
+                                    ''updating provisional ledger entry at the time of GARN
+                                    Dim Query15 As New String("")
+                                    If (TextBox57.Text = "N/A") Then
+
+                                        Query15 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox160.Text & "' where PO_NO='" & Label12.Text & "' AND AMOUNT_CR ='" & PROV_PRICE & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
+
+                                    Else
+                                        Query15 = "update LEDGER set BILL_TRACK_ID ='" & DropDownList40.Text & "', INVOICE_NO ='" & TextBox160.Text & "', AGING_FLAG ='" & TextBox57.Text & "' where PO_NO='" & Label12.Text & "'  AND AMOUNT_CR ='" & PROV_PRICE & "' and POST_INDICATION ='PROV' AND GARN_NO_MB_NO ='" & row.Cells(1).Text & "' AND BILL_TRACK_ID IS NULL"
+                                    End If
+
+                                    Dim cmd15 As New SqlCommand
+                                    cmd15 = New SqlCommand(Query15, conn_trans_Transporter, myTransactionForTransport)
+                                    cmd15.ExecuteReader()
+                                    cmd15.Dispose()
+
+
+
+
+
+
                                     save_ledger_transport(row.Cells(4).Text, Label12.Text, row.Cells(1).Text, TextBox160.Text, Label16.Text.Substring(0, Label16.Text.IndexOf(",") - 1), PROV_HEAD, "Dr", PROV_PRICE, "PROV", DropDownList40.Text, 1, "")
 
                                     If DropDownList2.SelectedValue = "Yes" Then
@@ -3769,6 +3848,13 @@ Public Class inv_value
                         Return
                     End If
                 End If
+
+
+                ''UPDATE BILL TRACK ID STATUS
+                Dim query2 As String = "update inv_data set PaymentStatus='Valuation Completed' WHERE bill_id='" & DropDownList40.SelectedValue & "'"
+                Dim cmd2 As New SqlCommand(query2, conn_trans_Transporter, myTransactionForTransport)
+                cmd2.ExecuteReader()
+                cmd2.Dispose()
 
                 myTransactionForTransport.Commit()
                 Label17.Visible = True

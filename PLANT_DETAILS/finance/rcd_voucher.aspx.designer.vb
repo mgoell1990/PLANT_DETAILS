@@ -185,6 +185,60 @@ Partial Public Class rcd_voucher
     Protected WithEvents DropDownList23 As Global.System.Web.UI.WebControls.DropDownList
     
     '''<summary>
+    '''Label446 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label446 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList50 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList50 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''Label1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label1 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList1 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
+    '''Label5 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label5 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''DropDownList49 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DropDownList49 As Global.System.Web.UI.WebControls.DropDownList
+    
+    '''<summary>
     '''Label508 control.
     '''</summary>
     '''<remarks>

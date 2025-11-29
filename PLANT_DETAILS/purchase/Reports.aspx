@@ -28,13 +28,29 @@
                 <asp:Panel ID="Panel9" runat="server">
                     <div class="row align-items-center">
                         <div class="col-5 text-end">
-                            <asp:Label ID="Label49" runat="server" Font-Bold="True" ForeColor="Blue" Text="Search Type"></asp:Label>
+                            <asp:Label ID="Label49" runat="server" Font-Bold="True" ForeColor="Blue" Text="Order Status"></asp:Label>
                         </div>
-                        <div class="col text-center">
+                        <div class="col-5 text-center">
                             <asp:DropDownList CssClass="form-select" ID="DropDownList9" runat="server" AutoPostBack="True">
                                 <asp:ListItem>Select</asp:ListItem>
-                                <asp:ListItem>Active Work Orders</asp:ListItem>
+                                <asp:ListItem>Active Orders</asp:ListItem>
+                                <asp:ListItem>Closed Orders</asp:ListItem>
+                                <asp:ListItem>Short Closed Orders</asp:ListItem>
                             </asp:DropDownList>
+                        </div>
+                        
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-5 text-end">
+                            <asp:Label ID="Label24" runat="server" Font-Bold="True" ForeColor="Blue" Text="Order Type"></asp:Label>
+                        </div>
+                        <div class="col-5 text-center">
+                            <asp:DropDownList CssClass="form-select" ID="DropDownList8" runat="server" AutoPostBack="True">
+                                
+                            </asp:DropDownList>
+                        </div>
+                        <div class="col text-center">
+                            <asp:Button ID="Button30" runat="server" Text="Download" CssClass="btn btn-primary" />
                         </div>
                     </div>
                 </asp:Panel>
@@ -49,13 +65,6 @@
                     <asp:View ID="View1" runat="server">
                         <div class="row justify-content-center align-items-center">
                             <div class="col text-center" style="background-color: #AAEEFF; border-color: #AAEEFF; border-style: Groove">
-                                <div class="row align-items-center">
-                                    <div class="col text-center">
-                                        <asp:Button ID="Button30" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                    </div>
-                                </div>
-
-
                                 <div class="row align-items-center mt-1">
                                     <div class="col g-0">
                                         <asp:Panel ID="Panel16" runat="server" ScrollBars="Auto">
@@ -68,8 +77,8 @@
                                                     <asp:BoundField DataField="SO_ACTUAL_DATE" HeaderText="Order Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                     <asp:BoundField DataField="SUPL_ID" HeaderText="Party Code" />
                                                     <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
-                                                    <asp:BoundField DataField="W_SLNO" HeaderText="WO Sl. No." />
-                                                    <asp:BoundField DataField="W_NAME" HeaderText="Work Name" />
+                                                    <asp:BoundField DataField="W_SLNO" HeaderText="Sl. No." />
+                                                    <asp:BoundField DataField="W_NAME" HeaderText="Description" />
                                                     <asp:BoundField DataField="W_AU" HeaderText="A/U" />
                                                     <asp:BoundField DataField="W_QTY" HeaderText="Order Qty." />
                                                     <asp:BoundField DataField="W_COMPLITED" HeaderText="Executed Qty." />

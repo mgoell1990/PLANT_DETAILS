@@ -70,34 +70,6 @@ Public Class issue
             ISSUE_ERR_LABEL.Visible = True
             DropDownList11.Focus()
             Return
-        ElseIf TextBox166.Text = "" Then
-            Return
-        ElseIf TextBox167.Text = "" Then
-            Return
-        ElseIf IsNumeric(TextBox163.Text) = False Then
-            ISSUE_ERR_LABEL.Text = "Please Enter Numeric Value"
-            ISSUE_ERR_LABEL.Visible = True
-            TextBox163.Text = ""
-            TextBox163.Focus()
-            Return
-        ElseIf CDec(TextBox163.Text) < CDec(TextBox3.Text) Then
-            ISSUE_ERR_LABEL.Text = "Required Qty is lower than Issue Qty"
-            ISSUE_ERR_LABEL.Visible = True
-            TextBox3.Focus()
-            Return
-        ElseIf CDec(TextBox167.Text) < CDec(TextBox3.Text) Then
-            ISSUE_ERR_LABEL.Text = "Stock Qty is lower than Issue Qty"
-            ISSUE_ERR_LABEL.Visible = True
-            TextBox3.Focus()
-            Return
-        ElseIf CDec(TextBox3.Text) > CDec(TextBox163.Text) Then
-            If TextBox2.Text = "" Then
-                ISSUE_ERR_LABEL.Text = "Please Enter Min Issue Qty Remarks"
-                ISSUE_ERR_LABEL.Visible = True
-                TextBox2.Focus()
-                Return
-            End If
-
         End If
 
         Using conn_trans
@@ -107,160 +79,223 @@ Public Class issue
             Try
 
 
-                'Database updation entry
-                ''Getting fiscal year
-                ''Issue no generate
-                Dim STR1 As String = ""
-                If Today.Date.Month > 3 Then
-                    STR1 = Today.Date.Year
-                    STR1 = STR1.Trim.Substring(2)
-                    STR1 = STR1 & (STR1 + 1)
-                ElseIf Today.Date.Month <= 3 Then
-                    STR1 = Today.Date.Year
-                    STR1 = STR1.Trim.Substring(2)
-                    STR1 = (STR1 - 1) & STR1
-                End If
+                If RadioButtonList1.SelectedIndex = 0 Then
 
+                    If TextBox166.Text = "" Then
+                        Return
+                    ElseIf TextBox167.Text = "" Then
+                        Return
+                    ElseIf IsNumeric(TextBox163.Text) = False Then
+                        ISSUE_ERR_LABEL.Text = "Please Enter Numeric Value"
+                        ISSUE_ERR_LABEL.Visible = True
+                        TextBox163.Text = ""
+                        TextBox163.Focus()
+                        Return
+                    ElseIf CDec(TextBox163.Text) < CDec(TextBox3.Text) Then
+                        ISSUE_ERR_LABEL.Text = "Required Qty is lower than Issue Qty"
+                        ISSUE_ERR_LABEL.Visible = True
+                        TextBox3.Focus()
+                        Return
+                    ElseIf CDec(TextBox167.Text) < CDec(TextBox3.Text) Then
+                        ISSUE_ERR_LABEL.Text = "Stock Qty is lower than Issue Qty"
+                        ISSUE_ERR_LABEL.Visible = True
+                        TextBox3.Focus()
+                        Return
+                    ElseIf CDec(TextBox3.Text) > CDec(TextBox163.Text) Then
+                        If TextBox2.Text = "" Then
+                            ISSUE_ERR_LABEL.Text = "Please Enter Min Issue Qty Remarks"
+                            ISSUE_ERR_LABEL.Visible = True
+                            TextBox2.Focus()
+                            Return
+                        End If
 
-                conn.Open()
-                Dim max_line As Integer
-                max_line = 0
-                Dim MC5 As New SqlCommand
-                MC5.CommandText = "select (CASE WHEN count(line_no) IS NULL THEN '0' ELSE count(line_no) END) AS line_no from MAT_DETAILS where MAT_CODE ='" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR =" & CInt(STR1) & " and LINE_NO <> 0"
-                MC5.Connection = conn
-                dr = MC5.ExecuteReader
-                If dr.HasRows Then
-                    dr.Read()
-                    max_line = dr.Item("line_no")
-                    dr.Close()
-                    conn.Close()
-                Else
-                    conn.Close()
-                End If
-
-                TextBox169.Text = max_line + 1
-
-
-
-                Dim month As Integer
-                month = Today.Date.Month
-                Dim qtr As String = ""
-                If month = 4 Or month = 5 Or month = 6 Then
-                    qtr = "Q1"
-                ElseIf month = 7 Or month = 8 Or month = 9 Then
-                    qtr = "Q2"
-                ElseIf month = 10 Or month = 11 Or month = 12 Then
-                    qtr = "Q3"
-                ElseIf month = 1 Or month = 2 Or month = 3 Then
-                    qtr = "Q4"
-                End If
-                'conn.Open()
-                Dim Query As String = "UPDATE MAT_DETAILS SET ENTRY_DATE=@ENTRY_DATE,ISSUE_DATE=@ISSUE_DATE,AVG_PRICE=@AVG_PRICE, LINE_NO=@LINE_NO,LINE_DATE=@LINE_DATE,ISSUE_QTY=@ISSUE_QTY,MAT_BALANCE=@MAT_BALANCE,UNIT_PRICE=@UNIT_PRICE,TOTAL_PRICE=@TOTAL_PRICE,ISSUE_BY=@ISSUE_BY ,REMARKS=@REMARKS,QTR=@QTR , MAT_QTY=@MAT_QTY WHERE ISSUE_NO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
-                Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
-                cmd.Parameters.AddWithValue("@LINE_NO", max_line + 1)
-                cmd.Parameters.AddWithValue("@REMARKS", TextBox2.Text)
-                cmd.Parameters.AddWithValue("@LINE_DATE", Today.Date.Date)
-                cmd.Parameters.AddWithValue("@MAT_QTY", 0)
-                cmd.Parameters.AddWithValue("@ISSUE_QTY", CDec(TextBox3.Text))
-                cmd.Parameters.AddWithValue("@MAT_BALANCE", CDec(TextBox167.Text) - CDec(TextBox3.Text))
-                cmd.Parameters.AddWithValue("@UNIT_PRICE", CDec(TextBox166.Text))
-                cmd.Parameters.AddWithValue("@TOTAL_PRICE", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)))
-                cmd.Parameters.AddWithValue("@QTR", qtr)
-                cmd.Parameters.AddWithValue("@ISSUE_BY", Session("userName"))
-                cmd.Parameters.AddWithValue("@ISSUE_DATE", Today.Date.Date)
-                cmd.Parameters.AddWithValue("@AVG_PRICE", CDec(TextBox166.Text))
-                cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                cmd.ExecuteReader()
-                cmd.Dispose()
-                'conn.Close()
-
-                ''UPDATE MATERIAL
-                TextBox167.Text = CDec(TextBox167.Text) - CDec(TextBox3.Text)
-                'conn.Open()
-                Query = "UPDATE MATERIAL SET MAT_STOCK=@MAT_STOCK,LAST_ISSUE_DATE=@LAST_ISSUE_DATE,LAST_TRANS_DATE=@LAST_TRANS_DATE WHERE MAT_CODE ='" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
-                cmd = New SqlCommand(Query, conn_trans, myTrans)
-                cmd.Parameters.AddWithValue("@MAT_STOCK", CDec(TextBox167.Text))
-                cmd.Parameters.AddWithValue("@LAST_ISSUE_DATE", Date.ParseExact(Today.Date.Date, "dd-MM-yyyy", provider))
-                cmd.Parameters.AddWithValue("@LAST_TRANS_DATE", Date.ParseExact(Today.Date.Date, "dd-MM-yyyy", provider))
-                cmd.ExecuteReader()
-                cmd.Dispose()
-                'conn.Close()
-
-                '''save ledger
-                'Dim issue_head, con_head As String
-                'issue_head = ""
-                'con_head = ""
-                ''Dim MC5 As New SqlCommand
-
-                'conn.Open()
-                '''Getting Material Consumption head
-                'MC5.CommandText = "select COST_CODE,ISSUE_CODE from MAT_DETAILS WITH(NOLOCK) where ISSUE_NO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR='" & STR1 & "'"
-                'MC5.Connection = conn
-                'dr = MC5.ExecuteReader
-                'If dr.HasRows Then
-                '    dr.Read()
-                '    issue_head = dr.Item("ISSUE_CODE")
-                '    con_head = dr.Item("COST_CODE")
-                '    dr.Close()
-                '    conn.Close()
-                'Else
-                '    conn.Close()
-                'End If
-
-
-                Dim issueCode, consumptionCode, wipHead As New String("")
-                conn.Open()
-                Dim MCc As New SqlCommand
-                MCc.CommandText = "select AC_ISSUE,AC_CON,CWIP_HEAD from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
-                MCc.Connection = conn
-                dr = MCc.ExecuteReader
-                If dr.HasRows Then
-                    dr.Read()
-                    issueCode = dr.Item("AC_ISSUE")
-                    consumptionCode = dr.Item("AC_CON")
-
-                    If Not (IsDBNull(dr.Item("CWIP_HEAD"))) Then
-                        wipHead = dr.Item("CWIP_HEAD")
                     End If
 
-                    dr.Close()
-                    conn.Close()
-                Else
-                    conn.Close()
-                End If
+                    'Database updation entry
+                    ''Getting fiscal year
+                    ''Issue no generate
+                    Dim STR1 As String = ""
+                    If Today.Date.Month > 3 Then
+                        STR1 = Today.Date.Year
+                        STR1 = STR1.Trim.Substring(2)
+                        STR1 = STR1 & (STR1 + 1)
+                    ElseIf Today.Date.Month <= 3 Then
+                        STR1 = Today.Date.Year
+                        STR1 = STR1.Trim.Substring(2)
+                        STR1 = (STR1 - 1) & STR1
+                    End If
 
-                'If (CInt(DropDownList3.Text.Substring(0, 3)) < 50) Then
-                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, issueCode, "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
-                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, consumptionCode, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
-                'Else
-                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "60614", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital Issue")
-                '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, wipHead, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital WIP")
-                'End If
 
-                save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "61602", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
-                save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "80901", "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
+                    conn.Open()
+                    Dim max_line As Integer
+                    max_line = 0
+                    Dim MC5 As New SqlCommand
+                    MC5.CommandText = "select (CASE WHEN count(line_no) IS NULL THEN '0' ELSE count(line_no) END) AS line_no from MAT_DETAILS where MAT_CODE ='" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR =" & CInt(STR1) & " and LINE_NO <> 0"
+                    MC5.Connection = conn
+                    dr = MC5.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        max_line = dr.Item("line_no")
+                        dr.Close()
+                        conn.Close()
+                    Else
+                        conn.Close()
+                    End If
 
-                Dim ds5 As New DataSet
-                conn.Open()
-                dt.Clear()
-                da = New SqlDataAdapter("SELECT (MAT_DETAILS.ISSUE_NO + ' , ' + MATERIAL .MAT_NAME) AS ISSUE_NO FROM MATERIAL WITH(NOLOCK) JOIN MAT_DETAILS WITH(NOLOCK) ON MATERIAL .MAT_CODE =MAT_DETAILS .MAT_CODE JOIN cost ON MAT_DETAILS .COST_CODE =cost .cost_code 
+                    TextBox169.Text = max_line + 1
+
+
+
+                    Dim month As Integer
+                    month = Today.Date.Month
+                    Dim qtr As String = ""
+                    If month = 4 Or month = 5 Or month = 6 Then
+                        qtr = "Q1"
+                    ElseIf month = 7 Or month = 8 Or month = 9 Then
+                        qtr = "Q2"
+                    ElseIf month = 10 Or month = 11 Or month = 12 Then
+                        qtr = "Q3"
+                    ElseIf month = 1 Or month = 2 Or month = 3 Then
+                        qtr = "Q4"
+                    End If
+                    'conn.Open()
+                    Dim Query As String = "UPDATE MAT_DETAILS SET ENTRY_DATE=@ENTRY_DATE,ISSUE_DATE=@ISSUE_DATE,AVG_PRICE=@AVG_PRICE, LINE_NO=@LINE_NO,LINE_DATE=@LINE_DATE,ISSUE_QTY=@ISSUE_QTY,MAT_BALANCE=@MAT_BALANCE,UNIT_PRICE=@UNIT_PRICE,TOTAL_PRICE=@TOTAL_PRICE,ISSUE_BY=@ISSUE_BY ,REMARKS=@REMARKS,QTR=@QTR , MAT_QTY=@MAT_QTY WHERE ISSUE_NO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
+                    Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
+                    cmd.Parameters.AddWithValue("@LINE_NO", max_line + 1)
+                    cmd.Parameters.AddWithValue("@REMARKS", TextBox2.Text)
+                    cmd.Parameters.AddWithValue("@LINE_DATE", Today.Date.Date)
+                    cmd.Parameters.AddWithValue("@MAT_QTY", 0)
+                    cmd.Parameters.AddWithValue("@ISSUE_QTY", CDec(TextBox3.Text))
+                    cmd.Parameters.AddWithValue("@MAT_BALANCE", CDec(TextBox167.Text) - CDec(TextBox3.Text))
+                    cmd.Parameters.AddWithValue("@UNIT_PRICE", CDec(TextBox166.Text))
+                    cmd.Parameters.AddWithValue("@TOTAL_PRICE", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)))
+                    cmd.Parameters.AddWithValue("@QTR", qtr)
+                    cmd.Parameters.AddWithValue("@ISSUE_BY", Session("userName"))
+                    cmd.Parameters.AddWithValue("@ISSUE_DATE", Today.Date.Date)
+                    cmd.Parameters.AddWithValue("@AVG_PRICE", CDec(TextBox166.Text))
+                    cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
+                    cmd.ExecuteReader()
+                    cmd.Dispose()
+                    'conn.Close()
+
+                    ''UPDATE MATERIAL
+                    TextBox167.Text = CDec(TextBox167.Text) - CDec(TextBox3.Text)
+                    'conn.Open()
+                    Query = "UPDATE MATERIAL SET MAT_STOCK=@MAT_STOCK,LAST_ISSUE_DATE=@LAST_ISSUE_DATE,LAST_TRANS_DATE=@LAST_TRANS_DATE WHERE MAT_CODE ='" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
+                    cmd = New SqlCommand(Query, conn_trans, myTrans)
+                    cmd.Parameters.AddWithValue("@MAT_STOCK", CDec(TextBox167.Text))
+                    cmd.Parameters.AddWithValue("@LAST_ISSUE_DATE", Date.ParseExact(Today.Date.Date, "dd-MM-yyyy", provider))
+                    cmd.Parameters.AddWithValue("@LAST_TRANS_DATE", Date.ParseExact(Today.Date.Date, "dd-MM-yyyy", provider))
+                    cmd.ExecuteReader()
+                    cmd.Dispose()
+                    'conn.Close()
+
+                    '''save ledger
+                    'Dim issue_head, con_head As String
+                    'issue_head = ""
+                    'con_head = ""
+                    ''Dim MC5 As New SqlCommand
+
+                    'conn.Open()
+                    '''Getting Material Consumption head
+                    'MC5.CommandText = "select COST_CODE,ISSUE_CODE from MAT_DETAILS WITH(NOLOCK) where ISSUE_NO='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "' and FISCAL_YEAR='" & STR1 & "'"
+                    'MC5.Connection = conn
+                    'dr = MC5.ExecuteReader
+                    'If dr.HasRows Then
+                    '    dr.Read()
+                    '    issue_head = dr.Item("ISSUE_CODE")
+                    '    con_head = dr.Item("COST_CODE")
+                    '    dr.Close()
+                    '    conn.Close()
+                    'Else
+                    '    conn.Close()
+                    'End If
+
+
+                    Dim issueCode, consumptionCode, wipHead As New String("")
+                    conn.Open()
+                    Dim MCc As New SqlCommand
+                    MCc.CommandText = "select AC_ISSUE,AC_CON,CWIP_HEAD from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList3.Text.Substring(0, DropDownList3.Text.IndexOf(",") - 1) & "'"
+                    MCc.Connection = conn
+                    dr = MCc.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        issueCode = dr.Item("AC_ISSUE")
+                        consumptionCode = dr.Item("AC_CON")
+
+                        If Not (IsDBNull(dr.Item("CWIP_HEAD"))) Then
+                            wipHead = dr.Item("CWIP_HEAD")
+                        End If
+
+                        dr.Close()
+                        conn.Close()
+                    Else
+                        conn.Close()
+                    End If
+
+                    'If (CInt(DropDownList3.Text.Substring(0, 3)) < 50) Then
+                    '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, issueCode, "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
+                    '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, consumptionCode, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
+                    'Else
+                    '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "60614", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital Issue")
+                    '    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, wipHead, "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Capital WIP")
+                    'End If
+
+                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "61602", "Cr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Issue")
+                    save_ledger(DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim, "80901", "Dr", CDec(FormatNumber(CDec(TextBox3.Text) * CDec(TextBox166.Text), 2)), "Material Con")
+
+                    Dim ds5 As New DataSet
+                    conn.Open()
+                    dt.Clear()
+                    da = New SqlDataAdapter("SELECT (MAT_DETAILS.ISSUE_NO + ' , ' + MATERIAL .MAT_NAME) AS ISSUE_NO FROM MATERIAL WITH(NOLOCK) JOIN MAT_DETAILS WITH(NOLOCK) ON MATERIAL .MAT_CODE =MAT_DETAILS .MAT_CODE JOIN cost ON MAT_DETAILS .COST_CODE =cost .cost_code 
                                     WHERE DEPT_CODE ='STORE' AND POST_TYPE ='AUTH' AND LINE_DATE IS NULL and cost.mat_type='STORE MATERIAL' order by ISSUE_NO", conn)
-                da.Fill(dt)
-                conn.Close()
-                DropDownList11.Items.Clear()
-                DropDownList11.DataSource = dt
-                DropDownList11.DataValueField = "ISSUE_NO"
-                DropDownList11.DataBind()
-                DropDownList11.Items.Insert(0, "Select")
-                DropDownList11.SelectedValue = "Select"
-                ''DropDownList11.DataBind()
+                    da.Fill(dt)
+                    conn.Close()
+                    DropDownList11.Items.Clear()
+                    DropDownList11.DataSource = dt
+                    DropDownList11.DataValueField = "ISSUE_NO"
+                    DropDownList11.DataBind()
+                    DropDownList11.Items.Insert(0, "Select")
+                    DropDownList11.SelectedValue = "Select"
+                    ''DropDownList11.DataBind()
 
-                myTrans.Commit()
-                ISSUE_ERR_LABEL.Visible = True
-                ISSUE_ERR_LABEL.Text = "All records are written to database."
+                    myTrans.Commit()
+                    ISSUE_ERR_LABEL.Visible = True
+                    ISSUE_ERR_LABEL.Text = "All records are written to database."
 
-                DropDownList11.Text = "Select"
-                TextBox3.Text = ""
+                    DropDownList11.Text = "Select"
+                    TextBox3.Text = ""
+
+
+                ElseIf RadioButtonList1.SelectedIndex = 1 Then
+                    'conn.Open()
+                    Dim Query As String = "UPDATE MAT_DETAILS SET AUTH_DATE=@AUTH_DATE, POST_TYPE=@POST_TYPE,AUTH_BY=@AUTH_BY WHERE ISSUE_NO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
+                    Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
+                    cmd.Parameters.AddWithValue("@POST_TYPE", "CANCEL")
+                    cmd.Parameters.AddWithValue("@AUTH_BY", Session("userName"))
+                    cmd.Parameters.AddWithValue("@AUTH_DATE", Today.Date.Date)
+                    cmd.ExecuteReader()
+                    cmd.Dispose()
+                    'conn.Close()
+                    myTrans.Commit()
+                    ISSUE_ERR_LABEL.Visible = True
+                    ISSUE_ERR_LABEL.Text = "Issue number Cancelled Successfully."
+
+                    Dim ds5 As New DataSet
+                    conn.Open()
+                    dt.Clear()
+                    da = New SqlDataAdapter("SELECT (MAT_DETAILS.ISSUE_NO + ' , ' + MATERIAL .MAT_NAME) AS ISSUE_NO FROM MATERIAL WITH(NOLOCK) JOIN MAT_DETAILS WITH(NOLOCK) ON MATERIAL .MAT_CODE =MAT_DETAILS .MAT_CODE JOIN cost ON MAT_DETAILS .COST_CODE =cost .cost_code 
+                                    WHERE DEPT_CODE ='STORE' AND POST_TYPE ='AUTH' AND LINE_DATE IS NULL and cost.mat_type='STORE MATERIAL' order by ISSUE_NO", conn)
+                    da.Fill(dt)
+                    conn.Close()
+                    DropDownList11.Items.Clear()
+                    DropDownList11.DataSource = dt
+                    DropDownList11.DataValueField = "ISSUE_NO"
+                    DropDownList11.DataBind()
+                    DropDownList11.Items.Insert(0, "Select")
+                    DropDownList11.SelectedValue = "Select"
+
+                End If
 
             Catch ee As Exception
                 ' Roll back the transaction. 
