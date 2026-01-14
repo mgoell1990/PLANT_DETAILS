@@ -1509,7 +1509,7 @@ Public Class OutsourceMatDespatch
                     End If
 
 
-                    ProfitOnSales = CDec(TextBox54.Text) * (unit_rate - AvgPrice)
+                    ''ProfitOnSales = CDec(TextBox54.Text) * (unit_rate - AvgPrice)
 
 
 
@@ -1520,12 +1520,13 @@ Public Class OutsourceMatDespatch
                             save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE ISSUE")
                             save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, IUCA, "Dr", CDec(TextBox45.Text), "IUCA")
                             save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_TRANSFER_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * unit_rate), 2), "STOCK TRANSFOR")
-                            If (ProfitOnSales > 0) Then
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
-                            Else
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
-                            End If
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            'If (ProfitOnSales > 0) Then
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            'Else
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
+                            'End If
 
                             save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
                             save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
@@ -1545,13 +1546,13 @@ Public Class OutsourceMatDespatch
                             save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, adv_pay_head, "Dr", CDec(TextBox45.Text), "ADV_PAY")
                             save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_TRANSFER_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * unit_rate), 2), "SALE OTHERS")
 
-                            If (ProfitOnSales > 0) Then
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
-                            Else
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
-                            End If
-
+                            'If (ProfitOnSales > 0) Then
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            'Else
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
+                            'End If
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
 
                             save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, FREIGHT, "Cr", CDec(TextBox39.Text), "FREIGHT")
                             save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, lcgst, "Cr", CDec(TextBox42.Text), "CGST_PAYABLE")
@@ -1569,12 +1570,13 @@ Public Class OutsourceMatDespatch
                             save_ledger(DropDownList1.SelectedValue, TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, STOCK_TRANSFER_HEAD, "Cr", Math.Round((CDec(TextBox54.Text) * unit_rate), 2), "SALE OTHERS")
 
 
-                            If (ProfitOnSales > 0) Then
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
-                            Else
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
-                                save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
-                            End If
+                            'If (ProfitOnSales > 0) Then
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
+                            'Else
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2) + ProfitOnSales, "OUTSOURCE CONSUMPTION")
+                            '    save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, "84004", "Dr", ProfitOnSales * (-1), "LOSS ON SALES")
+                            'End If
+                            save_ledger("", TextBox124.Text, inv_for & TextBox65.Text, TextBox125.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox54.Text) * AvgPrice), 2), "OUTSOURCE CONSUMPTION")
 
 
 

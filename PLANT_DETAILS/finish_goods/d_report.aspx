@@ -103,6 +103,7 @@
                         <asp:BoundField DataField="TOTAL_VALUE" HeaderText="TOTAL VALUE" />
                         <asp:BoundField DataField="QUAL_DESC" HeaderText="Quality Group" />
                         <asp:BoundField DataField="FISCAL_YEAR" HeaderText="F. Year" />
+                        <asp:BoundField DataField="HSN_CODE" HeaderText="HSN_CODE" />
                     </Columns>
                 </asp:GridView>
 

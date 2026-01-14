@@ -87,18 +87,18 @@ Public Class d_report
         dt.Clear()
         If DropDownList1.Text <> "All" And DropDownList2.Text <> "All" Then
 
-            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') and DESPATCH .P_CODE = '" & DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1) & "'    ORDER BY INV_NO", conn)
+            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC,HSN_CODE , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join SO_MAT_ORDER on DESPATCH.SO_NO=SO_MAT_ORDER.SO_NO and DESPATCH.MAT_SLNO=SO_MAT_ORDER.ITEM_SLNO join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') and DESPATCH .P_CODE = '" & DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1) & "'  and SO_MAT_ORDER.AMD_NO='0' ORDER BY INV_NO", conn)
 
         ElseIf DropDownList1.Text = "All" And DropDownList2.Text <> "All" Then
 
-            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') and DESPATCH .P_CODE = '" & DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1) & "'    ORDER BY INV_NO", conn)
+            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC,HSN_CODE , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join SO_MAT_ORDER on DESPATCH.SO_NO=SO_MAT_ORDER.SO_NO and DESPATCH.MAT_SLNO=SO_MAT_ORDER.ITEM_SLNO join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') and DESPATCH .P_CODE = '" & DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1) & "'  and SO_MAT_ORDER.AMD_NO='0' ORDER BY INV_NO", conn)
 
         ElseIf DropDownList1.Text <> "All" And DropDownList2.Text = "All" Then
 
-            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') and DESPATCH .P_CODE like '" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1) & "%'   ORDER BY INV_NO", conn)
+            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC,HSN_CODE , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join SO_MAT_ORDER on DESPATCH.SO_NO=SO_MAT_ORDER.SO_NO and DESPATCH.MAT_SLNO=SO_MAT_ORDER.ITEM_SLNO join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') and DESPATCH .P_CODE like '" & DropDownList1.Text.Substring(0, DropDownList1.Text.IndexOf(",") - 1) & "%'  and SO_MAT_ORDER.AMD_NO='0' ORDER BY INV_NO", conn)
         ElseIf DropDownList1.Text = "All" And DropDownList2.Text = "All" Then
 
-            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE') ORDER BY INV_NO", conn)
+            da = New SqlDataAdapter("SELECT (DESPATCH .D_TYPE + DESPATCH .INV_NO) AS INV_NO, CONVERT(varchar, FORMAT(DESPATCH .INV_DATE, 'dd-MM-yyyy', 'en-us')) As INV_DATE ,ORDER_DETAILS .SO_ACTUAL,DESPATCH .FISCAL_YEAR  ,CONVERT(varchar, FORMAT(ORDER_DETAILS .SO_ACTUAL_DATE, 'dd-MM-yyyy', 'en-us')) As SO_ACTUAL_DATE , ORDER_DETAILS .PARTY_CODE, DESPATCH .P_CODE , DESPATCH .P_DESC,HSN_CODE , DESPATCH.TOTAL_PCS,DESPATCH .TRUCK_NO, DESPATCH .TAXABLE_VALUE AS CAS4, (cast(DESPATCH .PACK_PRICE as varchar) + DESPATCH .PACK_TYPE) AS PACKING , (cast(DESPATCH .RLY_ROAD_FRT as varchar) + DESPATCH .FRT_TYPE) AS FREIGHT,DESPATCH .TERM_AMT,DESPATCH .TCS_AMT,DESPATCH .TOTAL_WEIGHT , DESPATCH .BASE_PRICE ,DESPATCH .TRANS_NAME,qual_group .qual_desc AS QUAL_DESC,DESPATCH .TOTAL_AMT AS TOTAL_VALUE,DESPATCH .SGST_AMT,DESPATCH .CGST_AMT,DESPATCH .IGST_AMT, DESPATCH.MAT_SLNO  from (DESPATCH join ORDER_DETAILS on DESPATCH .SO_NO =ORDER_DETAILS .SO_NO) join SO_MAT_ORDER on DESPATCH.SO_NO=SO_MAT_ORDER.SO_NO and DESPATCH.MAT_SLNO=SO_MAT_ORDER.ITEM_SLNO join qual_group on SUBSTRING(DESPATCH .P_CODE, 1, 3) =qual_group .qual_code WHERE DESPATCH .INV_DATE BETWEEN '" & DATE_FROM.Year & "-" & DATE_FROM.Month & "-" & DATE_FROM.Day & "' AND '" & DATE_TO.Year & "-" & DATE_TO.Month & "-" & DATE_TO.Day & "' AND (DESPATCH .INV_STATUS ='' or DESPATCH .INV_STATUS ='ACTIVE')  and SO_MAT_ORDER.AMD_NO='0' ORDER BY INV_NO", conn)
 
         End If
 
@@ -127,99 +127,136 @@ Public Class d_report
         Dim dRow As DataRow
         dRow = dt.NewRow
         dRow.Item(0) = "Total"
-        dRow.Item(8) = t_qty
-        dRow.Item(15) = t_weight
-        dRow.Item(10) = t_CAS4
-        dRow.Item(13) = t_ttax
-        dRow.Item(14) = t_tcs
-        dRow.Item(20) = t_sgst
-        dRow.Item(21) = t_cgst
-        dRow.Item(22) = t_igst
-        dRow.Item(19) = t_total_value
+        dRow.Item(9) = t_qty
+        dRow.Item(16) = t_weight
+        dRow.Item(11) = t_CAS4
+
+        dRow.Item(20) = t_total_value
         dt.Rows.Add(dRow)
 
-        'dt.Rows.Add("Total", "", "", "", "", "Adjust For PSC")
+        ''dt.Rows.Add("Total", "", "", "", "", "", "", "", t_qty, t_weight, "", "", "", t_total_value, "", "", "", "", "", "", "", "", "", "", "", "", "")
         dt.AcceptChanges()
         GridView1.DataSource = dt
         GridView1.DataBind()
 
-        For Me.count = 0 To GridView1.Rows.Count - 2
-            conn.Open()
-            Dim BASE_VALUE As Decimal = 0
+        'For Me.count = 0 To GridView1.Rows.Count - 2
+        '    conn.Open()
+        '    Dim BASE_VALUE As Decimal = 0
 
-            Dim mc As New SqlCommand
-            mc.CommandText = "select (case when DESPATCH.ACC_UNIT='SET' THEN (DESPATCH.TOTAL_QTY * DESPATCH.BASE_PRICE) ELSE(CASE when DESPATCH.TOTAL_PCS = 0 then (DESPATCH.TOTAL_WEIGHT * DESPATCH.BASE_PRICE) else (DESPATCH.TOTAL_PCS*DESPATCH.BASE_PRICE) end) end) AS BASE_VALUE from DESPATCH where DESPATCH .D_TYPE + DESPATCH .INV_NO  ='" & GridView1.Rows(count).Cells(0).Text & "' AND DESPATCH.FISCAL_YEAR='" & GridView1.Rows(count).Cells(24).Text & "'"
-            mc.Connection = conn
-            dr = mc.ExecuteReader
-            If dr.HasRows Then
-                dr.Read()
-                BASE_VALUE = dr.Item("BASE_VALUE")
-                dr.Close()
-            Else
-                conn.Close()
-            End If
-            conn.Close()
-            GridView1.Rows(count).Cells(13).Text = BASE_VALUE
-        Next
+        '    Dim mc As New SqlCommand
+        '    mc.CommandText = "select (case when DESPATCH.ACC_UNIT='SET' THEN (DESPATCH.TOTAL_QTY * DESPATCH.BASE_PRICE) ELSE(CASE when DESPATCH.TOTAL_PCS = 0 then (DESPATCH.TOTAL_WEIGHT * DESPATCH.BASE_PRICE) else (DESPATCH.TOTAL_PCS*DESPATCH.BASE_PRICE) end) end) AS BASE_VALUE from DESPATCH where DESPATCH .D_TYPE + DESPATCH .INV_NO  ='" & GridView1.Rows(count).Cells(0).Text & "' AND DESPATCH.FISCAL_YEAR='" & GridView1.Rows(count).Cells(24).Text & "'"
+        '    mc.Connection = conn
+        '    dr = mc.ExecuteReader
+        '    If dr.HasRows Then
+        '        dr.Read()
+        '        BASE_VALUE = dr.Item("BASE_VALUE")
+        '        dr.Close()
+        '    Else
+        '        conn.Close()
+        '    End If
+        '    conn.Close()
+        '    GridView1.Rows(count).Cells(13).Text = BASE_VALUE
+        'Next
         GridView1.Rows(GridView1.Rows.Count - 1).Font.Bold = True
 
     End Sub
 
     Protected Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If GridView1.Rows.Count < 0 Then
-            Return
+        'If GridView1.Rows.Count < 0 Then
+        '    Return
+        'End If
+
+        'Dim dt3 As DataTable = New DataTable(GridView1.Rows(0).Cells(23).Text)
+        'dt3.Columns.Add(New DataColumn("Inv. No", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Inv. Date", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Act. SO", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Act. SO Date", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Mat. SLNo", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Party Code", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Item Code", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Item Name", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Qty Pcs", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Total Weight", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Base Price", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Tran. Name", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Truck No", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Base Value", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("CAS4", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Packing", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Term Tax", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("TCS", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Freight", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("SGST", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("CGST", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("IGST", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Total Value", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Qual. Grp", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Fiscal Year", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("HSN Code", GetType(String)))
+        'For Me.count = 0 To GridView1.Rows.Count - 2
+        '    Dim trans_name As String = ""
+        '    If GridView1.Rows(count).Cells(11).Text <> "&nbsp;" Then
+        '        trans_name = GridView1.Rows(count).Cells(11).Text
+        '    End If
+        '    dt3.Rows.Add(GridView1.Rows(count).Cells(0).Text, GridView1.Rows(count).Cells(1).Text, GridView1.Rows(count).Cells(2).Text, GridView1.Rows(count).Cells(3).Text, GridView1.Rows(count).Cells(4).Text, GridView1.Rows(count).Cells(5).Text, GridView1.Rows(count).Cells(6).Text, GridView1.Rows(count).Cells(7).Text, GridView1.Rows(count).Cells(8).Text, GridView1.Rows(count).Cells(9).Text, GridView1.Rows(count).Cells(10).Text, trans_name, GridView1.Rows(count).Cells(12).Text, GridView1.Rows(count).Cells(13).Text, GridView1.Rows(count).Cells(14).Text, GridView1.Rows(count).Cells(15).Text, GridView1.Rows(count).Cells(16).Text, GridView1.Rows(count).Cells(17).Text, GridView1.Rows(count).Cells(18).Text, GridView1.Rows(count).Cells(19).Text, GridView1.Rows(count).Cells(20).Text, GridView1.Rows(count).Cells(21).Text, GridView1.Rows(count).Cells(22).Text, GridView1.Rows(count).Cells(23).Text, GridView1.Rows(count).Cells(24).Text, GridView1.Rows(count).Cells(25).Text)
+        'Next
+
+        'Using wb As New XLWorkbook()
+
+        '    wb.Worksheets.Add(dt3)
+        '    'Export the Excel file.
+        '    Response.Clear()
+        '    Response.Buffer = True
+        '    Response.Charset = ""
+        '    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        '    Response.AddHeader("content-disposition", "attachment;filename=SaleReport.xlsx")
+        '    Using MyMemoryStream As New MemoryStream()
+        '        wb.SaveAs(MyMemoryStream)
+        '        MyMemoryStream.WriteTo(Response.OutputStream)
+        '        Response.Flush()
+        '        Response.End()
+        '    End Using
+        'End Using
+
+        If GridView1.Rows.Count > 0 Then
+            Try
+
+                Dim dt As DataTable = New DataTable()
+                For j As Integer = 0 To GridView1.Columns.Count - 1
+                    dt.Columns.Add(GridView1.Columns(j).HeaderText)
+                Next
+                For i As Integer = 0 To GridView1.Rows.Count - 1
+                    Dim dr As DataRow = dt.NewRow()
+                    For j As Integer = 0 To GridView1.Columns.Count - 1
+                        If (GridView1.Rows(i).Cells(j).Text <> "") Then
+                            dr(GridView1.Columns(j).HeaderText) = GridView1.Rows(i).Cells(j).Text
+                        End If
+
+                    Next
+                    dt.Rows.Add(dr)
+                Next
+
+                Using wb As XLWorkbook = New XLWorkbook()
+                    wb.Worksheets.Add(dt, "Sale Report")
+                    Response.Clear()
+                    Response.Buffer = True
+                    Response.Charset = ""
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    Response.AddHeader("content-disposition", "attachment;filename=SaleReport.xlsx")
+                    Using MyMemoryStream As MemoryStream = New MemoryStream()
+                        wb.SaveAs(MyMemoryStream)
+                        MyMemoryStream.WriteTo(Response.OutputStream)
+                        Response.Flush()
+                        Response.End()
+                    End Using
+                End Using
+
+            Catch ex As Exception
+            Finally
+
+            End Try
         End If
 
-        Dim dt3 As DataTable = New DataTable(GridView1.Rows(0).Cells(23).Text)
-        dt3.Columns.Add(New DataColumn("Inv. No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Inv. Date", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Act. SO", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Act. SO Date", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Mat. SLNo", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Party Code", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Item Code", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Item Name", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Qty Pcs", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Total Weight", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Base Price", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Tran. Name", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Truck No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Base Value", GetType(String)))
-        dt3.Columns.Add(New DataColumn("CAS4", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Packing", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Term Tax", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("TCS", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Freight", GetType(String)))
-        dt3.Columns.Add(New DataColumn("SGST", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("CGST", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("IGST", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Total Value", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Qual. Grp", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Fiscal Year", GetType(String)))
-        For Me.count = 0 To GridView1.Rows.Count - 1
-            Dim trans_name As String = ""
-            If GridView1.Rows(count).Cells(11).Text <> "&nbsp;" Then
-                trans_name = GridView1.Rows(count).Cells(11).Text
-            End If
-            dt3.Rows.Add(GridView1.Rows(count).Cells(0).Text, GridView1.Rows(count).Cells(1).Text, GridView1.Rows(count).Cells(2).Text, GridView1.Rows(count).Cells(3).Text, GridView1.Rows(count).Cells(4).Text, GridView1.Rows(count).Cells(5).Text, GridView1.Rows(count).Cells(6).Text, GridView1.Rows(count).Cells(7).Text, GridView1.Rows(count).Cells(8).Text, GridView1.Rows(count).Cells(9).Text, GridView1.Rows(count).Cells(10).Text, trans_name, GridView1.Rows(count).Cells(12).Text, GridView1.Rows(count).Cells(13).Text, GridView1.Rows(count).Cells(14).Text, GridView1.Rows(count).Cells(15).Text, GridView1.Rows(count).Cells(16).Text, GridView1.Rows(count).Cells(17).Text, GridView1.Rows(count).Cells(18).Text, GridView1.Rows(count).Cells(19).Text, GridView1.Rows(count).Cells(20).Text, GridView1.Rows(count).Cells(21).Text, GridView1.Rows(count).Cells(22).Text, GridView1.Rows(count).Cells(23).Text, GridView1.Rows(count).Cells(24).Text)
-        Next
-
-        Using wb As New XLWorkbook()
-
-            wb.Worksheets.Add(dt3)
-            'Export the Excel file.
-            Response.Clear()
-            Response.Buffer = True
-            Response.Charset = ""
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            Response.AddHeader("content-disposition", "attachment;filename=Sale.xlsx")
-            Using MyMemoryStream As New MemoryStream()
-                wb.SaveAs(MyMemoryStream)
-                MyMemoryStream.WriteTo(Response.OutputStream)
-                Response.Flush()
-                Response.End()
-            End Using
-        End Using
     End Sub
 
     Protected Sub DropDownList1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList1.SelectedIndexChanged

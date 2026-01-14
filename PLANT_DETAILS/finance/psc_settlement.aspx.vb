@@ -1432,7 +1432,7 @@ Public Class psc_settlement
             ''CALCULATING TOTAL RCD QTY
             conn.Open()
             'mc1.CommandText = "SELECT SUM(MAT_QTY) AS RCD_QTY, SUM(TOTAL_PRICE) AS RCD_VALUE FROM MAT_DETAILS WHERE MAT_CODE LIKE '100%' AND LINE_DATE between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND LINE_TYPE='R' and MAT_CODE='" & GridView2.Rows(I).Cells(0).Text & "' GROUP BY MAT_CODE ORDER BY MAT_CODE"
-            mc1.CommandText = "SELECT SUM(MAT_QTY) AS RCD_QTY, SUM(TOTAL_PRICE) AS RCD_VALUE FROM MAT_DETAILS WHERE MAT_CODE LIKE '100%' AND FISCAL_YEAR='" & STR1 & "' AND LINE_DATE <= '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND LINE_TYPE='R' and MAT_CODE='" & GridView2.Rows(I).Cells(0).Text & "' GROUP BY MAT_CODE ORDER BY MAT_CODE"
+            mc1.CommandText = "SELECT SUM(MAT_QTY) AS RCD_QTY, SUM(TOTAL_PRICE) AS RCD_VALUE FROM MAT_DETAILS WHERE MAT_CODE LIKE '100%' AND FISCAL_YEAR='" & STR1 & "' AND LINE_DATE <= '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (LINE_TYPE='R' or LINE_TYPE='A') and MAT_CODE='" & GridView2.Rows(I).Cells(0).Text & "' GROUP BY MAT_CODE ORDER BY MAT_CODE"
             mc1.Connection = conn
             dr = mc1.ExecuteReader
             If dr.HasRows = True Then
@@ -1490,7 +1490,7 @@ Public Class psc_settlement
 
             ''CALCULATING TOTAL ISSUE QTY & ISSUE VALUATION
             conn.Open()
-            mc1.CommandText = "SELECT SUM(ISSUE_QTY) AS ISSUE_QTY, SUM(TOTAL_PRICE) AS ISSUE_VALUE FROM MAT_DETAILS WHERE MAT_CODE LIKE '100%' AND FISCAL_YEAR='" & STR1 & "' AND LINE_DATE <= '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND LINE_TYPE='I' and MAT_CODE='" & GridView2.Rows(I).Cells(0).Text & "' GROUP BY MAT_CODE ORDER BY MAT_CODE"
+            mc1.CommandText = "SELECT SUM(ISSUE_QTY) AS ISSUE_QTY, SUM(TOTAL_PRICE) AS ISSUE_VALUE FROM MAT_DETAILS WHERE MAT_CODE LIKE '100%' AND FISCAL_YEAR='" & STR1 & "' AND LINE_DATE <= '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (LINE_TYPE='I' or LINE_TYPE='A') and MAT_CODE='" & GridView2.Rows(I).Cells(0).Text & "' GROUP BY MAT_CODE ORDER BY MAT_CODE"
             mc1.Connection = conn
             dr = mc1.ExecuteReader
             If dr.HasRows = True Then

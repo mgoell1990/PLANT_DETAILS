@@ -336,8 +336,10 @@
                                                     <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
                                                     <asp:BoundField DataField="AC_NO" HeaderText="A/C No." />
                                                     <asp:BoundField DataField="ac_description" HeaderText="A/C Name" />
-                                                    <asp:TemplateField HeaderText="Debit Amount"></asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Credit Amount"></asp:TemplateField>
+                                                    <%--<asp:TemplateField HeaderText="Debit Amount"></asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Credit Amount"></asp:TemplateField>--%>
+                                                    <asp:BoundField DataField="Debit" HeaderText="Debit Amount" />
+                                                    <asp:BoundField DataField="Credit" HeaderText="Credit Amount" />
                                                 </Columns>
 
                                             </asp:GridView>
@@ -648,6 +650,7 @@
                                                     <asp:BoundField DataField="EFECTIVE_DATE" HeaderText="Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                     <asp:BoundField DataField="DR" HeaderText="DR" />
                                                     <asp:BoundField DataField="CR" HeaderText="CR" />
+                                                    <asp:BoundField DataField="DESCRIPTION" HeaderText="DESCRIPTION" />
                                                 </Columns>
                                             </asp:GridView>
                                         </asp:Panel>

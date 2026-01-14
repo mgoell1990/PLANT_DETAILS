@@ -314,7 +314,7 @@ Public Class misc_voucher
                         Next
 
 
-                        Dim query As String = "INSERT INTO VOUCHER (SUPL_NAME,REF_DATE,JE_NO,JE_DATE,INV_NO,TOKEN_NO,TOKEN_DATE,SEC_NO,SEC_DATE,VOUCHER_TYPE,PAY_TYPE,NET_AMT,PARTICULAR,SUPL_ID,EMP_ID,FISCAL_YEAR)VALUES(@SUPL_NAME,@REF_DATE,@JE_NO,@JE_DATE,@INV_NO,@TOKEN_NO,@TOKEN_DATE,@SEC_NO,@SEC_DATE,@VOUCHER_TYPE,@PAY_TYPE,@NET_AMT,@PARTICULAR,@SUPL_ID,@EMP_ID,@FISCAL_YEAR)"
+                        Dim query As String = "INSERT INTO VOUCHER (BILL_TRACK,SUPL_NAME,REF_DATE,JE_NO,JE_DATE,INV_NO,TOKEN_NO,TOKEN_DATE,SEC_NO,SEC_DATE,VOUCHER_TYPE,PAY_TYPE,NET_AMT,PARTICULAR,SUPL_ID,EMP_ID,FISCAL_YEAR)VALUES(@BILL_TRACK,@SUPL_NAME,@REF_DATE,@JE_NO,@JE_DATE,@INV_NO,@TOKEN_NO,@TOKEN_DATE,@SEC_NO,@SEC_DATE,@VOUCHER_TYPE,@PAY_TYPE,@NET_AMT,@PARTICULAR,@SUPL_ID,@EMP_ID,@FISCAL_YEAR)"
                         Dim cmd As New SqlCommand(query, conn_trans, myTrans)
                         cmd.Parameters.AddWithValue("@TOKEN_NO", pay_vou_TextBox76.Text)
                         cmd.Parameters.AddWithValue("@TOKEN_DATE", Date.ParseExact(working_date.Date, "dd-MM-yyyy", provider))
@@ -333,6 +333,7 @@ Public Class misc_voucher
                         cmd.Parameters.AddWithValue("@INV_NO", TextBox177.Text)
                         cmd.Parameters.AddWithValue("@PO_NO", pay_po_wo_TextBox96.Text)
                         cmd.Parameters.AddWithValue("@EMP_ID", Session("userName"))
+                        cmd.Parameters.AddWithValue("@BILL_TRACK", ddlBillTrackID.SelectedValue)
                         cmd.ExecuteReader()
                         cmd.Dispose()
 
@@ -412,7 +413,7 @@ Public Class misc_voucher
                             cmd.Parameters.AddWithValue("@AMOUNT_CR", CDec(jpay_GridView9.Rows(i).Cells(3).Text))
                             cmd.Parameters.AddWithValue("@POST_INDICATION", "")
                             cmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
-                            cmd.Parameters.AddWithValue("@BILL_TRACK_ID", "")
+                            cmd.Parameters.AddWithValue("@BILL_TRACK_ID", ddlBillTrackID.SelectedValue)
                             cmd.Parameters.AddWithValue("@JURNAL_LINE_NO", i + pay_GridView8.Rows.Count)
                             cmd.Parameters.AddWithValue("@VOUCHER_NO", pay_vou_TextBox76.Text)
                             cmd.Parameters.AddWithValue("@AGING_FLAG", TextBox177.Text)
@@ -496,23 +497,11 @@ Public Class misc_voucher
 
 
                         ''UPDATE BILL TRACK ID STATUS
-                        Dim query115 As String = "update inv_data set PaymentStatus='Bill Passed' WHERE bill_id='" & ddlBillTrackID.SelectedValue & "'"
+                        Dim query115 As String = "update inv_data set PaymentStatus='Bill Passed',v_ind='V',VoucherNo='" & pay_vou_TextBox76.Text & "' WHERE bill_id='" & ddlBillTrackID.SelectedValue & "'"
                         Dim cmd115 As New SqlCommand(query115, conn_trans, myTrans)
                         cmd115.ExecuteReader()
                         cmd115.Dispose()
 
-
-                        conn.Open()
-                        ddlBillTrackID.Items.Clear()
-                        dt.Clear()
-                        da = New SqlDataAdapter("select bill_id from inv_data where InvType='Miscellaneous' and PaymentStatus='INVOICE REGISTERED' ORDER BY bill_id", conn)
-                        da.Fill(dt)
-                        ddlBillTrackID.DataSource = dt
-                        ddlBillTrackID.DataValueField = "bill_id"
-                        ddlBillTrackID.DataBind()
-                        conn.Close()
-                        ddlBillTrackID.Items.Insert(0, "Select")
-                        ddlBillTrackID.SelectedValue = ("Select")
 
                         Dim DT8 As New DataTable
                         DT8.Columns.AddRange(New DataColumn(3) {New DataColumn("SUPL_ID"), New DataColumn("AC_HEAD"), New DataColumn("AC_DESC"), New DataColumn("AMOUNT")})
@@ -529,7 +518,17 @@ Public Class misc_voucher
                         Label627.ForeColor = Drawing.Color.Red
                         Label627.Text = "All records are written to database."
 
-                        MultiView1.ActiveViewIndex = -1
+                        conn.Open()
+                        ddlBillTrackID.Items.Clear()
+                        dt.Clear()
+                        da = New SqlDataAdapter("select bill_id from inv_data where InvType='Miscellaneous' and PaymentStatus='INVOICE REGISTERED' ORDER BY bill_id", conn)
+                        da.Fill(dt)
+                        ddlBillTrackID.DataSource = dt
+                        ddlBillTrackID.DataValueField = "bill_id"
+                        ddlBillTrackID.DataBind()
+                        conn.Close()
+                        ddlBillTrackID.Items.Insert(0, "Select")
+                        ddlBillTrackID.SelectedValue = ("Select")
 
                     End If
 

@@ -159,7 +159,7 @@ Public Class report3
 
         da = New SqlDataAdapter("WITH invDataFiltered AS (
         SELECT
-            inv_data.VoucherNo,inv_data .bill_id ,inv_data .post_date ,inv_data .inv_no ,inv_data .inv_date ,inv_data .inv_amount ,inv_data .emp_id ,inv_data .po_no
+            inv_data.VoucherNo,inv_data .bill_id ,inv_data .post_date ,inv_data .inv_no ,inv_data .inv_date ,inv_data .inv_amount ,inv_data .emp_id ,inv_data .po_no,inv_data .SUPL_ID
         FROM
             inv_data
 	    where inv_data .post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & " ' and ' " & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "'
@@ -174,7 +174,7 @@ Public Class report3
         SELECT
             invData.VoucherNo,invData .bill_id ,invData .post_date ,invData .inv_no ,invData .inv_date ,invData .inv_amount ,invData .emp_id ,invData .po_no, SUPL .SUPL_NAME ,o1 .PO_TYPE,SUPL .PARTY_TYPE,convert(varchar(30),CONVERT(varchar,v1.CHEQUE_DATE,105) , 105) As PAYMENT_DATE, v1.CHEQUE_NO
         FROM
-            invDataFiltered AS invData left join VOUCHER as v1 on invData.bill_id=v1.BILL_TRACK and invData.VoucherNo=v1.TOKEN_NO left join orderDetailsFiltered o1 ON invData.po_no =o1.SO_NO LEFT JOIN SUPL ON o1 .PARTY_CODE =SUPL .SUPL_ID
+            invDataFiltered AS invData left join VOUCHER as v1 on invData.bill_id=v1.BILL_TRACK and invData.VoucherNo=v1.TOKEN_NO left join orderDetailsFiltered o1 ON invData.po_no =o1.SO_NO LEFT JOIN SUPL ON invData .SUPL_ID =SUPL .SUPL_ID
         ORDER BY bill_id", conn)
 
         da.Fill(dt)
@@ -728,71 +728,85 @@ Public Class report3
         to_date = CDate(TextBox5.Text)
 
 
-        ''''''''''''''''''''''''''''''''''
-        'conn.Open()
-        'dt.Clear()
-        ''Dim quary As String = "SELECT L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, V1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description, L1.AMOUNT_DR, L1.AMOUNT_CR" &
-        ''    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
-        ''    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.EFECTIVE_DATE"
-        ''Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, (CASE WHEN L1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME, L1.AC_NO, A1.ac_description" &
-        ''    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code left join supl s1 on s1.SUPL_ID=L1.SUPL_ID left join dater d1 on d1.d_code=L1.SUPL_ID WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
-        ''    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.VOUCHER_NO"
-        'Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description" &
+        '''''''''''''''''''''''''''''''''
+        conn.Open()
+        dt.Clear()
+        'Dim quary As String = "SELECT L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, V1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description, L1.AMOUNT_DR, L1.AMOUNT_CR" &
+        '    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
+        '    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.EFECTIVE_DATE"
+        'Dim quary As String = "SELECT distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, (CASE WHEN L1.supl_id like 'D%' THEN d1.d_name ELSE s1.SUPL_NAME end) as SUPL_NAME, L1.AC_NO, A1.ac_description" &
         '    " FROM (LEDGER L1 JOIN VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO) JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code left join supl s1 on s1.SUPL_ID=L1.SUPL_ID left join dater d1 on d1.d_code=L1.SUPL_ID WHERE (L1.GARN_NO_MB_NO='PAYMENT' OR L1.GARN_NO_MB_NO='RCD' OR (L1.GARN_NO_MB_NO LIKE 'RV%' AND L1.AMOUNT_CR >0) OR (L1.GARN_NO_MB_NO LIKE 'PV%' AND L1.POST_INDICATION ='ADV PAY')) " &
         '    " AND V1.CHEQUE_NO <> '' AND L1.EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (L1.AMOUNT_CR <> L1.AMOUNT_DR) ORDER BY L1.VOUCHER_NO"
+        Dim quary As String = "WITH ledgerFilteredData AS (
+    SELECT
+        distinct VOUCHER_NO, SUPL_ID, AC_NO,sum(AMOUNT_DR) as Debit,sum(AMOUNT_CR) as Credit
+    FROM
+        LEDGER
+	where EFECTIVE_DATE BETWEEN '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' AND '" & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "' AND (AMOUNT_CR <> AMOUNT_DR) AND (GARN_NO_MB_NO = 'BANK' OR GARN_NO_MB_NO = 'BANK RCD') group by VOUCHER_NO, SUPL_ID, AC_NO
+)
+SELECT
+    distinct L1.VOUCHER_NO,V1.CVB_NO, V1.CVB_DATE, V1.CHEQUE_NO, L1.SUPL_ID, V1.SUPL_NAME, L1.AC_NO, A1.ac_description,L1.Debit,L1.Credit,'Detail' AS RowType
+FROM
+    ledgerFilteredData AS L1 left join VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code
+Union
+SELECT
+    NULL AS VOUCHER_NO,NULL AS CVB_NO, NULL AS CVB_DATE, NULL AS CHEQUE_NO, NULL AS SUPL_ID, NULL AS SUPL_NAME, NULL AS AC_NO, 'Total' as ac_description,sum(L1.Debit) as Debit,Sum(L1.Credit) as Cebit,'Total' AS RowType
+FROM
+    ledgerFilteredData AS L1 left join VOUCHER V1 ON L1.VOUCHER_NO=V1.TOKEN_NO JOIN ACDIC A1 ON L1.AC_NO=A1.ac_code
+ORDER BY RowType"
 
-        'da = New SqlDataAdapter(quary, conn)
-        'da.Fill(dt)
-        'conn.Close()
-        '''''''''''''''''''''''''''''''''''
-        'GridView2.DataSource = dt
-        'GridView2.DataBind()
-
-
-        Dim spName As String = "GetBankBookReport"
-        Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
-        Using con As New SqlConnection(constr)
-            Using cmd As New SqlCommand(spName, con)
-                cmd.CommandType = CommandType.StoredProcedure
-                cmd.Parameters.AddWithValue("@from_date", from_date)
-                cmd.Parameters.AddWithValue("@to_date", to_date)
-
-                Using sda As New SqlDataAdapter(cmd)
-                    Using dt As New DataTable()
-                        sda.Fill(dt)
-                        GridView2.DataSource = dt
-                        GridView2.DataBind()
-
-                        calculateBankBookAmount(GridView2.Rows.Count)
-
-
-                        'METHOD TO CALCULATE DEBIT AND CREDIT AMOUNT OF DIFFERENT HEADS
-                        Dim total_dr, total_cr As New Decimal(0)
-                        Dim I As Integer = 0
-                        For I = 0 To GridView2.Rows.Count - 1
-                            ''Calculating total Debit and Credit amount
-                            total_dr = total_dr + CDec(GridView2.Rows(I).Cells(8).Text)
-                            total_cr = total_cr + CDec(GridView2.Rows(I).Cells(9).Text)
-                        Next
-                        Dim dRow As DataRow
-                        dRow = dt.NewRow
-                        dRow.Item(7) = "Total"
-                        dt.Rows.Add(dRow)
-
-                        dt.AcceptChanges()
-                        GridView2.DataSource = dt
-                        GridView2.DataBind()
-
-                        GridView2.Rows(GridView2.Rows.Count - 1).Cells(8).Text = total_dr
-                        GridView2.Rows(GridView2.Rows.Count - 1).Cells(9).Text = total_cr
-                        GridView2.Rows(GridView2.Rows.Count - 1).Font.Bold = True
+        da = New SqlDataAdapter(quary, conn)
+        da.Fill(dt)
+        conn.Close()
+        ''''''''''''''''''''''''''''''''''
+        GridView2.DataSource = dt
+        GridView2.DataBind()
 
 
-                        calculateBankBookAmount(GridView2.Rows.Count - 1)
-                    End Using
-                End Using
-            End Using
-        End Using
+        'Dim spName As String = "GetBankBookReport"
+        'Dim constr As String = ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
+        'Using con As New SqlConnection(constr)
+        '    Using cmd As New SqlCommand(spName, con)
+        '        cmd.CommandType = CommandType.StoredProcedure
+        '        cmd.Parameters.AddWithValue("@from_date", from_date)
+        '        cmd.Parameters.AddWithValue("@to_date", to_date)
+
+        '        Using sda As New SqlDataAdapter(cmd)
+        '            Using dt As New DataTable()
+        '                sda.Fill(dt)
+        '                GridView2.DataSource = dt
+        '                GridView2.DataBind()
+
+        '                calculateBankBookAmount(GridView2.Rows.Count)
+
+
+        '                'METHOD TO CALCULATE DEBIT AND CREDIT AMOUNT OF DIFFERENT HEADS
+        '                Dim total_dr, total_cr As New Decimal(0)
+        '                Dim I As Integer = 0
+        '                For I = 0 To GridView2.Rows.Count - 1
+        '                    ''Calculating total Debit and Credit amount
+        '                    total_dr = total_dr + CDec(GridView2.Rows(I).Cells(8).Text)
+        '                    total_cr = total_cr + CDec(GridView2.Rows(I).Cells(9).Text)
+        '                Next
+        '                Dim dRow As DataRow
+        '                dRow = dt.NewRow
+        '                dRow.Item(7) = "Total"
+        '                dt.Rows.Add(dRow)
+
+        '                dt.AcceptChanges()
+        '                GridView2.DataSource = dt
+        '                GridView2.DataBind()
+
+        '                GridView2.Rows(GridView2.Rows.Count - 1).Cells(8).Text = total_dr
+        '                GridView2.Rows(GridView2.Rows.Count - 1).Cells(9).Text = total_cr
+        '                GridView2.Rows(GridView2.Rows.Count - 1).Font.Bold = True
+
+
+        '                calculateBankBookAmount(GridView2.Rows.Count - 1)
+        '            End Using
+        '        End Using
+        '    End Using
+        'End Using
 
 
 
@@ -1202,42 +1216,78 @@ Public Class report3
             Return
         End If
 
-        Dim dt3 As DataTable = New DataTable("GL")
-        dt3.Columns.Add(New DataColumn("A/C. No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("A/C. Name", GetType(String)))
-        dt3.Columns.Add(New DataColumn("PO No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("GARN No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Voucher No", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Date", GetType(String)))
-        dt3.Columns.Add(New DataColumn("Amount DR", GetType(Decimal)))
-        dt3.Columns.Add(New DataColumn("Amount CR", GetType(Decimal)))
+        'Dim dt3 As DataTable = New DataTable("GL")
+        'dt3.Columns.Add(New DataColumn("A/C. No", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("A/C. Name", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("PO No", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("GARN No", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Voucher No", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Date", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("Amount DR", GetType(Decimal)))
+        'dt3.Columns.Add(New DataColumn("Amount CR", GetType(Decimal)))
 
 
-        For Me.count = 0 To GridView4.Rows.Count - 1
-            dt3.Rows.Add(GridView4.Rows(count).Cells(0).Text, GridView4.Rows(count).Cells(1).Text, GridView4.Rows(count).Cells(2).Text, GridView4.Rows(count).Cells(3).Text, GridView4.Rows(count).Cells(4).Text, GridView4.Rows(count).Cells(5).Text, CDec(GridView4.Rows(count).Cells(6).Text), CDec(GridView4.Rows(count).Cells(7).Text))
-        Next
+        'For Me.count = 0 To GridView4.Rows.Count - 1
+        '    dt3.Rows.Add(GridView4.Rows(count).Cells(0).Text, GridView4.Rows(count).Cells(1).Text, GridView4.Rows(count).Cells(2).Text, GridView4.Rows(count).Cells(3).Text, GridView4.Rows(count).Cells(4).Text, GridView4.Rows(count).Cells(5).Text, CDec(GridView4.Rows(count).Cells(6).Text), CDec(GridView4.Rows(count).Cells(7).Text))
+        'Next
 
-        Using wb As New XLWorkbook()
+        'Using wb As New XLWorkbook()
 
-            wb.Worksheets.Add(dt3)
-            'Export the Excel file.
-            'Dim workbook = New ExcelFile
-            'Dim worksheet = workbook.Worksheets.Add("Styles and Formatting")
-            'worksheet.Range("FirstCell:LastCell").Merge()
+        '    wb.Worksheets.Add(dt3)
+
+        '    Response.Clear()
+        '    Response.Buffer = True
+        '    Response.Charset = ""
+        '    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        '    Response.AddHeader("content-disposition", "attachment;filename=General_Ledger.xlsx")
+        '    Using MyMemoryStream As New MemoryStream()
+        '        wb.SaveAs(MyMemoryStream)
+        '        MyMemoryStream.WriteTo(Response.OutputStream)
+        '        Response.Flush()
+        '        Response.End()
+        '    End Using
+        'End Using
 
 
-            Response.Clear()
-            Response.Buffer = True
-            Response.Charset = ""
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            Response.AddHeader("content-disposition", "attachment;filename=General_Ledger.xlsx")
-            Using MyMemoryStream As New MemoryStream()
-                wb.SaveAs(MyMemoryStream)
-                MyMemoryStream.WriteTo(Response.OutputStream)
-                Response.Flush()
-                Response.End()
+        Try
+
+            Dim dt As DataTable = New DataTable()
+            For j As Integer = 0 To GridView4.Columns.Count - 1
+                dt.Columns.Add(GridView4.Columns(j).HeaderText)
+            Next
+            For i As Integer = 0 To GridView4.Rows.Count - 1
+                Dim dr As DataRow = dt.NewRow()
+                For j As Integer = 0 To GridView4.Columns.Count - 1
+                    If (GridView4.Rows(i).Cells(j).Text <> "") Then
+                        dr(GridView4.Columns(j).HeaderText) = GridView4.Rows(i).Cells(j).Text
+                    End If
+
+                Next
+                dt.Rows.Add(dr)
+            Next
+
+            Using wb As XLWorkbook = New XLWorkbook()
+                wb.Worksheets.Add(dt, DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1).Trim)
+                Response.Clear()
+                Response.Buffer = True
+                Response.Charset = ""
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                Response.AddHeader("content-disposition", "attachment;filename=General_Ledger.xlsx")
+                Using MyMemoryStream As MemoryStream = New MemoryStream()
+                    wb.SaveAs(MyMemoryStream)
+                    MyMemoryStream.WriteTo(Response.OutputStream)
+                    Response.Flush()
+                    Response.End()
+                End Using
             End Using
-        End Using
+
+
+        Catch ex As Exception
+            Console.WriteLine(ex.ToString())
+        Finally
+
+        End Try
+
     End Sub
 
     Protected Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
@@ -2702,7 +2752,7 @@ Public Class report3
         conn.Open()
         dt.Clear()
 
-        Dim quary As String = "select bill_id,po_no,inv_data.supl_id,SUPL.SUPL_NAME,inv_no,inv_date,inv_amount,post_date,PaymentStatus,VoucherNo,DATEDIFF(DAY, post_date, GETDATE()) AS PendingDays,(case when DATEDIFF(DAY, post_date, GETDATE())<16 THEN '0-15 Days' when (16<=DATEDIFF(DAY, post_date, GETDATE()) and DATEDIFF(DAY, post_date, GETDATE())<=30) THEN '16-30 Days' when (31<=DATEDIFF(DAY, post_date, GETDATE()) and DATEDIFF(DAY, post_date, GETDATE())<=45) THEN '31-45 Days' when (46<=DATEDIFF(DAY, post_date, GETDATE())) THEN 'More than 45 Days' end) as PendingDuration,SUPL.PARTY_TYPE,SUPL.MSME_NO from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<'" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' order by inv_data.bill_id"
+        Dim quary As String = "select bill_id,po_no,inv_data.supl_id,SUPL.SUPL_NAME,inv_no,inv_date,inv_amount,post_date,PaymentStatus,VoucherNo,DATEDIFF(DAY, post_date, GETDATE()) AS PendingDays,(case when DATEDIFF(DAY, post_date, GETDATE())<16 THEN '0-15 Days' when (16<=DATEDIFF(DAY, post_date, GETDATE()) and DATEDIFF(DAY, post_date, GETDATE())<=30) THEN '16-30 Days' when (31<=DATEDIFF(DAY, post_date, GETDATE()) and DATEDIFF(DAY, post_date, GETDATE())<=45) THEN '31-45 Days' when (46<=DATEDIFF(DAY, post_date, GETDATE())) THEN 'More than 45 Days' end) as PendingDuration,SUPL.PARTY_TYPE,SUPL.MSME_NO from inv_data join SUPL on inv_data.supl_id=SUPL.SUPL_ID where (PaymentStatus is null OR PaymentStatus='PENDING' OR PaymentStatus='INVOICE REGISTERED' OR PaymentStatus='Valuation Completed' OR PaymentStatus='Bill Passed') and (billtractstatus is null OR billtractstatus='OTHERS') and post_date<='" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & "' order by inv_data.bill_id"
         da = New SqlDataAdapter(quary, conn)
         da.Fill(dt)
         conn.Close()
@@ -2840,7 +2890,7 @@ Public Class report3
             SELECT ac_code AS AC_NO, ac_desc AS ac_description, '' AS PO_NO, 'OPENING' AS GARN,'' AS VOUCHER_NO, CONVERT(DATE, '01-04-20' + '" & Left(STR1, 2) & "', 103) AS EFECTIVE_DATE, 
             ac_dr AS DR, ac_cr AS CR FROM ob_trial where (ac_dr>0 OR ac_cr>0) AND ac_fy=" & STR1 & "
             
-            SELECT * FROM @TT ORDER BY AC_NO, EFECTIVE_DATE"
+            SELECT T1.AC_NO,ac_description,T1.PO_NO,T1.GARN,T1.VOUCHER_NO,T1.EFECTIVE_DATE,T1.DR,T1.CR,(CASE WHEN T1.PO_NO LIKE 'P%' THEN (SELECT 'INCOMING MATERIAL ('+MAT_NAME+')' FROM PO_RCD_MAT WHERE GARN_NO=T1.GARN) WHEN T1.PO_NO LIKE 'S%' THEN (SELECT 'OUTWARD SUPPLY ('+P_DESC+')' FROM DESPATCH WHERE D_TYPE+INV_NO=T1.GARN AND FISCAL_YEAR=" & STR1 & ") ELSE VOUCHER.PARTICULAR END) AS DESCRIPTION FROM @TT T1 LEFT JOIN VOUCHER ON T1.VOUCHER_NO=VOUCHER.TOKEN_NO ORDER BY AC_NO, EFECTIVE_DATE"
             da = New SqlDataAdapter(quary, conn)
             da.Fill(dt)
             conn.Close()
@@ -2861,7 +2911,7 @@ Public Class report3
             ac_dr AS DR, ac_cr AS CR FROM ob_trial 
             where ac_code='" & DropDownList2.Text.Substring(0, DropDownList2.Text.IndexOf(",") - 1).Trim & "' AND (ac_dr>0 OR ac_cr>0) AND ac_fy=" & STR1 & "
             
-            SELECT * FROM @TT ORDER BY AC_NO, EFECTIVE_DATE"
+            SELECT T1.AC_NO,ac_description,T1.PO_NO,T1.GARN,T1.VOUCHER_NO,T1.EFECTIVE_DATE,T1.DR,T1.CR,(CASE WHEN T1.PO_NO LIKE 'P%' THEN (SELECT 'INCOMING MATERIAL ('+MAT_NAME+')' FROM PO_RCD_MAT WHERE GARN_NO=T1.GARN) WHEN T1.PO_NO LIKE 'S%' THEN (SELECT 'OUTWARD SUPPLY ('+P_DESC+')' FROM DESPATCH WHERE D_TYPE+INV_NO=T1.GARN AND FISCAL_YEAR=" & STR1 & ") ELSE VOUCHER.PARTICULAR END) AS DESCRIPTION FROM @TT T1 LEFT JOIN VOUCHER ON T1.VOUCHER_NO=VOUCHER.TOKEN_NO ORDER BY AC_NO, EFECTIVE_DATE"
             da = New SqlDataAdapter(quary, conn)
             da.Fill(dt)
             conn.Close()

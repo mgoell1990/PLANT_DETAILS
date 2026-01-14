@@ -1221,17 +1221,7 @@ Public Class mis_sale
                 Next
 
                 ''search ac head
-                Dim IUCA As String = ""
-                Dim FREIGHT As String = ""
-                Dim CGST_HEAD As String = ""
-                Dim IGST_HEAD As String = ""
-                Dim VAT As String = ""
-                Dim CST_HEAD As String = ""
-                Dim TERMINAL As String = ""
-                Dim TCS As String = ""
-                Dim STOCK_HEAD As String = ""
-                Dim CESS_HEAD As String = ""
-                Dim SGST_HEAD As String = ""
+                Dim IUCA, FREIGHT, CGST_HEAD, IGST_HEAD, TERMINAL, TCS, STOCK_REVENUE_HEAD, CESS_HEAD, SGST_HEAD, STOCK_TRANSFER_HEAD As New String("")
 
                 Dim lcgst, lsgst, ligst, lcess, adv_pay_head, gst_exp As New String("")
                 conn.Open()
@@ -1242,12 +1232,11 @@ Public Class mis_sale
                 If dr.HasRows Then
                     dr.Read()
                     ORDER_TO = dr.Item("ORDER_TO")
+                    STOCK_TRANSFER_HEAD = dr.Item("stock_ac_head")
                     IUCA = dr.Item("iuca_head")
                     FREIGHT = dr.Item("freight_head")
                     CGST_HEAD = dr.Item("CGST")
                     IGST_HEAD = dr.Item("IGST")
-                    VAT = dr.Item("vat_head")
-                    CST_HEAD = dr.Item("cst_head")
                     TERMINAL = dr.Item("term_tax")
                     TCS = dr.Item("TCS_OUTGOING")
                     CESS_HEAD = dr.Item("CESS")
@@ -1263,70 +1252,179 @@ Public Class mis_sale
                 Else
                     conn.Close()
                 End If
-                conn.Open()
-                MC5.CommandText = "SELECT AC_ISSUE FROM MATERIAL WITH(NOLOCK) WHERE MAT_CODE LIKE '" & DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim & "'"
-                MC5.Connection = conn
-                dr = MC5.ExecuteReader
-                If dr.HasRows Then
-                    dr.Read()
-                    STOCK_HEAD = dr.Item("AC_ISSUE")
-                    dr.Close()
-                    conn.Close()
+
+
+                If (Left(DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim, 3) = "100") Then
+                    Dim ISSUE_HEAD, CONSUMPTION_HEAD As New String("")
+                    Dim AvgPrice, ProfitOnSales As New Decimal(0)
+                    conn.Open()
+                    mc.CommandText = "select * from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim & "'"
+                    mc.Connection = conn
+                    dr = mc.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        ISSUE_HEAD = dr.Item("AC_ISSUE")
+                        CONSUMPTION_HEAD = dr.Item("AC_CON")
+                        AvgPrice = dr.Item("MAT_AVG")
+                        dr.Close()
+                        conn.Close()
+                    Else
+                        conn.Close()
+                    End If
+                    If ORDER_TO = "I.P.T." Then
+                        If FINANCE_ARRANGE = "Book Adjustment" Or FINANCE_ARRANGE = "CREDIT" Then
+
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, IUCA, "Dr", CDec(TextBox122.Text), "IUCA")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+
+
+
+
+                            'save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            'save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, IUCA, "Dr", CDec(TextBox122.Text), "IUCA")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        End If
+
+                    ElseIf ORDER_TO = "Other" Then
+                        If FINANCE_ARRANGE = "ADVANCE" Then
+
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "ADV_PAY")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+
+
+                            'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "ADV_PAY")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        ElseIf FINANCE_ARRANGE = "RETURNABLE BASIS" Then
+
+
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "62203", "Dr", CDec(TextBox122.Text), "SUND_DEBTOR_OTHER")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+
+
+                            'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "62203", "Dr", CDec(TextBox122.Text), "SUND_DEBTOR_OTHER")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        ElseIf FINANCE_ARRANGE = "BUY BACK" Then
+
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "BUY_BACK")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+
+
+                            'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "BUY_BACK")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        End If
+
+                    End If
+
                 Else
-                    conn.Close()
-                End If
 
-                If ORDER_TO = "I.P.T." Then
-                    If FINANCE_ARRANGE = "Book Adjustment" Or FINANCE_ARRANGE = "CREDIT" Then
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, IUCA, "Dr", CDec(TextBox122.Text), "IUCA")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
-                        save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+                    conn.Open()
+                    MC5.CommandText = "SELECT AC_ISSUE FROM MATERIAL WITH(NOLOCK) WHERE MAT_CODE LIKE '" & DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim & "'"
+                    MC5.Connection = conn
+                    dr = MC5.ExecuteReader
+                    If dr.HasRows Then
+                        dr.Read()
+                        STOCK_REVENUE_HEAD = dr.Item("AC_ISSUE")
+                        dr.Close()
+                        conn.Close()
+                    Else
+                        conn.Close()
+                    End If
+
+                    If ORDER_TO = "I.P.T." Then
+                        If FINANCE_ARRANGE = "Book Adjustment" Or FINANCE_ARRANGE = "CREDIT" Then
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_REVENUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, IUCA, "Dr", CDec(TextBox122.Text), "IUCA")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        End If
+
+                    ElseIf ORDER_TO = "Other" Then
+                        If FINANCE_ARRANGE = "ADVANCE" Then
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_REVENUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "ADV_PAY")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        ElseIf FINANCE_ARRANGE = "RETURNABLE BASIS" Then
+
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_REVENUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "62203", "Dr", CDec(TextBox122.Text), "SUND_DEBTOR_OTHER")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+
+                        ElseIf FINANCE_ARRANGE = "BUY BACK" Then
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_REVENUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
+                            save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "BUY_BACK")
+                        End If
 
                     End If
 
-                ElseIf ORDER_TO = "Other" Then
-                    If FINANCE_ARRANGE = "ADVANCE" Then
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "ADV_PAY")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
-
-                    ElseIf FINANCE_ARRANGE = "RETURNABLE BASIS" Then
-
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "62203", "Dr", CDec(TextBox122.Text), "SUND_DEBTOR_OTHER")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
-
-                    ElseIf FINANCE_ARRANGE = "BUY BACK" Then
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, FREIGHT, "Cr", CDec(TextBox113.Text), "FREIGHT")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lsgst, "Cr", CDec(TextBox114.Text), "SGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcgst, "Cr", CDec(TextBox116.Text), "CGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ligst, "Cr", CDec(TextBox118.Text), "IGST_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, lcess, "Cr", CDec(TextBox120.Text), "CESS_PAYABLE")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TERMINAL, "Cr", CDec(TextBox117.Text), "TERMINAL TAX")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, TCS, "Cr", CDec(TextBox119.Text), "TCS_OUTPUT")
-                        save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "BUY_BACK")
-                    End If
-
                 End If
+
+
+
 
                 'UPDATE SALE_RCD_VOUCHER
                 If DropDownList1.SelectedValue <> "N/A" Then
@@ -1635,7 +1733,6 @@ Public Class mis_sale
                     Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(TextBox177.Text + TextBox95.Text, TextBox96.Text)
                     If (AuthErrorData.Item(0).status = "1") Then
 
-
                         Dim authIdToken As String = AuthErrorData.Item(0).Idtoken
                         'Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag, "INV")
                         Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, Guid.NewGuid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag, "INV")
@@ -1644,7 +1741,6 @@ Public Class mis_sale
                             TextBox6.Text = EinvErrorData.Item(0).IRN
                             TextBox8.Text = EinvErrorData.Item(0).EwbNo
                             TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
-
                             '================SENDING DATA TO EY PORTAL START==================='
 
                             Dim result

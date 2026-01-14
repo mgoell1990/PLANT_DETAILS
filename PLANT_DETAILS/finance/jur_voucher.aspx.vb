@@ -99,6 +99,18 @@ Public Class jur_voucher
             TextBox177.Focus()
             Label468.Text = "Please Enter Invoice No"
             Return
+        ElseIf DropDownList28.SelectedValue = "To Be Reversed" Then
+            If TextBox3.Text = "" Or IsDate(TextBox3.Text) = False Then
+                TextBox3.Focus()
+                Label468.Text = "Please select Reversal Voucher entry date"
+                Return
+            ElseIf TextBox66.Text = "" Then
+                TextBox66.Focus()
+                Label468.Text = "Please enter Reversal Voucher journal no."
+                Return
+            Else
+                Label468.Text = ""
+            End If
         End If
 
 
@@ -205,6 +217,17 @@ Public Class jur_voucher
                 ElseIf DropDownList10.SelectedValue = "HO DA" Then
                     If DropDownList29.Text = "" Then
                         Label468.Text = "Please enter BE No."
+                        Return
+                    Else
+                        Label468.Text = ""
+                    End If
+                ElseIf DropDownList28.SelectedValue = "To Be Reversed" Then
+                    If (TextBox3.Text = "" Or IsDate(TextBox3.Text) = False) Then
+                        Label468.Text = "Please select reversal voucher date."
+                        Return
+                    ElseIf TextBox66.Text = "" Then
+                        TextBox66.Focus()
+                        Label468.Text = "Please enter Reversal Voucher journal no."
                         Return
                     Else
                         Label468.Text = ""
@@ -360,6 +383,93 @@ Public Class jur_voucher
 
                     Next
 
+                    If DropDownList28.SelectedValue = "To Be Reversed" Then
+                        Dim revWorkingDate As Date
+                        revWorkingDate = CDate(TextBox3.Text)
+                        Dim STRFY As String = ""
+                        If revWorkingDate.Month > 3 Then
+                            STRFY = revWorkingDate.Year
+                            STRFY = STRFY.Trim.Substring(2)
+                            STRFY = STRFY & (STRFY + 1)
+                        ElseIf revWorkingDate.Month <= 3 Then
+                            STRFY = revWorkingDate.Year
+                            STRFY = STRFY.Trim.Substring(2)
+                            STRFY = (STRFY - 1) & STRFY
+                        End If
+                        Dim month2 As Integer
+                        month2 = revWorkingDate.Month
+                        Dim qtr2 As String = ""
+                        If month2 = 4 Or month2 = 5 Or month2 = 6 Then
+                            qtr2 = "Q1"
+                        ElseIf month2 = 7 Or month2 = 8 Or month2 = 9 Then
+                            qtr2 = "Q2"
+                        ElseIf month2 = 10 Or month2 = 11 Or month2 = 12 Then
+                            qtr2 = "Q3"
+                        ElseIf month2 = 1 Or month2 = 2 Or month2 = 3 Then
+                            qtr2 = "Q4"
+                        End If
+                        ''token no generate
+                        count = 0
+                        conn.Open()
+                        ds.Clear()
+                        da = New SqlDataAdapter("select DISTINCT TOKEN_NO FROM VOUCHER WITH(NOLOCK) WHERE FISCAL_YEAR=" & STRFY, conn)
+                        count = da.Fill(dt)
+                        conn.Close()
+                        TextBox65.Text = STRFY & count + 1
+                        ''data save voucher
+
+                        Dim rvquery As String = "INSERT INTO VOUCHER (TOKEN_NO,TOKEN_DATE,SEC_NO,SEC_DATE,VOUCHER_TYPE,PAY_TYPE,NET_AMT,PARTICULAR,SUPL_ID,EMP_ID,FISCAL_YEAR,CVB_NO,CVB_DATE,CHEQUE_NO,CHEQUE_DATE)VALUES(@TOKEN_NO,@TOKEN_DATE,@SEC_NO,@SEC_DATE,@VOUCHER_TYPE,@PAY_TYPE,@NET_AMT,@PARTICULAR,@SUPL_ID,@EMP_ID,@FISCAL_YEAR,@CVB_NO,@CVB_DATE,@CHEQUE_NO,@CHEQUE_DATE)"
+                        Dim rvcmd As New SqlCommand(rvquery, conn_trans, myTrans)
+                        rvcmd.Parameters.AddWithValue("@TOKEN_NO", TextBox65.Text)
+                        rvcmd.Parameters.AddWithValue("@TOKEN_DATE", Date.ParseExact(revWorkingDate.Date, "dd-MM-yyyy", provider))
+                        rvcmd.Parameters.AddWithValue("@SEC_NO", TextBox62.Text)
+                        rvcmd.Parameters.AddWithValue("@SEC_DATE", Date.ParseExact(TextBox3.Text, "dd-MM-yyyy", provider))
+                        rvcmd.Parameters.AddWithValue("@VOUCHER_TYPE", "REVERSAL")
+                        rvcmd.Parameters.AddWithValue("@PAY_TYPE", "")
+                        rvcmd.Parameters.AddWithValue("@NET_AMT", 0.0)
+                        rvcmd.Parameters.AddWithValue("@PARTICULAR", "REVERSAL OF VOUCHER NO " + TextBox61.Text)
+                        rvcmd.Parameters.AddWithValue("@SUPL_ID", "")
+                        rvcmd.Parameters.AddWithValue("@FISCAL_YEAR", STRFY)
+                        rvcmd.Parameters.AddWithValue("@CVB_NO", "")
+                        rvcmd.Parameters.AddWithValue("@CVB_DATE", "")
+                        rvcmd.Parameters.AddWithValue("@CHEQUE_NO", "")
+                        rvcmd.Parameters.AddWithValue("@CHEQUE_DATE", "")
+                        rvcmd.Parameters.AddWithValue("@EMP_ID", Session("userName"))
+                        rvcmd.ExecuteReader()
+                        rvcmd.Dispose()
+
+                        ''UPDATING ORIGINAL VOUCHER LEDGER ENTRY
+                        mycommand = New SqlCommand("update LEDGER set POST_INDICATION='" & TextBox65.Text & "'  WHERE VOUCHER_NO='" & TextBox61.Text & "'", conn_trans, myTrans)
+                        mycommand.ExecuteNonQuery()
+
+                        ''SAVE LEDGER
+                        Dim Irev As Integer = 0
+                        For Irev = 0 To GridView2.Rows.Count - 1
+
+                            ''SAVE LEDGER
+                            rvquery = "Insert Into LEDGER(INVOICE_NO,BE_NO,POST_INDICATION,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,REVERSAL_INDICATOR,PAYMENT_INDICATION,Journal_ID)VALUES(@INVOICE_NO,@BE_NO,@POST_INDICATION,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@REVERSAL_INDICATOR,@PAYMENT_INDICATION,@Journal_ID)"
+                            rvcmd = New SqlCommand(rvquery, conn_trans, myTrans)
+                            rvcmd.Parameters.AddWithValue("@VOUCHER_NO", TextBox65.Text)
+                            rvcmd.Parameters.AddWithValue("@Journal_ID", TextBox66.Text)
+                            rvcmd.Parameters.AddWithValue("@SUPL_ID", GridView2.Rows(Irev).Cells(2).Text)
+                            rvcmd.Parameters.AddWithValue("@FISCAL_YEAR", STRFY)
+                            rvcmd.Parameters.AddWithValue("@PERIOD", qtr2)
+                            rvcmd.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(revWorkingDate.Date, "dd-MM-yyyy", provider))
+                            rvcmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
+                            rvcmd.Parameters.AddWithValue("@AC_NO", GridView2.Rows(Irev).Cells(0).Text)
+                            rvcmd.Parameters.AddWithValue("@AMOUNT_CR", CDec(GridView2.Rows(Irev).Cells(3).Text))
+                            rvcmd.Parameters.AddWithValue("@AMOUNT_DR", CDec(GridView2.Rows(Irev).Cells(4).Text))
+                            rvcmd.Parameters.AddWithValue("@REVERSAL_INDICATOR", "REVERSAL ENTRY")
+                            rvcmd.Parameters.AddWithValue("@POST_INDICATION", TextBox61.Text)
+                            rvcmd.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
+                            rvcmd.Parameters.AddWithValue("@BE_NO", Convert.ToString(GridView2.Rows(Irev).Cells(5).Text))
+                            rvcmd.Parameters.AddWithValue("@INVOICE_NO", GridView2.Rows(Irev).Cells(6).Text)
+                            rvcmd.ExecuteReader()
+                            rvcmd.Dispose()
+
+                        Next
+                    End If
+
                     myTrans.Commit()
                     Label468.Text = "All records are written to database."
 
@@ -372,6 +482,7 @@ Public Class jur_voucher
                 conn.Close()
                 conn_trans.Close()
                 TextBox61.Text = ""
+                TextBox65.Text = ""
                 Label468.Text = "There was some Error, please contact EDP."
             Finally
                 conn.Close()
@@ -414,6 +525,15 @@ Public Class jur_voucher
 
         ElseIf DropDownList10.SelectedValue = "Other" Then
             Panel1.Visible = False
+        End If
+    End Sub
+
+    Protected Sub DropDownList28_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDownList28.SelectedIndexChanged
+        If DropDownList28.SelectedValue = "To Be Reversed" Then
+            MultiView1.ActiveViewIndex = 0
+
+        Else
+            MultiView1.ActiveViewIndex = -1
         End If
     End Sub
 End Class

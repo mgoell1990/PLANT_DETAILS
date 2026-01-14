@@ -246,27 +246,31 @@ Public Class rcd_voucher
                     Next
                     ''SAVE LEDGER BANK DEBIT
 
-                    Dim query1 As String = "Insert Into LEDGER(PO_NO,AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@PO_NO,@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
-                    Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
-                    cmd1.Parameters.AddWithValue("@VOUCHER_NO", TextBox59.Text)
-                    cmd1.Parameters.AddWithValue("@Journal_ID", TextBox56.Text)
-                    cmd1.Parameters.AddWithValue("@GARN_NO_MB_NO", "BANK")
-                    cmd1.Parameters.AddWithValue("@SUPL_ID", "")
-                    cmd1.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
-                    cmd1.Parameters.AddWithValue("@PERIOD", qtr1)
-                    cmd1.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(TextBox1.Text, "dd-MM-yyyy", provider))
-                    cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                    cmd1.Parameters.AddWithValue("@AC_NO", "50514")
-                    cmd1.Parameters.AddWithValue("@AMOUNT_DR", CDec(net_amount))
-                    cmd1.Parameters.AddWithValue("@AMOUNT_CR", 0.0)
-                    cmd1.Parameters.AddWithValue("@POST_INDICATION", "BANK RCD")
-                    cmd1.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
-                    cmd1.Parameters.AddWithValue("@INVOICE_NO", TextBox2.Text)
-                    cmd1.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
-                    cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox2.Text)
-                    cmd1.Parameters.AddWithValue("@PO_NO", DropDownList49.Text.Substring(0, DropDownList49.Text.IndexOf(",") - 1).Trim())
-                    cmd1.ExecuteReader()
-                    cmd1.Dispose()
+                    For i = 0 To GridView211.Rows.Count - 1
+                        Dim query1 As String = "Insert Into LEDGER(PO_NO,AGING_FLAG_NEW,AGING_FLAG,INVOICE_NO,GARN_NO_MB_NO,VOUCHER_NO,SUPL_ID,FISCAL_YEAR,PERIOD,EFECTIVE_DATE,ENTRY_DATE,AC_NO,AMOUNT_DR,AMOUNT_CR,POST_INDICATION,PAYMENT_INDICATION,Journal_ID)VALUES(@PO_NO,@AGING_FLAG_NEW,@AGING_FLAG,@INVOICE_NO,@GARN_NO_MB_NO,@VOUCHER_NO,@SUPL_ID,@FISCAL_YEAR,@PERIOD,@EFECTIVE_DATE,@ENTRY_DATE,@AC_NO,@AMOUNT_DR,@AMOUNT_CR,@POST_INDICATION,@PAYMENT_INDICATION,@Journal_ID)"
+                        Dim cmd1 As New SqlCommand(query1, conn_trans, myTrans)
+                        cmd1.Parameters.AddWithValue("@VOUCHER_NO", TextBox59.Text)
+                        cmd1.Parameters.AddWithValue("@Journal_ID", TextBox56.Text)
+                        cmd1.Parameters.AddWithValue("@GARN_NO_MB_NO", "BANK")
+                        cmd1.Parameters.AddWithValue("@SUPL_ID", GridView211.Rows(i).Cells(0).Text)
+                        cmd1.Parameters.AddWithValue("@FISCAL_YEAR", STR1)
+                        cmd1.Parameters.AddWithValue("@PERIOD", qtr1)
+                        cmd1.Parameters.AddWithValue("@EFECTIVE_DATE", Date.ParseExact(TextBox1.Text, "dd-MM-yyyy", provider))
+                        cmd1.Parameters.AddWithValue("@ENTRY_DATE", Now)
+                        cmd1.Parameters.AddWithValue("@AC_NO", "50514")
+                        cmd1.Parameters.AddWithValue("@AMOUNT_DR", CDec(net_amount))
+                        cmd1.Parameters.AddWithValue("@AMOUNT_CR", 0.0)
+                        cmd1.Parameters.AddWithValue("@POST_INDICATION", "BANK RCD")
+                        cmd1.Parameters.AddWithValue("@PAYMENT_INDICATION", "")
+                        cmd1.Parameters.AddWithValue("@INVOICE_NO", TextBox2.Text)
+                        cmd1.Parameters.AddWithValue("@AGING_FLAG", TextBox2.Text)
+                        cmd1.Parameters.AddWithValue("@AGING_FLAG_NEW", TextBox2.Text)
+                        cmd1.Parameters.AddWithValue("@PO_NO", DropDownList49.Text.Substring(0, DropDownList49.Text.IndexOf(",") - 1).Trim())
+                        cmd1.ExecuteReader()
+                        cmd1.Dispose()
+                    Next
+
+
 
                     Dim DT9 As New DataTable
                     DT9.Columns.AddRange(New DataColumn(7) {New DataColumn("supl_id"), New DataColumn("inst_type"), New DataColumn("inst_no"), New DataColumn("inst_date"), New DataColumn("ac_code"), New DataColumn("amount"), New DataColumn("drawn_on"), New DataColumn("nar")})

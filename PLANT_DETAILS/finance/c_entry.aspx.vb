@@ -179,13 +179,13 @@ Public Class c_entry
 
 
                             ''UPDATE BILL TRACK ID STATUS
-                            Dim query2 As String = "update inv_data set PaymentStatus=@PaymentStatus, PaymentDate=@PaymentDate WHERE VoucherNo='" & GridView7.Rows(I).Cells(0).Text & "'"
+                            Dim query2 As String = "update inv_data set finalPayment=@finalPayment,PaymentStatus=@PaymentStatus, PaymentDate=@PaymentDate WHERE VoucherNo='" & GridView7.Rows(I).Cells(0).Text & "'"
                             Dim cmd2 As New SqlCommand(query2, conn_trans, myTrans)
                             cmd2.Parameters.AddWithValue("@PaymentStatus", "Payment Completed")
                             cmd2.Parameters.AddWithValue("@PaymentDate", Date.ParseExact(CDate(GridView7.Rows(I).Cells(7).Text), "dd-MM-yyyy", provider))
+                            cmd2.Parameters.AddWithValue("@finalPayment", GridView7.Rows(I).Cells(4).Text)
                             cmd2.ExecuteReader()
                             cmd2.Dispose()
-
 
                         Else
                             Label541.Text = "Please Add Cheque No And Date"
