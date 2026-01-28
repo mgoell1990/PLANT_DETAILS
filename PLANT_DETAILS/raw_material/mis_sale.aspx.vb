@@ -1112,11 +1112,12 @@ Public Class mis_sale
                 cmd1.Dispose()
                 'conn.Close()
                 ''update sale order update f_item
+                Dim STOCK_QTY, AVG_PRICE As Decimal
                 Dim lp As Integer = 0
                 For lp = 0 To GridView4.Rows.Count - 1
                     'material avg price
                     Dim conn1 As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
-                    Dim STOCK_QTY, AVG_PRICE As Decimal
+
                     conn1.Open()
                     mc.CommandText = "select * from MATERIAL where MAT_CODE = '" & GridView4.Rows(lp).Cells(1).Text & "'"
                     mc.Connection = conn1
@@ -1142,10 +1143,10 @@ Public Class mis_sale
 
                     'conn1.Open()
                     QUARY1 = ""
-                    QUARY1 = "update MATERIAL set MAT_STOCK =MAT_STOCK - ((" & CDec(GridView4.Rows(lp).Cells(4).Text) & ")),LAST_ISSUE_DATE = @ITEM_LAST_DESPATCH,LAST_TRANS_DATE=@ITEM_LAST_DESPATCH ,MAT_AVG= @MAT_AVG where MAT_CODE ='" & GridView4.Rows(lp).Cells(1).Text & "'"
+                    QUARY1 = "update MATERIAL set MAT_STOCK =MAT_STOCK - ((" & CDec(GridView4.Rows(lp).Cells(4).Text) & ")),LAST_ISSUE_DATE = @ITEM_LAST_DESPATCH,LAST_TRANS_DATE=@ITEM_LAST_DESPATCH where MAT_CODE ='" & GridView4.Rows(lp).Cells(1).Text & "'"
                     Dim cmd2 As New SqlCommand(QUARY1, conn_trans, myTrans)
                     cmd2.Parameters.AddWithValue("@ITEM_LAST_DESPATCH", Date.ParseExact(working_date, "dd-MM-yyyy", provider))
-                    cmd2.Parameters.AddWithValue("@MAT_AVG", NEW_AVG_PRICE)
+                    ''cmd2.Parameters.AddWithValue("@MAT_AVG", NEW_AVG_PRICE)
                     cmd2.ExecuteReader()
                     cmd2.Dispose()
                     'conn1.Close()
@@ -1256,7 +1257,7 @@ Public Class mis_sale
 
                 If (Left(DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim, 3) = "100") Then
                     Dim ISSUE_HEAD, CONSUMPTION_HEAD As New String("")
-                    Dim AvgPrice, ProfitOnSales As New Decimal(0)
+                    Dim ProfitOnSales As New Decimal(0)
                     conn.Open()
                     mc.CommandText = "select * from MATERIAL WITH(NOLOCK) where MAT_CODE = '" & DropDownList12.Text.Substring(0, (DropDownList12.Text.IndexOf(",") - 1)).Trim & "'"
                     mc.Connection = conn
@@ -1265,21 +1266,28 @@ Public Class mis_sale
                         dr.Read()
                         ISSUE_HEAD = dr.Item("AC_ISSUE")
                         CONSUMPTION_HEAD = dr.Item("AC_CON")
-                        AvgPrice = dr.Item("MAT_AVG")
+                        ''AvgPrice = dr.Item("MAT_AVG")
                         dr.Close()
                         conn.Close()
                     Else
                         conn.Close()
                     End If
+
+                    ProfitOnSales = (CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text)) - Math.Round((CDec(TextBox107.Text) * AVG_PRICE), 2)
+
                     If ORDER_TO = "I.P.T." Then
                         If FINANCE_ARRANGE = "Book Adjustment" Or FINANCE_ARRANGE = "CREDIT" Then
 
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AVG_PRICE), 2), "Material Issue")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
                             save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, IUCA, "Dr", CDec(TextBox122.Text), "IUCA")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
 
-
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "71801", "Cr", ProfitOnSales, "PROFIT ON SALE OF RM")
+                            Else
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "84222", "Dr", (-1) * ProfitOnSales, "LOSS ON SALE OF RM")
+                            End If
 
 
                             'save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
@@ -1297,11 +1305,15 @@ Public Class mis_sale
                     ElseIf ORDER_TO = "Other" Then
                         If FINANCE_ARRANGE = "ADVANCE" Then
 
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AVG_PRICE), 2), "Material Issue")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
                             save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "ADV_PAY")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
-
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "71801", "Cr", ProfitOnSales, "PROFIT ON SALE OF RM")
+                            Else
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "84222", "Dr", (-1) * ProfitOnSales, "LOSS ON SALE OF RM")
+                            End If
 
                             'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
                             'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "ADV_PAY")
@@ -1316,11 +1328,16 @@ Public Class mis_sale
                         ElseIf FINANCE_ARRANGE = "RETURNABLE BASIS" Then
 
 
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AVG_PRICE), 2), "Material Issue")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
                             save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "62203", "Dr", CDec(TextBox122.Text), "SUND_DEBTOR_OTHER")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
 
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "71801", "Cr", ProfitOnSales, "PROFIT ON SALE OF RM")
+                            Else
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "84222", "Dr", (-1) * ProfitOnSales, "LOSS ON SALE OF RM")
+                            End If
 
                             'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
                             'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "62203", "Dr", CDec(TextBox122.Text), "SUND_DEBTOR_OTHER")
@@ -1334,11 +1351,16 @@ Public Class mis_sale
 
                         ElseIf FINANCE_ARRANGE = "BUY BACK" Then
 
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Issue")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
+                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, ISSUE_HEAD, "Cr", Math.Round((CDec(TextBox107.Text) * AVG_PRICE), 2), "Material Issue")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, CONSUMPTION_HEAD, "Dr", Math.Round((CDec(TextBox107.Text) * AvgPrice), 2), "Material Con")
                             save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "BUY_BACK")
-                            save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
+                            ''save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_TRANSFER_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "RM MISC. SALES")
 
+                            If (ProfitOnSales > 0) Then
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "71801", "Cr", ProfitOnSales, "PROFIT ON SALE OF RM")
+                            Else
+                                save_ledger("", TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, "84222", "Dr", (-1) * ProfitOnSales, "LOSS ON SALE OF RM")
+                            End If
 
                             'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, STOCK_ISSUE_HEAD, "Cr", CDec(ass_price) + CDec(TextBox115.Text) - CDec(TextBox111.Text), "STOCK TRANSFOR")
                             'save_ledger(DropDownList1.SelectedValue, TextBox123.Text, inv_for & TextBox95.Text, TextBox96.Text, adv_pay_head, "Dr", CDec(TextBox122.Text), "BUY_BACK")
@@ -1422,8 +1444,6 @@ Public Class mis_sale
                     End If
 
                 End If
-
-
 
 
                 'UPDATE SALE_RCD_VOUCHER
@@ -1682,147 +1702,147 @@ Public Class mis_sale
 
                 ''===========================Generate E-Invoice Through EY Start=======================''
 
-                If gst_code = my_gst_code Then
-                    ''Only E-way bill is required
-                    Dim logicClassObj = New EinvoiceLogicClassEY
-                    Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(TextBox177.Text + TextBox95.Text, TextBox96.Text)
-                    If (AuthErrorData.Item(0).status = "1") Then
+                'If gst_code = my_gst_code Then
+                '    ''Only E-way bill is required
+                '    Dim logicClassObj = New EinvoiceLogicClassEY
+                '    Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(TextBox177.Text + TextBox95.Text, TextBox96.Text)
+                '    If (AuthErrorData.Item(0).status = "1") Then
 
-                        'Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEwayBillOnly(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag)
-                        Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEwayBillOnly(AuthErrorData.Item(0).Idtoken, Guid.NewGuid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag)
-                        If (EinvErrorData.Item(0).status = "1") Then
+                '        'Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEwayBillOnly(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag)
+                '        Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEwayBillOnly(AuthErrorData.Item(0).Idtoken, Guid.NewGuid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag)
+                '        If (EinvErrorData.Item(0).status = "1") Then
 
-                            TextBox8.Text = EinvErrorData.Item(0).EwbNo
-                            TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
+                '            TextBox8.Text = EinvErrorData.Item(0).EwbNo
+                '            TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
 
-                            Dim sqlQuery As String = ""
-                            sqlQuery = "update DESPATCH set EWB_NO ='" & EinvErrorData.Item(0).EwbNo & "',EWB_DATE ='" & EinvErrorData.Item(0).EwbDt & "',EWB_VALIDITY ='" & EinvErrorData.Item(0).EwbValidTill & "', EWB_STATUS ='ACTIVE' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox95.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
-                            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
-                            despatch.ExecuteReader()
-                            despatch.Dispose()
-                            goAheadFlag = True
+                '            Dim sqlQuery As String = ""
+                '            sqlQuery = "update DESPATCH set EWB_NO ='" & EinvErrorData.Item(0).EwbNo & "',EWB_DATE ='" & EinvErrorData.Item(0).EwbDt & "',EWB_VALIDITY ='" & EinvErrorData.Item(0).EwbValidTill & "', EWB_STATUS ='ACTIVE' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox95.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
+                '            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                '            despatch.ExecuteReader()
+                '            despatch.Dispose()
+                '            goAheadFlag = True
 
-                        ElseIf (EinvErrorData.Item(0).status = "2") Then
-                            Label31.Visible = True
-                            Label42.Visible = True
-                            txtEinvoiceErrorCode.Visible = True
-                            txtEinvoiceErrorMessage.Visible = True
-                            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorCode
-                            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errorMessage
-                            goAheadFlag = False
-                            Label308.Text = "There is some response error in E-Invoice generation."
+                '        ElseIf (EinvErrorData.Item(0).status = "2") Then
+                '            Label31.Visible = True
+                '            Label42.Visible = True
+                '            txtEinvoiceErrorCode.Visible = True
+                '            txtEinvoiceErrorMessage.Visible = True
+                '            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorCode
+                '            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errorMessage
+                '            goAheadFlag = False
+                '            Label308.Text = "There is some response error in E-Invoice generation."
 
-                        End If
+                '        End If
 
-                    ElseIf (AuthErrorData.Item(0).status = "2") Then
+                '    ElseIf (AuthErrorData.Item(0).status = "2") Then
 
-                        Label31.Visible = True
-                        Label42.Visible = True
-                        txtEinvoiceErrorCode.Visible = True
-                        txtEinvoiceErrorMessage.Visible = True
-                        txtEinvoiceErrorCode.Text = AuthErrorData.Item(0).errorCode
-                        txtEinvoiceErrorMessage.Text = AuthErrorData.Item(0).errorMessage
-                        goAheadFlag = False
-                        Label308.Text = "There is some response error in E-invoice Authentication."
-                    Else
-                        goAheadFlag = False
-                        Label308.Text = "There is some response error in E-invoice Authentication."
-                    End If
-                Else
-                    Dim logicClassObj = New EinvoiceLogicClassEY
-                    Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(TextBox177.Text + TextBox95.Text, TextBox96.Text)
-                    If (AuthErrorData.Item(0).status = "1") Then
+                '        Label31.Visible = True
+                '        Label42.Visible = True
+                '        txtEinvoiceErrorCode.Visible = True
+                '        txtEinvoiceErrorMessage.Visible = True
+                '        txtEinvoiceErrorCode.Text = AuthErrorData.Item(0).errorCode
+                '        txtEinvoiceErrorMessage.Text = AuthErrorData.Item(0).errorMessage
+                '        goAheadFlag = False
+                '        Label308.Text = "There is some response error in E-invoice Authentication."
+                '    Else
+                '        goAheadFlag = False
+                '        Label308.Text = "There is some response error in E-invoice Authentication."
+                '    End If
+                'Else
+                '    Dim logicClassObj = New EinvoiceLogicClassEY
+                '    Dim AuthErrorData As List(Of AuthenticationErrorDetailsClassEY) = logicClassObj.EinvoiceAuthentication(TextBox177.Text + TextBox95.Text, TextBox96.Text)
+                '    If (AuthErrorData.Item(0).status = "1") Then
 
-                        Dim authIdToken As String = AuthErrorData.Item(0).Idtoken
-                        'Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag, "INV")
-                        Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, Guid.NewGuid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag, "INV")
+                '        Dim authIdToken As String = AuthErrorData.Item(0).Idtoken
+                '        'Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, AuthErrorData.Item(0).Access_token, "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag, "INV")
+                '        Dim EinvErrorData As List(Of EinvoiceErrorDetailsClassEY) = logicClassObj.GenerateEInvoice(AuthErrorData.Item(0).Idtoken, Guid.NewGuid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", tcsFlag, "INV")
 
-                        If (EinvErrorData.Item(0).status = "1") Then
-                            TextBox6.Text = EinvErrorData.Item(0).IRN
-                            TextBox8.Text = EinvErrorData.Item(0).EwbNo
-                            TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
-                            '================SENDING DATA TO EY PORTAL START==================='
+                '        If (EinvErrorData.Item(0).status = "1") Then
+                '            TextBox6.Text = EinvErrorData.Item(0).IRN
+                '            TextBox8.Text = EinvErrorData.Item(0).EwbNo
+                '            TextBox20.Text = EinvErrorData.Item(0).EwbValidTill
+                '            '================SENDING DATA TO EY PORTAL START==================='
 
-                            Dim result
-                            If (BILL_PARTY_GST = "") Then
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                            Else
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                            End If
+                '            Dim result
+                '            If (BILL_PARTY_GST = "") Then
+                '                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                '            Else
+                '                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                '            End If
 
-                            '================SENDING DATA TO EY PORTAL END==================='
-                            Dim sqlQuery As String = ""
-                            sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "',EWB_NO ='" & EinvErrorData.Item(0).EwbNo & "',EWB_DATE ='" & EinvErrorData.Item(0).EwbDt & "',EWB_VALIDITY ='" & EinvErrorData.Item(0).EwbValidTill & "', EWB_STATUS ='ACTIVE', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox95.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
-                            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
-                            despatch.ExecuteReader()
-                            despatch.Dispose()
-                            goAheadFlag = True
+                '            '================SENDING DATA TO EY PORTAL END==================='
+                '            Dim sqlQuery As String = ""
+                '            sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "',EWB_NO ='" & EinvErrorData.Item(0).EwbNo & "',EWB_DATE ='" & EinvErrorData.Item(0).EwbDt & "',EWB_VALIDITY ='" & EinvErrorData.Item(0).EwbValidTill & "', EWB_STATUS ='ACTIVE', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox95.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
+                '            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                '            despatch.ExecuteReader()
+                '            despatch.Dispose()
+                '            goAheadFlag = True
 
-                        ElseIf (EinvErrorData.Item(0).status = "2") Then
-                            Label31.Visible = True
-                            Label42.Visible = True
-                            txtEinvoiceErrorCode.Visible = True
-                            txtEinvoiceErrorMessage.Visible = True
-                            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorCode
-                            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errorMessage
-                            goAheadFlag = False
-                            Label308.Text = "There is some response error in E-Invoice generation."
+                '        ElseIf (EinvErrorData.Item(0).status = "2") Then
+                '            Label31.Visible = True
+                '            Label42.Visible = True
+                '            txtEinvoiceErrorCode.Visible = True
+                '            txtEinvoiceErrorMessage.Visible = True
+                '            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorCode
+                '            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errorMessage
+                '            goAheadFlag = False
+                '            Label308.Text = "There is some response error in E-Invoice generation."
 
-                        ElseIf (EinvErrorData.Item(0).status = "3") Then
-                            Label31.Visible = True
-                            Label42.Visible = True
-                            txtEinvoiceErrorCode.Visible = True
-                            txtEinvoiceErrorMessage.Visible = True
-                            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorfield
-                            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errordesc
-                            goAheadFlag = False
-                            Label308.Text = "There is some response error in E-Invoice generation."
-                        ElseIf (EinvErrorData.Item(0).status = "4") Then
-                            TextBox6.Text = EinvErrorData.Item(0).IRN
-                            Label31.Visible = True
-                            Label42.Visible = True
-                            txtEinvoiceErrorCode.Visible = True
-                            txtEinvoiceErrorMessage.Visible = True
-                            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).infoErrorCode
-                            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).infoErrorMessage
+                '        ElseIf (EinvErrorData.Item(0).status = "3") Then
+                '            Label31.Visible = True
+                '            Label42.Visible = True
+                '            txtEinvoiceErrorCode.Visible = True
+                '            txtEinvoiceErrorMessage.Visible = True
+                '            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).errorfield
+                '            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).errordesc
+                '            goAheadFlag = False
+                '            Label308.Text = "There is some response error in E-Invoice generation."
+                '        ElseIf (EinvErrorData.Item(0).status = "4") Then
+                '            TextBox6.Text = EinvErrorData.Item(0).IRN
+                '            Label31.Visible = True
+                '            Label42.Visible = True
+                '            txtEinvoiceErrorCode.Visible = True
+                '            txtEinvoiceErrorMessage.Visible = True
+                '            txtEinvoiceErrorCode.Text = EinvErrorData.Item(0).infoErrorCode
+                '            txtEinvoiceErrorMessage.Text = EinvErrorData.Item(0).infoErrorMessage
 
-                            '================SENDING DATA TO EY PORTAL START==================='
+                '            '================SENDING DATA TO EY PORTAL START==================='
 
-                            Dim result
-                            If (BILL_PARTY_GST = "") Then
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                            Else
-                                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
-                            End If
+                '            Dim result
+                '            If (BILL_PARTY_GST = "") Then
+                '                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "NO", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                '            Else
+                '                result = logicClassObj.SubmitGSTR1DataToEYPortal(authIdToken, New Guid().ToString(), "", TextBox177.Text + TextBox95.Text, TextBox96.Text, TextBox1.Text, "NO", "N", "YES", Date.ParseExact(working_date, "dd-MM-yyyy", provider), "INV")
+                '            End If
 
-                            '================SENDING DATA TO EY PORTAL END==================='
+                '            '================SENDING DATA TO EY PORTAL END==================='
 
-                            Dim sqlQuery As String = ""
-                            sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox95.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
-                            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
-                            despatch.ExecuteReader()
-                            despatch.Dispose()
-                            goAheadFlag = True
-                            partialSuccess = True
-                            Label308.Text = "There is error in E-way bill generation, please generate E-way bill alone with above IRN."
-                        End If
+                '            Dim sqlQuery As String = ""
+                '            sqlQuery = "update DESPATCH set IRN_NO ='" & EinvErrorData.Item(0).IRN & "',QR_CODE ='" & EinvErrorData.Item(0).QRCode & "', EY_STATUS ='" & result.ToString() & "' where D_TYPE+INV_NO  ='" & TextBox177.Text + TextBox95.Text & "' AND FISCAL_YEAR='" & STR1 & "'"
+                '            Dim despatch As New SqlCommand(sqlQuery, conn_trans, myTrans)
+                '            despatch.ExecuteReader()
+                '            despatch.Dispose()
+                '            goAheadFlag = True
+                '            partialSuccess = True
+                '            Label308.Text = "There is error in E-way bill generation, please generate E-way bill alone with above IRN."
+                '        End If
 
-                    ElseIf (AuthErrorData.Item(0).status = "2") Then
+                '    ElseIf (AuthErrorData.Item(0).status = "2") Then
 
-                        Label31.Visible = True
-                        Label42.Visible = True
-                        txtEinvoiceErrorCode.Visible = True
-                        txtEinvoiceErrorMessage.Visible = True
-                        txtEinvoiceErrorCode.Text = AuthErrorData.Item(0).errorCode
-                        txtEinvoiceErrorMessage.Text = AuthErrorData.Item(0).errorMessage
-                        goAheadFlag = False
-                        Label308.Text = "There is some response error in E-invoice Authentication."
-                    Else
-                        goAheadFlag = False
-                        Label308.Text = "There is some response error in E-invoice Authentication."
-                    End If
+                '        Label31.Visible = True
+                '        Label42.Visible = True
+                '        txtEinvoiceErrorCode.Visible = True
+                '        txtEinvoiceErrorMessage.Visible = True
+                '        txtEinvoiceErrorCode.Text = AuthErrorData.Item(0).errorCode
+                '        txtEinvoiceErrorMessage.Text = AuthErrorData.Item(0).errorMessage
+                '        goAheadFlag = False
+                '        Label308.Text = "There is some response error in E-invoice Authentication."
+                '    Else
+                '        goAheadFlag = False
+                '        Label308.Text = "There is some response error in E-invoice Authentication."
+                '    End If
 
-                End If
+                'End If
 
                 If (goAheadFlag = True) Then
 
