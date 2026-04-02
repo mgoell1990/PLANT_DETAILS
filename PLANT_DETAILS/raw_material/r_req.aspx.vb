@@ -101,11 +101,11 @@ Public Class r_req
             DropDownList3.Text = ""
             DropDownList3.Focus()
             Return
-        ElseIf TextBox163.Text = "" Or IsNumeric(TextBox163.Text) = False Then
-            ISSUE_ERR_LABEL.Text = "Enter Material Code"
+        ElseIf CDec(TextBox163.Text) < 0 Then
+            TextBox163.Focus()
+            TextBox163.Text = ""
             ISSUE_ERR_LABEL.Visible = True
-            DropDownList3.Text = ""
-            DropDownList3.Focus()
+            ISSUE_ERR_LABEL.Text = "Please Enter valid Value In Issue Qty"
             Return
         ElseIf DropDownList7.SelectedValue = "Select" Then
             ISSUE_ERR_LABEL.Text = "Please Select Cost Centre"

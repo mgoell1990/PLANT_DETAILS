@@ -55,6 +55,47 @@
             alert("Function called");
         }
     </script>
+    <script type="text/javascript">
+
+        $(function () {
+            $("[id$=TextBox3]").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '<%=ResolveUrl("~/Service.asmx/order_search")%>',
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            OnSuccess
+                            response($.map(data.d, function (item) {
+                                return {
+                                    label: item.split('^')[0]
+                                }
+                            }
+
+                            ))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                select: function (e, i) {
+
+                },
+                minLength: 1
+            });
+        });
+
+        function OnSuccess() {
+            alert("Function called");
+        }
+    </script>
+
 
     <div class="row text-white mt-0" style="background: #296DA9">
         <div class="col text-center">
@@ -125,13 +166,27 @@
                                     </div>
                                 </div>
 
+                                <div class="row align-items-center m-1 mb-1">
+                                    <div class="col-5 text-end">
+                                        <asp:Label ID="Label8" runat="server" ForeColor="Blue" Text="Order No"></asp:Label>
+
+                                    </div>
+                                    <div class="col-5 text-start">
+                                        <asp:TextBox ID="TextBox3" runat="server" class="form-control"></asp:TextBox>
+
+                                    </div>
+                                    <div class="col-2 text-start">
+                                        <asp:Button ID="Button4" runat="server" class="btn btn-primary" Text="Search" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'" />
+                                    </div>
+                                </div>
+
                                 <div class="row align-items-center mt-1 mb-1">
                                     <div class="col-5 text-end">
                                     </div>
                                     <div class="col text-start">
-                                        <asp:Button ID="Button64" runat="server" Text="Search" CssClass="btn btn-primary" />
-                                        <asp:Button ID="Button30" runat="server" Text="Download" CssClass="btn btn-primary" />
-                                        <asp:Button ID="Button68" runat="server" Text="Print" CssClass="btn btn-success" />
+                                        <asp:Button ID="Button64" runat="server" Text="Search" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'"/>
+                                        <asp:Button ID="Button30" runat="server" Text="Download" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'"/>
+                                        <asp:Button ID="Button68" runat="server" Text="Print" CssClass="btn btn-success" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait...'"/>
                                     </div>
                                 </div>
                             </div>
@@ -154,11 +209,11 @@
                                         <div class="col-2 text-start">
                                             <asp:Label ID="Label3" runat="server" Font-Bold="True" ForeColor="#000099" Visible="False"></asp:Label>
                                         </div>
-                                        
+
                                         <div class="col-3 text-start">
                                             <asp:Label ID="Label5" runat="server" Font-Bold="True" ForeColor="#000099" Visible="False"></asp:Label>
                                         </div>
-                                        
+
                                     </div>
 
 
@@ -280,7 +335,7 @@
                                     <asp:GridView ID="GridView3" CssClass="table table-bordered border-2 table-responsive text-center" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
                                         <Columns>
                                             <asp:BoundField DataField="ACTUAL_PO_NO" HeaderText="Actual Order No" />
-                                            <asp:BoundField DataField="SO_ACTUAL_DATE" HeaderText="Actual Order Date" DataFormatString="{0:dd/MM/yyyy}"/>
+                                            <asp:BoundField DataField="SO_ACTUAL_DATE" HeaderText="Actual Order Date" DataFormatString="{0:dd/MM/yyyy}" />
                                             <asp:BoundField DataField="PO_NO" HeaderText="System Order No" />
                                             <asp:BoundField DataField="PARTY_CODE" HeaderText="Party Code" />
                                             <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />

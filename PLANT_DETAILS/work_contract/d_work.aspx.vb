@@ -100,11 +100,25 @@ Public Class d_work
         ElseIf TextBox2.Text = "" Or IsDate(TextBox2.Text) = False Then
             TextBox2.Focus()
             Return
-        ElseIf TextBox4.Text = "" Or IsNumeric(TextBox4.Text) = False Then
+        ElseIf IsNumeric(TextBox4.Text) = False Then
             TextBox4.Focus()
+            TextBox4.Text = ""
+            Label403.Text = "Please Enter Numeric Value In Worked Qty"
             Return
-        ElseIf TextBox6.Text = "" Or IsNumeric(TextBox6.Text) = False Then
+        ElseIf TextBox4.Text = "" Or IsNumeric(TextBox4.Text) = False Or CDec(TextBox4.Text) < 0 Then
+            TextBox4.Focus()
+            TextBox4.Text = ""
+            Label403.Text = "Please Enter valid Value In Worked Qty"
+            Return
+        ElseIf IsNumeric(TextBox6.Text) = False Then
             TextBox6.Focus()
+            TextBox6.Text = ""
+            Label403.Text = "Please Enter Numeric Value In Required Qty"
+            Return
+        ElseIf TextBox6.Text = "" Or IsNumeric(TextBox6.Text) = False Or CDec(TextBox6.Text) < 0 Then
+            TextBox6.Focus()
+            TextBox6.Text = ""
+            Label403.Text = "Please Enter valid Value In Required Qty"
             Return
         ElseIf DropDownList3.SelectedValue = "Select" Then
             DropDownList3.Focus()

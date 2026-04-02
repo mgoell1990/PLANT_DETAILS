@@ -568,6 +568,7 @@
                                                     <asp:BoundField DataField="bill_id" HeaderText="Reg. No" />
                                                     <asp:BoundField DataField="post_date" HeaderText="Reg. Date" DataFormatString="{0:dd/MM/yyyy}" />
                                                     <asp:BoundField DataField="po_no" HeaderText="Order No" />
+                                                    <asp:BoundField DataField="SO_ACTUAL" HeaderText="Actual Order No" />
                                                     <asp:BoundField DataField="PO_TYPE" HeaderText="Order Type" />
                                                     <asp:BoundField DataField="SUPL_NAME" HeaderText="Party Name" />
                                                     <asp:BoundField DataField="inv_no" HeaderText="Inv. No" />

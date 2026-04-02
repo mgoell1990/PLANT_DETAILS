@@ -23,7 +23,7 @@
             $("[id$=pay_supl_code_TextBox98]").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: '<%=ResolveUrl("~/Service.asmx/supl")%>',
+                        url: '<%=ResolveUrl("~/Service.asmx/supl_and_dater")%>',
                         data: "{ 'prefix': '" + request.term + "'}",
                         dataType: "json",
                         type: "POST",

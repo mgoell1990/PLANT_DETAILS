@@ -166,13 +166,12 @@ Public Class report3
         ),
         orderDetailsFiltered AS (
         SELECT
-            SO_NO,PARTY_CODE,PO_TYPE
+            SO_NO,SO_ACTUAL,PARTY_CODE,PO_TYPE
         FROM
-            ORDER_DETAILS
-	    where ORDER_TO='Other'
+            ORDER_DETAILS where SO_NO in (select po_no from inv_data where inv_data .post_date between '" & from_date.Year & "-" & from_date.Month & "-" & from_date.Day & " ' and ' " & to_date.Year & "-" & to_date.Month & "-" & to_date.Day & "')
         )
         SELECT
-            invData.VoucherNo,invData .bill_id ,invData .post_date ,invData .inv_no ,invData .inv_date ,invData .inv_amount ,invData .emp_id ,invData .po_no, SUPL .SUPL_NAME ,o1 .PO_TYPE,SUPL .PARTY_TYPE,convert(varchar(30),CONVERT(varchar,v1.CHEQUE_DATE,105) , 105) As PAYMENT_DATE, v1.CHEQUE_NO
+            invData.VoucherNo,invData .bill_id ,invData .post_date ,invData .inv_no ,invData .inv_date ,invData .inv_amount ,invData .emp_id ,invData .po_no, o1.SO_ACTUAL, SUPL .SUPL_NAME ,o1 .PO_TYPE,SUPL .PARTY_TYPE,convert(varchar(30),CONVERT(varchar,v1.CHEQUE_DATE,105) , 105) As PAYMENT_DATE, v1.CHEQUE_NO
         FROM
             invDataFiltered AS invData left join VOUCHER as v1 on invData.bill_id=v1.BILL_TRACK and invData.VoucherNo=v1.TOKEN_NO left join orderDetailsFiltered o1 ON invData.po_no =o1.SO_NO LEFT JOIN SUPL ON invData .SUPL_ID =SUPL .SUPL_ID
         ORDER BY bill_id", conn)
@@ -2053,46 +2052,86 @@ ORDER BY RowType"
     End Sub
 
     Protected Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
-        If GridView5.Rows.Count < 0 Then
-            Return
+        'If GridView5.Rows.Count < 0 Then
+        '    Return
+        'End If
+
+        'Dim dt3 As DataTable = New DataTable("BG")
+
+        'dt3.Columns.Add(New DataColumn("REG. NO", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("REG DATE", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("ORDER NO", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("ORDER TYPE", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("PARTY NAME", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("INV. NO.", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("INV. DATE", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("GARN/MB DATE", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("PAYMENT DATE", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("CHEQUE NO.", GetType(String)))
+        'dt3.Columns.Add(New DataColumn("AMOUNT", GetType(Double)))
+        'dt3.Columns.Add(New DataColumn("Party Type", GetType(String)))
+
+
+        'For Me.count = 0 To GridView5.Rows.Count - 1
+        '    dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, GridView5.Rows(count).Cells(3).Text, GridView5.Rows(count).Cells(4).Text, GridView5.Rows(count).Cells(5).Text, GridView5.Rows(count).Cells(6).Text, GridView5.Rows(count).Cells(7).Text, GridView5.Rows(count).Cells(8).Text, GridView5.Rows(count).Cells(9).Text, CDec(GridView5.Rows(count).Cells(10).Text), GridView5.Rows(count).Cells(11).Text)
+        'Next
+
+        'Using wb As New XLWorkbook()
+
+        '    wb.Worksheets.Add(dt3)
+        '    'Export the Excel file.
+        '    Response.Clear()
+        '    Response.Buffer = True
+        '    Response.Charset = ""
+        '    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        '    Response.AddHeader("content-disposition", "attachment;filename=Bill_Track_Report.xlsx")
+        '    Using MyMemoryStream As New MemoryStream()
+        '        wb.SaveAs(MyMemoryStream)
+        '        MyMemoryStream.WriteTo(Response.OutputStream)
+        '        Response.Flush()
+        '        Response.End()
+        '    End Using
+        'End Using
+
+
+        If GridView5.Rows.Count > 0 Then
+            Try
+                Dim dt As DataTable = New DataTable()
+                For j As Integer = 0 To GridView5.Columns.Count - 1
+                    dt.Columns.Add(GridView5.Columns(j).HeaderText)
+                Next
+                For i As Integer = 0 To GridView5.Rows.Count - 1
+                    Dim dr As DataRow = dt.NewRow()
+                    For j As Integer = 0 To GridView5.Columns.Count - 1
+                        If (GridView5.Rows(i).Cells(j).Text <> "") Then
+                            dr(GridView5.Columns(j).HeaderText) = GridView5.Rows(i).Cells(j).Text
+                        End If
+
+                    Next
+                    dt.Rows.Add(dr)
+                Next
+
+                Using wb As XLWorkbook = New XLWorkbook()
+                    wb.Worksheets.Add(dt, "Bill Track Report")
+                    Response.Clear()
+                    Response.Buffer = True
+                    Response.Charset = ""
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    Response.AddHeader("content-disposition", "attachment;filename=Bill_Track_Report.xlsx")
+                    Using MyMemoryStream As MemoryStream = New MemoryStream()
+                        wb.SaveAs(MyMemoryStream)
+                        MyMemoryStream.WriteTo(Response.OutputStream)
+                        Response.Flush()
+                        Response.End()
+                    End Using
+                End Using
+
+            Catch ex As Exception
+            Finally
+
+            End Try
         End If
 
-        Dim dt3 As DataTable = New DataTable("BG")
-
-        dt3.Columns.Add(New DataColumn("REG. NO", GetType(String)))
-        dt3.Columns.Add(New DataColumn("REG DATE", GetType(String)))
-        dt3.Columns.Add(New DataColumn("ORDER NO", GetType(String)))
-        dt3.Columns.Add(New DataColumn("ORDER TYPE", GetType(String)))
-        dt3.Columns.Add(New DataColumn("PARTY NAME", GetType(String)))
-        dt3.Columns.Add(New DataColumn("INV. NO.", GetType(String)))
-        dt3.Columns.Add(New DataColumn("INV. DATE", GetType(String)))
-        dt3.Columns.Add(New DataColumn("GARN/MB DATE", GetType(String)))
-        dt3.Columns.Add(New DataColumn("PAYMENT DATE", GetType(String)))
-        dt3.Columns.Add(New DataColumn("CHEQUE NO.", GetType(String)))
-        dt3.Columns.Add(New DataColumn("AMOUNT", GetType(Double)))
-        dt3.Columns.Add(New DataColumn("Party Type", GetType(String)))
-
-
-        For Me.count = 0 To GridView5.Rows.Count - 1
-            dt3.Rows.Add(GridView5.Rows(count).Cells(0).Text, GridView5.Rows(count).Cells(1).Text, GridView5.Rows(count).Cells(2).Text, GridView5.Rows(count).Cells(3).Text, GridView5.Rows(count).Cells(4).Text, GridView5.Rows(count).Cells(5).Text, GridView5.Rows(count).Cells(6).Text, GridView5.Rows(count).Cells(7).Text, GridView5.Rows(count).Cells(8).Text, GridView5.Rows(count).Cells(9).Text, CDec(GridView5.Rows(count).Cells(10).Text), GridView5.Rows(count).Cells(11).Text)
-        Next
-
-        Using wb As New XLWorkbook()
-
-            wb.Worksheets.Add(dt3)
-            'Export the Excel file.
-            Response.Clear()
-            Response.Buffer = True
-            Response.Charset = ""
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            Response.AddHeader("content-disposition", "attachment;filename=Bill_Track_Report.xlsx")
-            Using MyMemoryStream As New MemoryStream()
-                wb.SaveAs(MyMemoryStream)
-                MyMemoryStream.WriteTo(Response.OutputStream)
-                Response.Flush()
-                Response.End()
-            End Using
-        End Using
     End Sub
 
     Protected Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click

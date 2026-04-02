@@ -239,9 +239,13 @@ Public Class dpr1
             Return
         ElseIf IsNumeric(TextBox1.Text) = False Then
             TextBox1.Focus()
-            Label279.Text = "Please Enter Numaric Value In FR Qty"
+            Label279.Text = "Please Enter Numaric Value In Production Qty"
             Return
-
+        ElseIf CDec(TextBox1.Text) < 0 Then
+            TextBox1.Focus()
+            TextBox1.Text = ""
+            Label279.Text = "Please Enter Positive Production Qty"
+            Return
         ElseIf CDec(TextBox1.Text = 0) Then
             TextBox1.Focus()
             Label279.Text = "Please Enter Some Value In Production Qty"
@@ -253,13 +257,7 @@ Public Class dpr1
                 TextBox1.Focus()
                 Label279.Text = "Don't Enter Decimal Value In FR Qty"
                 Return
-
             End If
-        ElseIf CDec(TextBox1.Text) < 0 Then
-            TextBox1.Focus()
-            Label279.Text = "Please Enter Positive Value In FR Qty"
-            Return
-
         End If
         Dim date_diff As Integer = 0
         date_diff = DateDiff(DateInterval.Day, CDate(TextBox49.Text), Today.Date)
@@ -422,7 +420,7 @@ Public Class dpr1
         conn.Open()
         Dim crystalReport As New ReportDocument
         Dim dt As New DataTable
-        Dim PO_QUARY As String = "select distinct PROD_CONTROL .ITEM_CODE,qual_group.qual_name ,F_ITEM .ITEM_NAME ,F_ITEM .ITEM_AU , " & _
+        Dim PO_QUARY As String = "select distinct PROD_CONTROL .ITEM_CODE,qual_group.qual_name ,F_ITEM .ITEM_NAME ,F_ITEM .ITEM_AU , " &
             " '" & dpr_date & "'  AS P_DATE , 'PRODUCTION & DESPATCH REPORT' AS R_TYPE, " _
             & " '" & dpr_date & "'  AS P_DATE_TO , " _
  & " (case when f_item.ITEM_AU ='Pcs' then CONVERT(DECIMAL(10,3),sum(PROD_CONTROL.ITEM_F_QTY))else '0.000' end) as F_QTY, " _

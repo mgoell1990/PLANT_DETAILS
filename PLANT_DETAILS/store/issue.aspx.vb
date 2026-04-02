@@ -159,7 +159,7 @@ Public Class issue
                         qtr = "Q4"
                     End If
                     'conn.Open()
-                    Dim Query As String = "UPDATE MAT_DETAILS SET ENTRY_DATE=@ENTRY_DATE,ISSUE_DATE=@ISSUE_DATE,AVG_PRICE=@AVG_PRICE, LINE_NO=@LINE_NO,LINE_DATE=@LINE_DATE,ISSUE_QTY=@ISSUE_QTY,MAT_BALANCE=@MAT_BALANCE,UNIT_PRICE=@UNIT_PRICE,TOTAL_PRICE=@TOTAL_PRICE,ISSUE_BY=@ISSUE_BY ,REMARKS=@REMARKS,QTR=@QTR , MAT_QTY=@MAT_QTY WHERE ISSUE_NO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
+                    Dim Query As String = "UPDATE MAT_DETAILS SET FISCAL_YEAR=@FISCAL_YEAR,ENTRY_DATE=@ENTRY_DATE,ISSUE_DATE=@ISSUE_DATE,AVG_PRICE=@AVG_PRICE, LINE_NO=@LINE_NO,LINE_DATE=@LINE_DATE,ISSUE_QTY=@ISSUE_QTY,MAT_BALANCE=@MAT_BALANCE,UNIT_PRICE=@UNIT_PRICE,TOTAL_PRICE=@TOTAL_PRICE,ISSUE_BY=@ISSUE_BY ,REMARKS=@REMARKS,QTR=@QTR , MAT_QTY=@MAT_QTY WHERE ISSUE_NO ='" & DropDownList11.Text.Substring(0, DropDownList11.Text.IndexOf(",") - 1).Trim & "'"
                     Dim cmd As New SqlCommand(Query, conn_trans, myTrans)
                     cmd.Parameters.AddWithValue("@LINE_NO", max_line + 1)
                     cmd.Parameters.AddWithValue("@REMARKS", TextBox2.Text)
@@ -174,7 +174,7 @@ Public Class issue
                     cmd.Parameters.AddWithValue("@ISSUE_DATE", Today.Date.Date)
                     cmd.Parameters.AddWithValue("@AVG_PRICE", CDec(TextBox166.Text))
                     cmd.Parameters.AddWithValue("@ENTRY_DATE", Now)
-                    cmd.ExecuteReader()
+                    cmd.Parameters.AddWithValue("@FISCAL_YEAR", CInt(STR1))
                     cmd.Dispose()
                     'conn.Close()
 

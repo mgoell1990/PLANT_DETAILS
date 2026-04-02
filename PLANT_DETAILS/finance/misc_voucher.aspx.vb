@@ -1048,5 +1048,22 @@ Public Class misc_voucher
 
     Protected Sub ddlBillTrackID_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlBillTrackID.SelectedIndexChanged
         MultiView1.ActiveViewIndex = 0
+
+        Dim InvoiceNumber, PurchaseOrderNo As New String("")
+
+        conn.Open()
+        Dim mc1 As New SqlCommand
+        mc1.CommandText = "select * from inv_data where bill_id='" & ddlBillTrackID.SelectedValue & "'"
+        mc1.Connection = conn
+        dr = mc1.ExecuteReader
+        If dr.HasRows Then
+            dr.Read()
+            TextBox177.Text = dr.Item("inv_no")
+            pay_po_wo_TextBox96.Text = dr.Item("po_no")
+            TextBox178.Text = dr.Item("inv_date")
+            dr.Close()
+        End If
+        conn.Close()
+
     End Sub
 End Class

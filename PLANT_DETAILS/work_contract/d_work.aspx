@@ -170,7 +170,7 @@
                                         <asp:TextBox class="form-control" ID="TextBox4" runat="server"></asp:TextBox>
                                     </div>
                                     <div class="col-1 g-0 text-start">
-                                        <asp:Label ID="Label9" runat="server" Text="Rqd Qty" Font-Bold="True" ForeColor="Blue"></asp:Label>
+                                        <asp:Label ID="Label9" runat="server" Text="Required Qty" Font-Bold="True" ForeColor="Blue"></asp:Label>
                                     </div>
                                     <div class="col-2 text-start">
                                         <asp:TextBox class="form-control" ID="TextBox6" runat="server"></asp:TextBox>
